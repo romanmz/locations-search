@@ -14,3 +14,6 @@ define( 'LOCATIONSSEARCHVERSION', '0.1.0' );
 
 // Load vendor scripts
 require_once 'vendor/WPSettingsPageHelper.class.php';
+
+// Load includes
+require_once 'init-post-types.php';
