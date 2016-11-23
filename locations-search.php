@@ -11,3 +11,6 @@ Version: 0.1.1
 // No direct access
 defined( 'ABSPATH' ) or die( 'No direct access' );
 define( 'LOCATIONSSEARCHVERSION', '0.1.0' );
+
+// Load vendor scripts
+require_once 'vendor/WPSettingsPageHelper.class.php';
