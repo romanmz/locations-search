@@ -100,6 +100,7 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 		public function __construct() {
 			add_action( 'add_meta_boxes_'.$this->post_type, array( $this, 'register_metabox' ) );
 			add_action( 'save_post', array( $this, 'save_post_meta' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'load_assets' ) );
 		}
 		
 		
@@ -228,6 +229,24 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 					update_post_meta( $post_id, $meta_key, $new_value );
 				}
 			}
+			
+		}
+		
+		
+		// Load css and js
+		// ------------------------------
+		public function load_assets( $hook ) {
+			
+			// Only on post edit screen
+			if(
+				!in_array( $hook, array( 'post.php', 'post-new.php' ) )
+				|| get_post_type() != $this->post_type
+			) {
+				return;
+			}
+			
+			// Load assets
+			wp_enqueue_style( 'location-edit-screen', LocationsSearch::get_url().'/css/location-edit.css', array(), LOCATIONSSEARCHVERSION );
 			
 		}
 		
