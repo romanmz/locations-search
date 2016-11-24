@@ -10,12 +10,9 @@ Version: 0.1.1
 
 // No direct access
 defined( 'ABSPATH' ) or die( 'No direct access' );
+
+// Define constants and static class
 define( 'LOCATIONSSEARCHVERSION', '0.1.0' );
-
-// Load vendor scripts
-require_once 'vendor/WPSettingsPageHelper.class.php';
-
-// Define static class
 if( !class_exists( 'LocationsSearch' ) ) {
 	class LocationsSearch {
 		static public function get_url() {
@@ -26,6 +23,9 @@ if( !class_exists( 'LocationsSearch' ) ) {
 		}
 	}
 }
+
+// Load vendor scripts
+require_once 'vendor/WPSettingsPageHelper.class.php';
 
 // Load includes
 require_once 'init-post-types.php';
