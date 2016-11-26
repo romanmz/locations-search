@@ -231,6 +231,14 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				);
 			}
 			
+			// Success message
+			add_settings_error(
+				self::$option_group,
+				'settings_updated',
+				'Settings updated',
+				'updated'
+			);
+			
 			// Sanitize
 			$data['google_api_key'] = sanitize_text_field( $data['google_api_key'] );
 			$data['permalinks_name'] = sanitize_title( $data['permalinks_name'] );
