@@ -52,6 +52,16 @@ if( !function_exists( 'locationssearch_post_type_location' ) ) {
 	add_action( 'init', 'locationssearch_post_type_location' );
 }
 
+// Flush Rewrite Rules on plugin activation
+if( !function_exists( 'locationssearch_flush_rewrites' ) ) {
+	function locationssearch_flush_rewrites() {
+		locationssearch_post_type_location();
+		flush_rewrite_rules();
+	}
+}
+register_activation_hook( LocationsSearch::get_main_file(), 'locationssearch_flush_rewrites' );
+register_deactivation_hook( LocationsSearch::get_main_file(), 'flush_rewrite_rules' );
+
 
 
 // META BOX: Location Address

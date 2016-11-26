@@ -73,6 +73,9 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			);
 		}
 		public function display_page() {
+			if( !empty( $_GET['settings-updated'] ) ) {
+				flush_rewrite_rules();
+			}
 			settings_errors( self::$option_group );
 			?>
 			<div class="wrap">

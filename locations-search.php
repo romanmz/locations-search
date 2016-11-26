@@ -21,6 +21,9 @@ if( !class_exists( 'LocationsSearch' ) ) {
 		static public function get_path() {
 			return dirname( __FILE__ );
 		}
+		static public function get_main_file() {
+			return __FILE__;
+		}
 		static public function get_country_codes() {
 			return array(
 				'af' => 'Afghanistan',
