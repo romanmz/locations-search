@@ -30,7 +30,7 @@ if( !function_exists( 'locationssearch_post_type_location' ) ) {
 		);
 		
 		// Register post type
-		$url_slug = LocationsSearchSettings::get( 'permalinks_name' );
+		$url_slug = LocationsSearchSettings::get( 'permalinks_base' );
 		$args = array(
 			'labels'              => $labels,
 			'public'              => true,

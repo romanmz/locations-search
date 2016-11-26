@@ -32,7 +32,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$field_value = isset( self::$option[ $field_key ] ) ? self::$option[ $field_key ] : '';
 			
 			// Fallback values
-			if( $field_key == 'permalinks_name' && empty( $field_value ) ) {
+			if( $field_key == 'permalinks_base' && empty( $field_value ) ) {
 				$field_value = 'locations';
 			}
 			if( $field_key == 'bias_country' && empty( $field_value ) ) {
@@ -111,7 +111,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 		public function register_fields() {
 			$fields = array(
 				'google_api_key' => 'Google API Key',
-				'permalinks_name' => 'Permalinks Name',
+				'permalinks_base' => 'Permalinks Base',
 				'bias_country' => 'Map Region',
 				'restrict_country' => 'Limit Results',
 			);
@@ -162,10 +162,10 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						esc_attr( $value )
 					);
 					break;
-				case 'permalinks_name':
+				case 'permalinks_base':
 					printf( '
 						<input id="%s" type="text" name="%s" class="regular-text" value="%s">
-						<p class="description">Text to be used to create the urls for each location, e.g: '.home_url( '/' ).'<strong>locations</strong>/location_name/</p>
+						<p class="description">Text to be used as a base for creating the urls for each location, e.g: '.home_url( '/' ).'<strong>locations</strong>/location-name/</p>
 						',
 						esc_attr( $id ),
 						esc_attr( $name ),
@@ -215,7 +215,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			// White list
 			$defaults = array(
 				'google_api_key' => '',
-				'permalinks_name' => '',
+				'permalinks_base' => '',
 				'bias_country' => '',
 				'restrict_country' => '',
 			);
@@ -241,7 +241,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			
 			// Sanitize
 			$data['google_api_key'] = sanitize_text_field( $data['google_api_key'] );
-			$data['permalinks_name'] = sanitize_title( $data['permalinks_name'] );
+			$data['permalinks_base'] = sanitize_title( $data['permalinks_base'] );
 			$data['bias_country'] = sanitize_title( $data['bias_country'] );
 			$data['restrict_country'] = sanitize_title( $data['restrict_country'] );
 			
