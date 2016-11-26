@@ -155,7 +155,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				case 'google_api_key':
 					printf( '
 						<input id="%s" type="text" name="%s" class="large-text" value="%s">
-						<p class="description">Create a <a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Google API Key</a> and paste it here (please enable both the <strong>Google Maps JavaScript API</strong> and the <strong>Google Maps Geocoding API</strong>).</p>
+						<p class="description"><a href="https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key" target="_blank">Generate a Google Maps Javascript API key</a> and enter it here.</p>
 						',
 						esc_attr( $id ),
 						esc_attr( $name ),
@@ -226,10 +226,9 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				add_settings_error(
 					self::$option_group,
 					'google_api_key',
-					'ERROR: The Google API Key is required for the locations search feature',
-					'error'
+					'It’s recommended to enter a Google Maps Javascript API key',
+					'notice-info'
 				);
-				$data['google_api_key'] = '';
 			}
 			
 			// Sanitize
