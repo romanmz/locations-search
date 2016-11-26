@@ -143,10 +143,15 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 				<?php $this->display_text( $post, 'postcode' ) ?>
 				<?php $this->display_dropdown( $post, 'state' ) ?>
 			</div>
+			<div id="location_address__update">
+				<button class="button">Update Map</button>
+			</div>
+			<div id="location_address__options"></div>
 			<div class="location_address__row">
 				<?php $this->display_text( $post, 'lat' ) ?>
 				<?php $this->display_text( $post, 'lng' ) ?>
 			</div>
+			<div id="location_address__map"></div>
 			<?php
 			
 		}
@@ -257,6 +262,8 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			}
 			
 			// Load assets
+			wp_enqueue_script( 'location-edit-google-maps-api', '//maps.googleapis.com/maps/api/js' );
+			wp_enqueue_script( 'location-edit-screen', LocationsSearch::get_url().'/js/location-edit.js', array( 'location-edit-google-maps-api', 'jquery', ), LOCATIONSSEARCHVERSION );
 			wp_enqueue_style( 'location-edit-screen', LocationsSearch::get_url().'/css/location-edit.css', array(), LOCATIONSSEARCHVERSION );
 			
 		}
