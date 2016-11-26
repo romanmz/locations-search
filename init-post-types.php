@@ -30,6 +30,7 @@ if( !function_exists( 'locationssearch_post_type_location' ) ) {
 		);
 		
 		// Register post type
+		$url_slug = LocationsSearchSettings::get( 'permalinks_name' );
 		$args = array(
 			'labels'              => $labels,
 			'public'              => true,
@@ -37,12 +38,12 @@ if( !function_exists( 'locationssearch_post_type_location' ) ) {
 			'menu_icon'           => 'dashicons-location',
 			'hierarchical'        => false,
 			'supports'            => array( 'title', 'editor', 'excerpt', 'revisions', ),
-			'has_archive'         => 'locations',
+			'has_archive'         => $url_slug,
 			'can_export'          => true,
 			'delete_with_user'    => false,
 			'capability_type'     => 'page',
 			'rewrite'             => array(
-				'slug'            => 'locations',
+				'slug'            => $url_slug,
 			),
 		);
 		register_post_type( 'location', $args );
