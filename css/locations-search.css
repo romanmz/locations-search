@@ -115,3 +115,13 @@
 		height: auto;
 	}
 }
+
+/* Search Options */
+.lsform__options div {
+	padding: 1em 2em 0;
+}
+.lsform__options ul {
+	margin: 0;
+	padding: 0 2em 1em;
+	border-bottom: 1px solid #EEE;
+}
