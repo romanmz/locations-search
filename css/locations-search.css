@@ -3,29 +3,26 @@
 .lsform__container {
 	position: relative;
 	border: 1px solid #EEE;
+	margin-bottom: 20px;
 }
 .lsform,
 .lsform__options,
 .lsform__summary,
 .lsform__results {
-	width: 50%;
+	width: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
 }
 .lsform__results {
-	min-height: 300px;
-	max-height: 600px;
-	
+	display: none;
+	height: 400px;
 	overflow: auto;
 	-webkit-overflow-scrolling: scrolling;
 	-webkit-overflow-scrolling: touch;
 }
 .lsform__map {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 50%;
-	right: 0;
+	position: relative;
+	height: 300px;
 	background: #EEE;
 }
 
@@ -96,4 +93,25 @@
 .lsform button:focus {
 	color: white;
 	background: #39C;
+}
+
+/* Desktop View */
+@media screen and (min-width: 750px) {
+	.lsform,
+	.lsform__options,
+	.lsform__summary,
+	.lsform__results {
+		width: 50%;
+	}
+	.lsform__results {
+		display: block;
+	}
+	.lsform__map {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 50%;
+		right: 0;
+		height: auto;
+	}
 }
