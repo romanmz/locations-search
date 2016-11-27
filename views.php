@@ -12,6 +12,29 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 	class LocationsSearchViews {
 		
 		
+		// Get "Query" Field
+		// ------------------------------
+		static private function get_query_field() {
+			
+			// Get requested query
+			$query = !empty( $_REQUEST['query'] ) ? trim( $_REQUEST['query'] ) : '';
+			
+			// Output field
+			$html = sprintf( '
+				<div class="lsform__field lsform__query">
+					<label for="lsform__query">%s</label>
+					<input id="lsform__query" type="text" name="query" value="%s" title="%s" placeholder="%s">
+				</div>',
+				esc_html( 'Query' ),
+				esc_attr( $query ),
+				esc_attr( 'Query' ),
+				esc_attr( 'Enter your postcode or city' )
+			);
+			return $html;
+			
+		}
+		
+		
 		// Get "Distance" Field
 		// ------------------------------
 		static private function get_distance_field( $options ) {
