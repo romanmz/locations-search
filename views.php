@@ -12,6 +12,39 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 	class LocationsSearchViews {
 		
 		
+		// Get Search Form
+		// ------------------------------
+		static public function get_search_form( $custom_atts=array() ) {
+			
+			// Parse settings
+			$default_atts = array(
+				'action' => is_singular() ? get_permalink() : '',
+				'method' => 'get',
+				'distance' => '5,10,25,50,100',
+			);
+			extract( shortcode_atts( $default_atts, $custom_atts ) );
+			
+			// Output form
+			$html = sprintf( '
+				<form class="lsform" action="%s" method="%s">
+					%s
+					%s
+					<div class="lsform__field lsform__submit">
+						<button id="lsform__submit" type="submit">Search</button>
+					</div>
+					<div class="lsform__options"></div>
+					<div class="lsform__summary"></div>
+				</form>',
+				esc_url( $action ),
+				( strtolower( $method ) == 'post' ) ? 'post' : 'get',
+				self::get_query_field(),
+				self::get_distance_field( $distance )
+			);
+			return $html;
+			
+		}
+		
+		
 		// Get "Query" Field
 		// ------------------------------
 		static private function get_query_field() {
