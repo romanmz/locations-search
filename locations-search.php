@@ -240,3 +240,4 @@ if( !class_exists( 'LocationsSearch' ) ) {
 // Load includes
 require_once 'init-post-types.php';
 require_once 'init-settings.php';
+require_once 'model.php';
