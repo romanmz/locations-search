@@ -64,6 +64,13 @@
 }
 .lsform__submit {
 	clear: both;
+	border-top: 1px solid #EEE;
+}
+
+/* Subfields */
+.lsform__subfield {
+	float: left;
+	width: 50%;
 }
 
 /* Form Fields Style */
@@ -85,6 +92,7 @@
 .lsform input[type=text],
 .lsform select {
 	line-height: 1;
+	background: none;
 }
 .lsform button {
 	color: white;
