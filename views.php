@@ -21,6 +21,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				'action' => is_singular() ? get_permalink() : '',
 				'method' => 'get',
 				'distance' => '5,10,25,50,100',
+				'distance_units' => 'km',
 			);
 			extract( shortcode_atts( $default_atts, $custom_atts ) );
 			
@@ -38,7 +39,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				esc_url( $action ),
 				( strtolower( $method ) == 'post' ) ? 'post' : 'get',
 				self::get_query_field(),
-				self::get_distance_field( $distance )
+				self::get_distance_field( $distance, $distance_units )
 			);
 			return $html;
 			
@@ -70,7 +71,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		
 		// Get "Distance" Field
 		// ------------------------------
-		static private function get_distance_field( $options ) {
+		static private function get_distance_field( $options, $units=false ) {
 			
 			// Clean up options
 			$options = (string) $options;
@@ -78,12 +79,14 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			if( empty( $options ) ) {
 				$options = array( 25 );
 			}
+			$units = in_array( $units, array( 'miles', 'km', 'select', ) ) ? $units : 'km';
 			
-			// Get requested option
+			// Get requested options
 			$selected = !empty( $_REQUEST['distance'] ) ? floatval( $_REQUEST['distance'] ) : 0;
 			if( !$selected || !in_array( $selected, $options ) ) {
 				$selected = reset( $options );
 			}
+			$selected_units = !empty( $_REQUEST['distance_units'] ) ? trim( $_REQUEST['distance_units'] ) : 'km';
 			
 			// One option
 			if( count( $options ) == 1 ) {
@@ -98,10 +101,10 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				$options_html = '';
 				foreach( $options as $option ) {
 					$options_html .= sprintf(
-						'<option value="%s"%s>%s</option>',
+						'<option value="%1$s"%2$s>%1$s%3$s</option>',
 						$option,
 						selected( $option, $selected, false ),
-						$option
+						( $units == 'select' ) ? '' : ' '.$units
 					);
 				}
 				$html = sprintf( '
@@ -114,6 +117,26 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					esc_html( 'Distance' ),
 					esc_attr( 'Distance' ),
 					$options_html
+				);
+			}
+			
+			// Pre-defined units
+			if( $units != 'select' ) {
+				$html .= sprintf(
+					'<input id="lsform__distanceunits" type="hidden" name="distance_units" value="%s">',
+					$units
+				);
+			}
+			
+			// Allow units selection
+			else {
+				$html .= sprintf(
+					'<select id="lsform__distanceunits" name="distance_units">
+						<option value="km"%s>km</option>
+						<option value="miles"%s>miles</option>
+					</select>',
+					selected( $selected_units, 'km', false ),
+					selected( $selected_units, 'miles', false )
 				);
 			}
 			
