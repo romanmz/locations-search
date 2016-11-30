@@ -12,6 +12,30 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 	class LocationsSearchViews {
 		
 		
+		// Get Full Container
+		// ------------------------------
+		static public function get_container( $custom_atts=array(), $content='' ) {
+			$html = sprintf( '
+				<div class="lsform__container" >
+					%s
+					<div class="lsform__options"></div>
+					<div class="lsform__summary"></div>
+					<noscript><div class="lsform__summary"><p>You need to enable javascript to be able to use this form.</p></div></noscript>
+					<div class="lsform__results"></div>
+					<div class="lsform__map"></div>
+				</div>
+				',
+				self::get_search_form( $custom_atts )
+			);
+			return $html;
+		}
+		
+		
+		
+		// Search Form
+		// ==================================================
+		
+		
 		// Get Search Form
 		// ------------------------------
 		static public function get_search_form( $custom_atts=array() ) {
