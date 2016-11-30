@@ -120,12 +120,15 @@
 
 /* Search Options */
 .lsform__options div {
-	padding: 1em 2em 0;
+	padding: 1em 1.5em 0;
 }
 .lsform__options ul {
 	margin: 0;
-	padding: 0 2em 1em;
+	padding: 0 1.5em 1em;
 	border-bottom: 1px solid #EEE;
+	list-style-position: inside;
+}
+
 /* Search Summary */
 .lsform__summary {}
 .lsform__summary p {
