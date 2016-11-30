@@ -91,30 +91,33 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					'<input id="lsform__distance" type="hidden" name="distance" value="%s">',
 					esc_attr( $selected )
 				);
-				return $html;
 			}
 			
 			// Multiple options
-			$options_html = '';
-			foreach( $options as $option ) {
-				$options_html .= sprintf(
-					'<option value="%s"%s>%s</option>',
-					$option,
-					selected( $option, $selected, false ),
-					$option
+			else {
+				$options_html = '';
+				foreach( $options as $option ) {
+					$options_html .= sprintf(
+						'<option value="%s"%s>%s</option>',
+						$option,
+						selected( $option, $selected, false ),
+						$option
+					);
+				}
+				$html = sprintf( '
+					<div class="lsform__field lsform__distance">
+						<label for="lsform__distance">%s</label>
+						<select id="lsform__distance" name="distance" title="%s">
+							%s
+						</select>
+					</div>',
+					esc_html( 'Distance' ),
+					esc_attr( 'Distance' ),
+					$options_html
 				);
 			}
-			$html = sprintf( '
-				<div class="lsform__field lsform__distance">
-					<label for="lsform__distance">%s</label>
-					<select id="lsform__distance" name="distance" title="%s">
-						%s
-					</select>
-				</div>',
-				esc_html( 'Distance' ),
-				esc_attr( 'Distance' ),
-				$options_html
-			);
+			
+			// Return
 			return $html;
 			
 		}
