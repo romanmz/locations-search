@@ -59,6 +59,16 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 			return !empty( $posts ) ? $posts : array();
 			
 		}
+		static public function get_closest_locations_from_array( $atts=array() ) {
+			$defaults = array(
+				'lat' => 0,
+				'lng' => 0,
+				'distance' => 0,
+				'distance_units' => '',
+			);
+			extract( shortcode_atts( $defaults, $atts ) );
+			return self::get_closest_locations( $lat, $lng, $distance, $distance_units );
+		}
 		
 		
 	}
