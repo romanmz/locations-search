@@ -30,11 +30,9 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				<form class="lsform" action="%s" method="%s">
 					%s
 					%s
-					<div class="lsform__field lsform__submit">
+					<div class="lsform__submit">
 						<button id="lsform__submit" type="submit">Search</button>
 					</div>
-					<div class="lsform__options"></div>
-					<div class="lsform__summary"></div>
 				</form>',
 				esc_url( $action ),
 				( strtolower( $method ) == 'post' ) ? 'post' : 'get',
