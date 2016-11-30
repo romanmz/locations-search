@@ -30,6 +30,7 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 					posts.*,
 					latitude.meta_value as lat,
 					longitude.meta_value as lng,
+					'${distance_units}' as distance_units,
 					(
 						ACOS(
 							SIN( RADIANS( $lat ) )
