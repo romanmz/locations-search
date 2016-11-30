@@ -181,5 +181,21 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		}
 		
 		
+		
+		// Helper Functions
+		// ==================================================
+		
+		static public function get_formatted_address( $post ) {
+			$meta_keys = array( 'address', 'suburb', 'state', 'postcode', );
+			foreach( $meta_keys as $meta_key ) {
+				$$meta_key = trim( esc_html( get_post_meta( $post->ID, $meta_key, true ) ) );
+			}
+			$address_line_1 = $address;
+			$address_line_2 = trim( "{$suburb} {$state} {$postcode}" );
+			$formatted_address = implode( '<br>', array_filter( array( $address_line_1, $address_line_2, ) ) );
+			return $formatted_address;
+		}
+		
+		
 	}
 }
