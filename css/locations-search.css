@@ -133,4 +133,25 @@
 	text-transform: uppercase;
 }
 
+/* Search Results */
+.lsform__results ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	overflow: hidden;
+}
+.lsform__results li {
+	margin-top: -1px;
+	padding: 1.5em;
+	border-top: 1px solid #EEE;
+	transition: background .5s;
+}
+.lsform__results li:hover {
+	background: #EEE;
+}
+.lsform__results h3 {
+	margin: 0;
+}
+
+
 }
