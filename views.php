@@ -131,10 +131,14 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			// Allow units selection
 			else {
 				$html .= sprintf(
-					'<select id="lsform__distanceunits" name="distance_units">
+					'
+					<label for="lsform__distanceunits">%s</label>
+					<select id="lsform__distanceunits" name="distance_units" title="%s">
 						<option value="km"%s>km</option>
 						<option value="miles"%s>miles</option>
 					</select>',
+					esc_html( 'Units' ),
+					esc_attr( 'Units' ),
 					selected( $selected_units, 'km', false ),
 					selected( $selected_units, 'miles', false )
 				);
