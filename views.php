@@ -90,7 +90,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			
 			// One option
 			if( count( $options ) == 1 ) {
-				$html = sprintf(
+				$distance_html = sprintf(
 					'<input id="lsform__distance" type="hidden" name="distance" value="%s">',
 					esc_attr( $selected )
 				);
@@ -107,13 +107,12 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 						( $units == 'select' ) ? '' : ' '.$units
 					);
 				}
-				$html = sprintf( '
-					<div class="lsform__field lsform__distance">
-						<label for="lsform__distance">%s</label>
-						<select id="lsform__distance" name="distance" title="%s">
-							%s
-						</select>
-					</div>',
+				$distance_html = sprintf( '
+					<label for="lsform__distance">%s</label>
+					<select id="lsform__distance" name="distance" title="%s">
+						%s
+					</select>
+					',
 					esc_html( 'Distance' ),
 					esc_attr( 'Distance' ),
 					$options_html
@@ -122,7 +121,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			
 			// Pre-defined units
 			if( $units != 'select' ) {
-				$html .= sprintf(
+				$units_html = sprintf(
 					'<input id="lsform__distanceunits" type="hidden" name="distance_units" value="%s">',
 					$units
 				);
@@ -130,7 +129,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			
 			// Allow units selection
 			else {
-				$html .= sprintf(
+				$units_html = sprintf(
 					'
 					<label for="lsform__distanceunits">%s</label>
 					<select id="lsform__distanceunits" name="distance_units" title="%s">
@@ -142,6 +141,16 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					selected( $selected_units, 'km', false ),
 					selected( $selected_units, 'miles', false )
 				);
+			}
+			
+			// Wrap up fields
+			if( count( $options ) > 1 && $units == 'select' ) {
+				$distance_html = '<div class="lsform__subfield">'.$distance_html.'</div>';
+				$units_html = '<div class="lsform__subfield">'.$units_html.'</div>';
+			}
+			$html = $distance_html.$units_html;
+			if( count( $options ) > 1 || $units == 'select' ) {
+				$html = '<div class="lsform__field lsform__distance">'.$html.'</div>';
 			}
 			
 			// Return
