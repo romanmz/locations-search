@@ -182,6 +182,30 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		
 		
 		
+		// Search Results
+		// ==================================================
+		
+		
+		// Get Results HTML
+		// ------------------------------
+		static public function get_results_html( $post ) {
+			return sprintf( '
+				<h3>%s</h3>
+				<div><strong>Distance: %s %s</strong></div>
+				<div>%s</div>
+				<div><a href="%s">More info</a> | <a href="%s" target="_blank">Get directions</a></div>
+				',
+				get_the_title( $post ),
+				round( $post->distance, 1 ),
+				$post->distance_units,
+				self::get_formatted_address( $post ),
+				get_permalink( $post ),
+				'https://maps.google.com/maps?'.http_build_query( array( 'saddr'=>'Current Location', 'daddr'=>$post->lat.','.$post->lng ) )
+			);
+		}
+		
+		
+		
 		// Helper Functions
 		// ==================================================
 		
