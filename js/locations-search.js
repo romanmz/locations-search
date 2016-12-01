@@ -40,8 +40,9 @@ jQuery(document).ready(function($){
 	var formShowOptions = function( geocodeResults ) {
 		
 		// Unlock form and clean options
-		formUnlock();
 		searchOptions.empty();
+		searchSummary.empty();
+		searchResults.empty();
 		if( !geocodeResults.length ) {
 			return;
 		}
@@ -74,7 +75,8 @@ jQuery(document).ready(function($){
 	var formShowResults = function( locations ) {
 		
 		// Unlock form and clean results
-		formUnlock();
+		searchOptions.empty();
+		formShowSummary( locations );
 		searchResults.empty();
 		if( !locations.length ) {
 			return;
@@ -96,11 +98,10 @@ jQuery(document).ready(function($){
 	// ------------------------------
 	var geocodeSubmitQuery = function() {
 		
-		// Lock form
+		// Check lock
 		if( searchForm.data( 'isLocked' ) ) {
 			return false;
 		}
-		formLock();
 		
 		// Prepare geocode query
 		var query = {};
@@ -119,11 +120,11 @@ jQuery(document).ready(function($){
 		// Check that query is valid
 		if( !query.address ) {
 			alert( locations_search.text_please_enter_address );
-			formUnlock();
 			return;
 		}
 		
 		// Send geocode request
+		formLock();
 		googleGeocoder.geocode( query, geocodeHandleResponse );
 		
 	}
@@ -153,12 +154,13 @@ jQuery(document).ready(function($){
 	}
 	var geocodeHandleResponse = function( results, status ) {
 		if( geocodeReturnedError( results, status ) ) {
-			formUnlock();
+			//
 		} else if( results.length > 1 ) {
 			formShowOptions( results );
 		} else {
 			locationsSubmitQueryByGeocode( results[0] );
 		}
+		formUnlock();
 	}
 	
 	
@@ -171,8 +173,10 @@ jQuery(document).ready(function($){
 	}
 	var locationsSubmitQuery = function( lat, lng ) {
 		
-		// Lock form
-		formLock();
+		// Check lock
+		if( searchForm.data( 'isLocked' ) ) {
+			return false;
+		}
 		
 		// Prepare query
 		var query = {}
@@ -183,6 +187,7 @@ jQuery(document).ready(function($){
 		query.distance_units = fieldDistanceUnits.val();
 		
 		// Submit query
+		formLock();
 		$.ajax({
 			url: locations_search.ajax_url,
 			data: query,
@@ -192,7 +197,6 @@ jQuery(document).ready(function($){
 				alert( locations_search.error_unknown );
 			},
 			success: function( locations, status, jqXHR ) {
-				formShowSummary( locations );
 				formShowResults( locations );
 			},
 			complete: function( jqXHR, status ) {
