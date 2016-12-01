@@ -202,4 +202,12 @@ jQuery(document).ready(function($){
 	}
 	
 	
+	// Bind events
+	// ------------------------------
+	searchForm.on( 'submit', function(e){
+		e.preventDefault();
+		geocodeSubmitQuery();
+	});
+	
+	
 });
