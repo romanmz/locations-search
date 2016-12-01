@@ -22,5 +22,9 @@ jQuery(document).ready(function($){
 		return;
 	}
 	
+	// Init google objects
+	var googleGeocoder = new google.maps.Geocoder();
+	var googleMap = map.length ? new google.maps.Map( map[0], { zoom:15, } ) : false;
+	
 	
 });
