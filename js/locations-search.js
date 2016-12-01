@@ -153,6 +153,7 @@ jQuery(document).ready(function($){
 		
 	}
 	var geocodeHandleResponse = function( results, status ) {
+		formUnlock();
 		if( geocodeReturnedError( results, status ) ) {
 			//
 		} else if( results.length > 1 ) {
@@ -160,7 +161,6 @@ jQuery(document).ready(function($){
 		} else {
 			locationsSubmitQueryByGeocode( results[0] );
 		}
-		formUnlock();
 	}
 	
 	
@@ -194,13 +194,12 @@ jQuery(document).ready(function($){
 			dataType: 'json',
 			method: 'POST',
 			error: function( jqXHR, status, error ) {
+				formUnlock();
 				alert( locations_search.error_unknown );
 			},
 			success: function( locations, status, jqXHR ) {
-				formShowResults( locations );
-			},
-			complete: function( jqXHR, status ) {
 				formUnlock();
+				formShowResults( locations );
 			},
 		});
 	}
