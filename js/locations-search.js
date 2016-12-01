@@ -92,4 +92,74 @@ jQuery(document).ready(function($){
 	}
 	
 	
+	// Geocoding functions
+	// ------------------------------
+	var geocodeSubmitQuery = function() {
+		
+		// Lock form
+		if( searchForm.data( 'isLocked' ) ) {
+			return false;
+		}
+		formLock();
+		
+		// Prepare geocode query
+		var query = {};
+		query.address = $.trim( fieldQuery.val() );
+		// query.location;
+		// query.placeId;
+		// query.bounds;
+		// query.region;
+		// query.componentRestrictions = {};
+		// query.componentRestrictions.route;
+		// query.componentRestrictions.locality;
+		// query.componentRestrictions.administrativeArea;
+		// query.componentRestrictions.postalCode;
+		// query.componentRestrictions.country;
+		
+		// Check that query is valid
+		if( !query.address ) {
+			alert( locations_search.text_please_enter_address );
+			formUnlock();
+			return;
+		}
+		
+		// Send geocode request
+		googleGeocoder.geocode( query, geocodeHandleResponse );
+		
+	}
+	var geocodeReturnedError = function( results, status ) {
+		
+		// Return false if no errors found
+		if( status == 'OK' && results.length ) {
+			return false;
+		}
+		
+		// Alert user and return true
+		if( status == 'INVALID_REQUEST' ) {
+			alert( locations_search.error_invalid_request );
+		}
+		if( status == 'OVER_QUERY_LIMIT' ) {
+			alert( locations_search.error_query_limit );
+		}
+		if( status == 'ZERO_RESULTS' || ( status == 'OK' && !results.length ) ) {
+			alert( locations_search.error_no_results );
+		}
+		if( status != 'OK' ) {
+			// UNKNOWN_ERROR and REQUEST_DENIED
+			alert( locations_search.error_unknown );
+		}
+		return true;
+		
+	}
+	var geocodeHandleResponse = function( results, status ) {
+		if( geocodeReturnedError( results, status ) ) {
+			formUnlock();
+		} else if( results.length > 1 ) {
+			formShowOptions( results );
+		} else {
+			locationsSubmitQueryByGeocode( results[0] );
+		}
+	}
+	
+	
 });

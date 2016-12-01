@@ -31,6 +31,11 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'ajax_action' => 'lsajax_search_results',
 				'text_did_you_mean' => 'Did you mean:',
+				'text_please_enter_address' => 'Please enter an address',
+				'error_invalid_request' => 'Invalid request, please verify that the requested address is correct',
+				'error_query_limit' => 'You have exceeded the maximum number of allowed queries, please wait for some time before trying again',
+				'error_no_results' => 'No results found, please try a different address',
+				'error_unknown' => 'There was an unknown error',
 			) );
 			wp_enqueue_style( 'locations-search', LocationsSearch::get_url().'/css/locations-search.css', array(), LOCATIONSSEARCHVERSION );
 		}
