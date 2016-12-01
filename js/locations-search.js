@@ -53,7 +53,7 @@ jQuery(document).ready(function($){
 			var link = $('<a>',{ href:'#', text:geocodeResult.formatted_address });
 			link.on( 'click', function(e){
 				e.preventDefault();
-				locationsGetByGeocode( geocodeResult );
+				locationsSubmitQueryByGeocode( geocodeResult );
 			});
 			list.append( item.append( link ) );
 		});
@@ -159,6 +159,46 @@ jQuery(document).ready(function($){
 		} else {
 			locationsSubmitQueryByGeocode( results[0] );
 		}
+	}
+	
+	
+	// Querying Locations
+	// ------------------------------
+	var locationsSubmitQueryByGeocode = function( geocodeResult ) {
+		var lat = geocodeResult.geometry.location.lat();
+		var lng = geocodeResult.geometry.location.lng();
+		locationsSubmitQuery( lat, lng );
+	}
+	var locationsSubmitQuery = function( lat, lng ) {
+		
+		// Lock form
+		formLock();
+		
+		// Prepare query
+		var query = {}
+		query.action = locations_search.ajax_action;
+		query.lat = lat;
+		query.lng = lng;
+		query.distance = fieldDistance.val();
+		query.distance_units = fieldDistanceUnits.val();
+		
+		// Submit query
+		$.ajax({
+			url: locations_search.ajax_url,
+			data: query,
+			dataType: 'json',
+			method: 'POST',
+			error: function( jqXHR, status, error ) {
+				alert( locations_search.error_unknown );
+			},
+			success: function( locations, status, jqXHR ) {
+				formShowSummary( locations );
+				formShowResults( locations );
+			},
+			complete: function( jqXHR, status ) {
+				formUnlock();
+			},
+		});
 	}
 	
 	
