@@ -54,9 +54,17 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 					distance ASC
 			";
 			
-			// Get posts and return result
+			// Get posts
 			$posts = $wpdb->get_results( $query );
-			return !empty( $posts ) ? $posts : array();
+			$posts = !empty( $posts ) ? $posts : array();
+			
+			// Cast vars
+			foreach( $posts as $post ) {
+				$post->lat = floatval( $post->lat );
+				$post->lng = floatval( $post->lng );
+				$post->distance = floatval( $post->distance );
+			}
+			return $posts;
 			
 		}
 		static public function get_closest_locations_from_array( $atts=array() ) {
