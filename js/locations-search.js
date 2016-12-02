@@ -236,19 +236,6 @@ jQuery(document).ready(function($){
 			position: position,
 		});
 		
-		// Extend map bounds
-		var newBounds = googleMap.getBounds();
-		if( !newBounds ) {
-			newBounds = new google.maps.LatLngBounds();
-		}
-		newBounds.extend( position );
-		googleMap.fitBounds( newBounds );
-		
-		// Don't zoom in too close
-		if( googleMap.getZoom() > 15 ) {
-			googleMap.setZoom( 15 );
-		}
-		
 		// Return marker
 		return marker;
 	}
@@ -285,9 +272,18 @@ jQuery(document).ready(function($){
 	var mapReplaceLocations = function( locations ) {
 		mapDeleteMarkers();
 		mapDeleteWindows();
+		var newBounds = new google.maps.LatLngBounds();
 		$.each( locations, function( i, location ){
 			mapAddLocation( location );
+			newBounds.extend( location );
 		});
+		googleMap.fitBounds( newBounds );
+		
+		// Don't zoom in too close
+		if( googleMap.getZoom() > 15 ) {
+			googleMap.setZoom( 15 );
+		}
+		
 	}
 	
 	
