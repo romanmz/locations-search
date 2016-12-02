@@ -25,6 +25,8 @@ jQuery(document).ready(function($){
 	// Init google objects
 	var googleGeocoder = new google.maps.Geocoder();
 	var googleMap = map.length ? new google.maps.Map( map[0], { zoom:15, } ) : false;
+	var mapMarkers = [];
+	var mapWindows = [];
 	
 	
 	// Form functions
@@ -78,6 +80,7 @@ jQuery(document).ready(function($){
 		searchOptions.empty();
 		formShowSummary( locations );
 		searchResults.empty();
+		mapReplaceLocations( locations );
 		if( !locations.length ) {
 			return;
 		}
@@ -201,6 +204,89 @@ jQuery(document).ready(function($){
 				formUnlock();
 				formShowResults( locations );
 			},
+		});
+	}
+	
+	
+	// Map Functions
+	// ------------------------------
+	var mapDeleteMarkers = function() {
+		$.each( mapMarkers, function( i, marker ) {
+			marker.setMap( null );
+		});
+		mapMarkers = [];
+	}
+	var mapDeleteWindows = function() {
+		$.each( mapWindows, function( i, infoWindow ) {
+			infoWindow.close();
+		});
+		mapWindows = [];
+	}
+	var mapAddMarker = function( lat, lng ) {
+		
+		// Exit if map doesn't exist
+		if( !googleMap ) {
+			return false;
+		}
+		
+		// Create and add marker
+		var position = new google.maps.LatLng( lat, lng );
+		var marker = new google.maps.Marker({
+			map: googleMap,
+			position: position,
+		});
+		
+		// Extend map bounds
+		var newBounds = googleMap.getBounds();
+		if( !newBounds ) {
+			newBounds = new google.maps.LatLngBounds();
+		}
+		newBounds.extend( position );
+		googleMap.fitBounds( newBounds );
+		
+		// Don't zoom in too close
+		if( googleMap.getZoom() > 15 ) {
+			googleMap.setZoom( 15 );
+		}
+		
+		// Return marker
+		return marker;
+	}
+	var mapAddWindow = function( lat, lng, content ) {
+		var infoWindow = new google.maps.InfoWindow({
+			position: new google.maps.LatLng( lat, lng ),
+			content: content,
+			pixelOffset: new google.maps.Size( 0, -30 ),
+		});
+		return infoWindow;
+	}
+	var mapAddLocation = function( location ) {
+		
+		// Exit if map doesn't exist
+		if( !googleMap ) {
+			return false;
+		}
+		
+		// Add marker and info window
+		var marker = mapAddMarker( location.lat, location.lng );
+		var infoWindow = mapAddWindow( location.lat, location.lng, location.info_window );
+		mapMarkers.push( marker );
+		mapWindows.push( infoWindow );
+		
+		// Show info windows when clicking on the marker
+		google.maps.event.addListener( marker, 'click', function(){
+			$.each( mapWindows, function( i, infoW ){
+				infoW.close();
+			});
+			infoWindow.open( googleMap );
+		});
+		
+	}
+	var mapReplaceLocations = function( locations ) {
+		mapDeleteMarkers();
+		mapDeleteWindows();
+		$.each( locations, function( i, location ){
+			mapAddLocation( location );
 		});
 	}
 	

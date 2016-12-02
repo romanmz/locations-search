@@ -62,6 +62,7 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				$_post->distance = $post->distance;
 				$_post->distance_units = $post->distance_units;
 				$_post->results_html = LocationsSearchViews::get_results_html( $post );
+				$_post->info_window = LocationsSearchViews::get_info_window( $post );
 				$posts[ $i ] = $_post;
 			}
 			header( 'Content-type: application/json' );
