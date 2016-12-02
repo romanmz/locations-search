@@ -270,9 +270,18 @@ jQuery(document).ready(function($){
 		
 	}
 	var mapReplaceLocations = function( locations ) {
+		
+		// Exit if map doesn't exist
+		if( !googleMap ) {
+			return false;
+		}
+		
+		// Reset map
 		mapDeleteMarkers();
 		mapDeleteWindows();
 		var newBounds = new google.maps.LatLngBounds();
+		
+		// Add locations
 		$.each( locations, function( i, location ){
 			mapAddLocation( location );
 			newBounds.extend( location );
