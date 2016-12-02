@@ -45,6 +45,7 @@ jQuery(document).ready(function($){
 		searchOptions.empty();
 		searchSummary.empty();
 		searchResults.empty();
+		mapDeleteLocations();
 		if( !geocodeResults.length ) {
 			return;
 		}
@@ -210,13 +211,11 @@ jQuery(document).ready(function($){
 	
 	// Map Functions
 	// ------------------------------
-	var mapDeleteMarkers = function() {
+	var mapDeleteLocations = function() {
 		$.each( mapMarkers, function( i, marker ) {
 			marker.setMap( null );
 		});
 		mapMarkers = [];
-	}
-	var mapDeleteWindows = function() {
 		$.each( mapWindows, function( i, infoWindow ) {
 			infoWindow.close();
 		});
@@ -277,8 +276,7 @@ jQuery(document).ready(function($){
 		}
 		
 		// Reset map
-		mapDeleteMarkers();
-		mapDeleteWindows();
+		mapDeleteLocations();
 		var newBounds = new google.maps.LatLngBounds();
 		
 		// Add locations
