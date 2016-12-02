@@ -298,6 +298,17 @@ jQuery(document).ready(function($){
 	
 	// Bind events
 	// ------------------------------
+	
+	// Set initial map location
+	if( googleMap ) {
+		googleMap.setCenter({
+			lat: parseFloat( locations_search.initial_lat ),
+			lng: parseFloat( locations_search.initial_lng ),
+		});
+		googleMap.setZoom( 15 );
+	}
+	
+	// Search locations on form submit
 	searchForm.on( 'submit', function(e){
 		e.preventDefault();
 		geocodeSubmitQuery();

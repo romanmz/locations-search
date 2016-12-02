@@ -39,6 +39,8 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				'error_query_limit' => 'You have exceeded the maximum number of allowed queries, please wait for some time before trying again',
 				'error_no_results' => 'No results found, please try a different address',
 				'error_unknown' => 'There was an unknown error',
+				'initial_lat' => -33.865,
+				'initial_lng' => 151.2094,
 			) );
 			wp_enqueue_style( 'locations-search', LocationsSearch::get_url().'/css/locations-search.css', array(), LOCATIONSSEARCHVERSION );
 		}
