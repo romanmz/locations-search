@@ -131,13 +131,17 @@ jQuery(document).ready(function($){
 		// query.location;
 		// query.placeId;
 		// query.bounds;
-		// query.region;
-		// query.componentRestrictions = {};
+		if( locations_search.focus_country && !locations_search.focus_country_strict ) {
+			query.region = locations_search.focus_country;
+		}
+		query.componentRestrictions = {};
 		// query.componentRestrictions.route;
 		// query.componentRestrictions.locality;
 		// query.componentRestrictions.administrativeArea;
 		// query.componentRestrictions.postalCode;
-		// query.componentRestrictions.country;
+		if( locations_search.focus_country && locations_search.focus_country_strict ) {
+			query.componentRestrictions.country = locations_search.focus_country;
+		}
 		
 		// Check that query is valid
 		if( !query.address ) {
