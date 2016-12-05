@@ -51,6 +51,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 		// ------------------------------
 		public function __construct() {
 			add_action( 'admin_menu', array( $this, 'register_page' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'load_assets' ) );
 			add_action( 'admin_init', array( $this, 'register_section' ) );
 			add_action( 'admin_init', array( $this, 'register_fields' ) );
 			add_action( 'admin_init', array( $this, 'register_settings' ) );
@@ -86,6 +87,17 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				</form>
 			</div>
 			<?php
+		}
+		
+		
+		// Load Assets
+		// ------------------------------
+		public function load_assets( $hook ) {
+			if( $hook == 'location_page_'.self::$page_id ) {
+				wp_enqueue_media();
+				wp_enqueue_script( 'locations-search-settings', LocationsSearch::get_url().'/js/settings.js', array( 'jquery', ), LOCATIONSSEARCHVERSION );
+				wp_enqueue_style( 'locations-search-settings', LocationsSearch::get_url().'/css/settings.css', array(), LOCATIONSSEARCHVERSION );
+			}
 		}
 		
 		
