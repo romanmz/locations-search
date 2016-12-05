@@ -109,7 +109,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$fields = array(
 				'google_api_key' => 'Google API Key',
 				'permalinks_base' => 'Permalinks Base',
-				'bias_country' => 'Map Region',
+				'focus_country' => 'Focus Country',
 				'restrict_country' => 'Limit Results',
 			);
 			foreach( $fields as $field_key => $field_label ) {
@@ -134,7 +134,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			extract( $field );
 			
 			// Prepare country dropdowns
-			if( $key == 'bias_country' || $key == 'restrict_country' ) {
+			if( $key == 'focus_country' ) {
 				$country_html ='';
 				$country_codes = LocationsSearch::get_country_codes();
 				foreach( $country_codes as $country_code => $country_name ) {
@@ -169,13 +169,13 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						esc_attr( $value )
 					);
 					break;
-				case 'bias_country':
+				case 'focus_country':
 					printf( '
 						<select id="%s" name="%s">
 							<option value="">- Select a country -</option>
 							%s
 						</select>
-						<p class="description">Bias the results towards the country selected here</p>
+						<p class="description">If you want to focus the map on a single country, select it here.</p>
 						',
 						esc_attr( $id ),
 						esc_attr( $name ),
@@ -214,7 +214,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$defaults = array(
 				'google_api_key' => '',
 				'permalinks_base' => '',
-				'bias_country' => '',
+				'focus_country' => '',
 				'restrict_country' => '',
 			);
 			$data = shortcode_atts( $defaults, $user_data );
@@ -240,7 +240,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			// Sanitize
 			$data['google_api_key'] = sanitize_text_field( $data['google_api_key'] );
 			$data['permalinks_base'] = sanitize_title( $data['permalinks_base'] );
-			$data['bias_country'] = sanitize_title( $data['bias_country'] );
+			$data['focus_country'] = sanitize_title( $data['focus_country'] );
 			$data['restrict_country'] = sanitize_title( $data['restrict_country'] );
 			
 			// Save
