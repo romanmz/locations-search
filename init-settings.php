@@ -124,6 +124,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'focus_country' => 'Focus Country',
 				'focus_country_strict' => 'Focus Country Mode',
 				'map_styles' => 'Map Styles',
+				'map_marker' => 'Map Markers',
 			);
 			foreach( $fields as $field_key => $field_label ) {
 				add_settings_field(
@@ -223,6 +224,30 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						esc_textarea( $value )
 					);
 					break;
+				case 'map_marker':
+					printf( '
+						<div class="lsmediaupload" data-frame-title="%s" data-frame-button-text="%s">
+							<div class="lsmediaupload__preview">
+								%s
+							</div>
+							<input type="hidden" class="lsmediaupload__field" id="%s" name="%s" value="%s">
+							<input type="button" class="lsmediaupload__upload button" value="%s" data-label-replace="%s">
+							<input type="button" class="lsmediaupload__reset button hidden" value="%s">
+						</div>
+						<p class="description">%s</p>
+						',
+						'Select an image',
+						'Use this image',
+						wp_get_attachment_image( absint( $value ), 'thumbnail' ),
+						esc_attr( $id ),
+						esc_attr( $name ),
+						esc_attr( $value ),
+						'Select File',
+						'Replace File',
+						'Remove File',
+						'Select an image to be used to create the markers on the map.'
+					);
+					break;
 			}
 		}
 		
@@ -245,6 +270,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'focus_country' => '',
 				'focus_country_strict' => '',
 				'map_styles' => '',
+				'map_marker' => '',
 			);
 			$data = shortcode_atts( $defaults, $user_data );
 			
@@ -284,6 +310,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$data['focus_country'] = sanitize_title( $data['focus_country'] );
 			$data['focus_country_strict'] = (bool) $data['focus_country_strict'];
 			$data['map_styles'] = trim( $data['map_styles'] );
+			$data['map_marker'] = !empty( $data['map_marker'] ) ? absint( $data['map_marker'] ) : '';
 			
 			// Save
 			return $data;

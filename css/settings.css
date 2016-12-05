@@ -1,1 +1,28 @@
 
+/* Map Markers */
+.lsmediaupload {
+	width: 220px;
+	border-radius: 5px;
+	border: 1px solid #DDD;
+	padding: 10px;
+	overflow: hidden;
+}
+.lsmediaupload__preview {
+}
+.lsmediaupload__preview img {
+	display: block;
+	margin: 0 auto 10px;
+	max-width: 50px;
+	height: auto;
+}
+.lsmediaupload__upload,
+.lsmediaupload__reset {
+	width: 49%;
+	box-sizing: border-box;
+}
+.lsmediaupload__upload {
+	float: left;
+}
+.lsmediaupload__reset {
+	float: right;
+}
