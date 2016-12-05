@@ -185,7 +185,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				case 'focus_country_strict':
 					printf( '
 						<label>
-							<input type="radio" name="%1$s]" value=""%2$s>
+							<input type="radio" name="%1$s" value=""%2$s>
 							Bias
 						</label>
 						&nbsp;
@@ -196,8 +196,8 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						<p class="description">Select <strong>bias</strong> to give preference to the Focus Country on the map but still allow other countries to be displayed, or select <strong>restrict</strong> to strictly restrict the map only on the Focus Country.</p>
 						',
 						esc_attr( $name ),
-						checked( true, $value, false ),
-						checked( false, $value, false )
+						checked( false, $value, false ),
+						checked( true, $value, false )
 					);
 					break;
 			}
