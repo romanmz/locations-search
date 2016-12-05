@@ -41,6 +41,7 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				'error_unknown' => 'There was an unknown error',
 				'initial_lat' => -33.865,
 				'initial_lng' => 151.2094,
+				'text_current_location' => '(current location)',
 			) );
 			wp_enqueue_style( 'locations-search', LocationsSearch::get_url().'/css/locations-search.css', array(), LOCATIONSSEARCHVERSION );
 		}

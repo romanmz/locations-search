@@ -28,6 +28,12 @@ jQuery(document).ready(function($){
 	var mapMarkers = [];
 	var mapWindows = [];
 	
+	// Init geolocation data
+	var userPosition = {
+		lat: sessionStorage.getItem( 'userLat' ),
+		lng: sessionStorage.getItem( 'userLng' ),
+	}
+	
 	
 	// Form functions
 	// ------------------------------
@@ -318,6 +324,42 @@ jQuery(document).ready(function($){
 	}
 	
 	
+	// Geolocation Functions
+	// ------------------------------
+	// searching by current position is always available if geo data was stored (with new request or with cached data)
+	// it should only be triggered (either manually or automatically on page load) when the query field is empty
+	var geolocSearchIsAvailable = function() {
+		return ( fieldQuery.val() == '' && userPosition.lat && userPosition.lng );
+	}
+	var geolocUpdatePlaceholder = function() {
+		if( userPosition.lat && userPosition.lng ) {
+			fieldQuery.attr( 'placeholder', locations_search.text_current_location );
+		}
+	}
+	var geolocGetClosestLocations = function() {
+		if( userPosition.lat && userPosition.lng ) {
+			fieldQuery.val( '' ).trigger( 'change' );
+			locationsSubmitQuery( userPosition.lat, userPosition.lng );
+		}
+	}
+	var geolocGetUserPosition = function() {
+		navigator.geolocation.getCurrentPosition(
+			function( position ){
+				userPosition.lat = position.coords.latitude;
+				userPosition.lng = position.coords.longitude;
+				sessionStorage.setItem( 'userLat', userPosition.lat );
+				sessionStorage.setItem( 'userLng', userPosition.lng );
+				geolocGetClosestLocations();
+			},
+			function( error ){},
+			{
+				enableHighAccuracy: false,
+				timeout: 10000,
+			}
+		);
+	}
+	
+	
 	// Bind events
 	// ------------------------------
 	
@@ -330,10 +372,17 @@ jQuery(document).ready(function($){
 		googleMap.setZoom( 15 );
 	}
 	
+	// Update placeholder for "query" field
+	fieldQuery.on( 'change keydown', geolocUpdatePlaceholder ).trigger( 'change' );
+	
 	// Search locations on form submit
 	searchForm.on( 'submit', function(e){
 		e.preventDefault();
-		geocodeSubmitQuery();
+		if( geolocSearchIsAvailable() ) {
+			geolocGetClosestLocations();
+		} else {
+			geocodeSubmitQuery();
+		}
 	});
 	
 	
@@ -341,6 +390,10 @@ jQuery(document).ready(function($){
 	// ------------------------------
 	if( searchForm.data( 'lsautosearch' ) ) {
 		searchForm.trigger( 'submit' );
+	} else if( geolocSearchIsAvailable() ) {
+		geolocGetClosestLocations();
+	} else if( fieldQuery.val() == '' ) {
+		geolocGetUserPosition();
 	}
 	
 	
