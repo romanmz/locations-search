@@ -30,6 +30,7 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 			wp_localize_script( 'locations-search', 'locations_search', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'ajax_action' => 'lsajax_search_results',
+				'map_styles' => apply_filters( 'locations_search_map_styles', LocationsSearchSettings::get( 'map_styles' ) ),
 				'focus_country' => LocationsSearchSettings::get( 'focus_country' ),
 				'focus_country_strict' => LocationsSearchSettings::get( 'focus_country_strict' ),
 				'text_did_you_mean' => 'Did you mean:',

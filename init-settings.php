@@ -111,6 +111,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'permalinks_base' => 'Permalinks Base',
 				'focus_country' => 'Focus Country',
 				'focus_country_strict' => 'Focus Country Mode',
+				'map_styles' => 'Map Styles',
 			);
 			foreach( $fields as $field_key => $field_label ) {
 				add_settings_field(
@@ -200,6 +201,16 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						checked( true, $value, false )
 					);
 					break;
+				case 'map_styles':
+					printf( '
+						<textarea id="%s" name="%s" class="large-text" rows="10">%s</textarea>
+						<p class="description">Use this <a href="https://mapstyle.withgoogle.com/" target="_blank">tool to generate custom map styles</a> and paste the JSON code here.</p>
+						',
+						esc_attr( $id ),
+						esc_attr( $name ),
+						esc_textarea( $value )
+					);
+					break;
 			}
 		}
 		
@@ -221,10 +232,11 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'permalinks_base' => '',
 				'focus_country' => '',
 				'focus_country_strict' => '',
+				'map_styles' => '',
 			);
 			$data = shortcode_atts( $defaults, $user_data );
 			
-			// Validation errors
+			// Validate Google API Key
 			if( empty( $data['google_api_key'] ) ) {
 				add_settings_error(
 					self::$option_group,
@@ -232,6 +244,18 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 					'It’s recommended to enter a Google Maps Javascript API key',
 					'notice-info'
 				);
+			}
+			
+			// Validate map styles
+			$map_styles_test = json_encode( $data['map_styles'] );
+			if( json_last_error() !== JSON_ERROR_NONE ) {
+				add_settings_error(
+					self::$option_group,
+					'map_styles',
+					'ERROR: Invalid JSON code on "Map Styles"',
+					'error'
+				);
+				$data['map_styles'] = '';
 			}
 			
 			// Success message
@@ -247,6 +271,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$data['permalinks_base'] = sanitize_title( $data['permalinks_base'] );
 			$data['focus_country'] = sanitize_title( $data['focus_country'] );
 			$data['focus_country_strict'] = (bool) $data['focus_country_strict'];
+			$data['map_styles'] = trim( $data['map_styles'] );
 			
 			// Save
 			return $data;

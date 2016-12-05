@@ -24,7 +24,13 @@ jQuery(document).ready(function($){
 	
 	// Init google objects
 	var googleGeocoder = new google.maps.Geocoder();
-	var googleMap = map.length ? new google.maps.Map( map[0], { zoom:15, } ) : false;
+	try {
+		var googleMapStyles = JSON.parse( locations_search.map_styles );
+	} catch( error ) {
+		console.log( error );
+		var googleMapStyles = [];
+	}
+	var googleMap = map.length ? new google.maps.Map( map[0], { zoom:15, styles:googleMapStyles, } ) : false;
 	var mapMarkers = [];
 	var mapWindows = [];
 	
