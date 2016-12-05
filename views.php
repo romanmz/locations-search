@@ -16,7 +16,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// ------------------------------
 		static public function get_container( $custom_atts=array(), $content='' ) {
 			$html = sprintf( '
-				<div class="lsform__container" >
+				<div class="lsform__container">
 					%s
 					<div class="lsform__options"></div>
 					<div class="lsform__summary"></div>
@@ -49,9 +49,20 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			);
 			extract( shortcode_atts( $default_atts, $custom_atts ) );
 			
+			// Enable auto-search
+			if(
+				!empty( $_POST['ls_autosearch'] )
+				&& !empty( $_SERVER['HTTP_REFERER'] )
+				&& strpos( $_SERVER['HTTP_REFERER'], home_url() ) === 0
+			) {
+				$autoload = true;
+			} else {
+				$autoload = false;
+			}
+			
 			// Output form
 			$html = sprintf( '
-				<form class="lsform" action="%s" method="%s">
+				<form class="lsform" action="%s" method="%s"%s>
 					%s
 					%s
 					<div class="lsform__submit">
@@ -60,6 +71,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				</form>',
 				esc_url( $action ),
 				( strtolower( $method ) == 'post' ) ? 'post' : 'get',
+				$autoload ? ' data-lsautosearch="1"' : '',
 				self::get_query_field(),
 				self::get_distance_field( $distance, $distance_units )
 			);

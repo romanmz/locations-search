@@ -337,4 +337,11 @@ jQuery(document).ready(function($){
 	});
 	
 	
+	// Automatically begin initial search
+	// ------------------------------
+	if( searchForm.data( 'lsautosearch' ) ) {
+		searchForm.trigger( 'submit' );
+	}
+	
+	
 });
