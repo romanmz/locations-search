@@ -40,10 +40,12 @@ jQuery(document).ready(function($){
 	var formLock = function() {
 		searchForm.data( 'isLocked', true );
 		container.addClass( 'lsform--loading' );
+		searchForm.find( ':input' ).prop( 'disabled', true );
 	}
 	var formUnlock = function() {
 		searchForm.data( 'isLocked', false );
 		container.removeClass( 'lsform--loading' );
+		searchForm.find( ':input' ).prop( 'disabled', false );
 	}
 	var formShowOptions = function( geocodeResults ) {
 		
