@@ -35,9 +35,6 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			if( $field_key == 'permalinks_base' && empty( $field_value ) ) {
 				$field_value = 'locations';
 			}
-			if( $field_key == 'bias_country' && empty( $field_value ) ) {
-				$field_value = 'us';
-			}
 			// $bias_bounds;
 			// $restrict_state;
 			// $restrict_postcode;
@@ -175,6 +172,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				case 'bias_country':
 					printf( '
 						<select id="%s" name="%s">
+							<option value="">- Select a country -</option>
 							%s
 						</select>
 						<p class="description">Bias the results towards the country selected here</p>
