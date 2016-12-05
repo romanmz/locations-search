@@ -110,7 +110,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'google_api_key' => 'Google API Key',
 				'permalinks_base' => 'Permalinks Base',
 				'focus_country' => 'Focus Country',
-				'restrict_country' => 'Limit Results',
+				'focus_country_strict' => 'Focus Country Mode',
 			);
 			foreach( $fields as $field_key => $field_label ) {
 				add_settings_field(
@@ -182,17 +182,22 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						$country_html
 					);
 					break;
-				case 'restrict_country':
+				case 'focus_country_strict':
 					printf( '
-						<select id="%s" name="%s">
-							<option value="">- Select a country -</option>
-							%s
-						</select>
-						<p class="description">Limit the search results to only the country selected here (optional)</p>
+						<label>
+							<input type="radio" name="%1$s]" value=""%2$s>
+							Bias
+						</label>
+						&nbsp;
+						<label>
+							<input type="radio" name="%1$s" value="1"%3$s>
+							Restrict
+						</label>
+						<p class="description">Select <strong>bias</strong> to give preference to the Focus Country on the map but still allow other countries to be displayed, or select <strong>restrict</strong> to strictly restrict the map only on the Focus Country.</p>
 						',
-						esc_attr( $id ),
 						esc_attr( $name ),
-						$country_html
+						checked( true, $value, false ),
+						checked( false, $value, false )
 					);
 					break;
 			}
@@ -215,7 +220,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'google_api_key' => '',
 				'permalinks_base' => '',
 				'focus_country' => '',
-				'restrict_country' => '',
+				'focus_country_strict' => '',
 			);
 			$data = shortcode_atts( $defaults, $user_data );
 			
@@ -241,7 +246,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$data['google_api_key'] = sanitize_text_field( $data['google_api_key'] );
 			$data['permalinks_base'] = sanitize_title( $data['permalinks_base'] );
 			$data['focus_country'] = sanitize_title( $data['focus_country'] );
-			$data['restrict_country'] = sanitize_title( $data['restrict_country'] );
+			$data['focus_country_strict'] = (bool) $data['focus_country_strict'];
 			
 			// Save
 			return $data;
