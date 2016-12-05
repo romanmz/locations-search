@@ -238,7 +238,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						',
 						'Select an image',
 						'Use this image',
-						wp_get_attachment_image( absint( $value ), 'thumbnail' ),
+						wp_get_attachment_image( absint( $value ), 'medium' ),
 						esc_attr( $id ),
 						esc_attr( $name ),
 						esc_attr( $value ),
