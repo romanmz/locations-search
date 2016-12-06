@@ -163,11 +163,18 @@
 	background: #EEE;
 }
 .lsform__result__heading {
-	margin: 0;
 }
 .lsform__result__distance {
 	font-weight: bold;
 }
+.lsform__result__address {
+}
+.lsform__result__details {
+}
+.lsform__result__links {
+}
+
+/* Selected Result */
 .lsform__result--selected {
 	background: #F2F2F2;
 }

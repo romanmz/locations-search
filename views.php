@@ -201,16 +201,19 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// Get Results HTML
 		// ------------------------------
 		static public function get_results_html( $post ) {
+			$details = self::get_formatted_details( $post );
 			$html = sprintf( '
 				<h3 class="lsform__result__heading">%s</h3>
 				<div class="lsform__result__distance">Distance: %s %s</div>
-				<address class="lsform__result__address">%s</address>
+				<address class="lsform__result__address"><p>%s</p></address>
+				%s
 				<div class="lsform__result__links"><a href="%s">More info</a> | <a href="%s" target="_blank">Get directions</a></div>
 				',
 				get_the_title( $post ),
 				round( $post->distance, 1 ),
 				$post->distance_units,
 				self::get_formatted_address( $post ),
+				$details ? '<p class="lsform__result__details">'.$details.'</p>' : '',
 				get_permalink( $post ),
 				'https://maps.google.com/maps?'.http_build_query( array( 'saddr'=>'Current Location', 'daddr'=>$post->lat.','.$post->lng ) )
 			);
@@ -231,6 +234,24 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			$address_line_2 = trim( "{$suburb} {$state} {$postcode}" );
 			$formatted_address = implode( '<br>', array_filter( array( $address_line_1, $address_line_2, ) ) );
 			return $formatted_address;
+		}
+		
+		static public function get_formatted_details( $post ) {
+			$details = array();
+			$phone = esc_html( get_post_meta( $post->ID, 'phone', true ) );
+			$email = is_email( get_post_meta( $post->ID, 'email', true ) );
+			$website = esc_url( get_post_meta( $post->ID, 'website', true ) );
+			if( $phone ) {
+				$details[] = '<strong>Phone:</strong> '.$phone;
+			}
+			if( $email ) {
+				$details[] = '<strong>Email:</strong> <a href="mailto:'.$email.'">'.$email.'</a>';
+			}
+			if( $website ) {
+				$details[] = '<strong>Website:</strong> <a href="'.$website.'" target="_blank">'.$website.'</a>';
+			}
+			$details = implode( '<br>', $details );
+			return $details;
 		}
 		
 		
