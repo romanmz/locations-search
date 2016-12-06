@@ -202,10 +202,12 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// ------------------------------
 		static public function get_results_html( $post ) {
 			$details = self::get_formatted_details( $post );
+			$hours = self::get_formatted_hours_list( $post );
 			$html = sprintf( '
 				<h3 class="lsform__result__heading">%s</h3>
 				<div class="lsform__result__distance">Distance: %s %s</div>
 				<address class="lsform__result__address"><p>%s</p></address>
+				%s
 				%s
 				<div class="lsform__result__links"><a href="%s">More info</a> | <a href="%s" target="_blank">Get directions</a></div>
 				',
@@ -214,6 +216,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				$post->distance_units,
 				self::get_formatted_address( $post ),
 				$details ? '<p class="lsform__result__details">'.$details.'</p>' : '',
+				$hours ? '<p class="lsform__result__hours">'.$hours.'</p>' : '',
 				get_permalink( $post ),
 				'https://maps.google.com/maps?'.http_build_query( array( 'saddr'=>'Current Location', 'daddr'=>$post->lat.','.$post->lng ) )
 			);
@@ -252,6 +255,50 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			}
 			$details = implode( '<br>', $details );
 			return $details;
+		}
+		
+		static public function get_formatted_hours_list( $post ) {
+			
+			// Init vars
+			$opening_hours = get_post_meta( $post->ID, 'opening_hours', true );
+			$day_names = array( 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', );
+			$lines = array();
+			$prev_i = -1;
+			$prev_day_hours = '';
+			
+			// Loop days of the week
+			foreach( $day_names as $i => $day_name ) {
+				
+				// Get day hours
+				$day_hours = array_filter( array(
+					!empty( $opening_hours[$i][0] ) ? esc_html( $opening_hours[$i][0] ) : '',
+					!empty( $opening_hours[$i][1] ) ? esc_html( $opening_hours[$i][1] ) : ''
+				) );
+				$day_hours = implode( '-', $day_hours );
+				
+				// Skip empty elements
+				if( empty( $day_hours ) ) {
+					$prev_day_hours = '';
+					continue;
+				}
+				
+				// Add to lines array
+				if( $day_hours == $prev_day_hours ) {
+					$lines[ $prev_i ][ $day_hours ][1] = $day_name;
+				} else {
+					$lines[ $i ] = array( $day_hours => array( $day_name ) );
+					$prev_day_hours = $day_hours;
+					$prev_i = $i;
+				}
+			}
+			
+			// Return markup
+			foreach( $lines as $i => $line ) {
+				$lines[ $i ] = '<strong>'.implode( '-', reset( $line ) ).':</strong> '.key( $line );
+			}
+			$formatted_hours = implode( '<br>', $lines );
+			return $formatted_hours;
+			
 		}
 		
 		
