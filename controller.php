@@ -69,6 +69,7 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				$_post->distance_units = $post->distance_units;
 				$_post->results_html = LocationsSearchViews::get_results_html( $post );
 				$_post->info_window = LocationsSearchViews::get_info_window( $post );
+				$_post->map_marker = apply_filters( 'locations_search_map_marker', LocationsSearchModel::get_marker_data() );
 				$posts[ $i ] = $_post;
 			}
 			header( 'Content-type: application/json' );

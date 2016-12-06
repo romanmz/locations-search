@@ -291,6 +291,24 @@ jQuery(document).ready(function($){
 		mapMarkers.push( marker );
 		mapWindows.push( infoWindow );
 		
+		// Set custom icon
+		if( location.map_marker ) {
+			try {
+				marker.setIcon({
+					url: location.map_marker.url,
+					size: new google.maps.Size( location.map_marker.size[0], location.map_marker.size[1] ),
+					scaledSize: new google.maps.Size( location.map_marker.scaledSize[0], location.map_marker.scaledSize[1] ),
+					origin: new google.maps.Point( location.map_marker.origin[0], location.map_marker.origin[1] ),
+					anchor: new google.maps.Point( location.map_marker.anchor[0], location.map_marker.anchor[1] ),
+				});
+				infoWindow.setOptions({
+					pixelOffset: new google.maps.Size( 0, ( location.map_marker.scaledSize[1] * -1 ) ),
+				});
+			} catch( error ) {
+				console.log( error );
+			}
+		}
+		
 		// Show info windows when clicking on the marker
 		google.maps.event.addListener( marker, 'click', function(){
 			mapOpenWindow( location );

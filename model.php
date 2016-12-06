@@ -79,5 +79,49 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 		}
 		
 		
+		// Get Marker Data from Attachment
+		// ------------------------------
+		static public function get_marker_data( $attachment_id=false ) {
+			
+			// Check attachment_id
+			if( $attachment_id === false ) {
+				$attachment_id = LocationsSearchSettings::get( 'map_marker' );
+			}
+			$attachment_id = absint( $attachment_id );
+			
+			// Get data
+			$attachment_data = wp_get_attachment_image_src( $attachment_id, 'medium' );
+			if( empty( $attachment_data ) ) {
+				return false;
+			}
+			
+			// Prepare data
+			$url = $attachment_data[0];
+			$width = $scaledWidth = $attachment_data[1];
+			$height = $scaledHeight = $attachment_data[2];
+			if( $scaledWidth > 40 ) {
+				$ratio = 40 / $scaledWidth;
+				$scaledWidth = 40;
+				$scaledHeight = round( $scaledHeight * $ratio );
+			}
+			if( $scaledHeight > 40 ) {
+				$ratio = 40 / $scaledHeight;
+				$scaledHeight = 40;
+				$scaledWidth = round( $scaledWidth * $ratio );
+			}
+			
+			// Return data
+			$marker = array(
+				'url' => $url,
+				'size' => array( $width, $height, ),
+				'scaledSize' => array( $scaledWidth, $scaledHeight, ),
+				'origin' => array( 0, 0, ),
+				'anchor' => array( round( $scaledWidth / 2 ), $scaledHeight ),
+			);
+			return $marker;
+			
+		}
+		
+		
 	}
 }
