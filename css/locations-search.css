@@ -193,3 +193,32 @@
 	bottom: 0;
 	background: rgba( 255, 255, 255, .75 ) url(../images/loading.svg) center center no-repeat;
 }
+
+/* How to style the info window: */;
+/*
+.gm-style-iw {
+	color: white;
+	overflow: visible !important;
+}
+.gm-style-iw:before {
+	content: '';
+	position: absolute;
+	left: -15px;
+	top: -10px;
+	right: -15px;
+	bottom: -20px;
+	background: #069;
+}
+.gm-style-iw:after {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	border: 10px solid;
+	border-color: #069 transparent transparent;
+	margin: 20px 0 0 -10px;
+}
+.lsform__infowindow {
+	position: relative;
+}
+*/
