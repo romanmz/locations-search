@@ -301,6 +301,54 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			
 		}
 		
+		static public function get_formatted_hours_table( $post ) {
+			
+			// Init vars
+			$opening_hours = get_post_meta( $post->ID, 'opening_hours', true );
+			$day_names = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', );
+			
+			// Markup rows
+			$formatted_hours = '';
+			foreach( $day_names as $i => $day_name ) {
+				$opens = !empty( $opening_hours[$i][0] ) ? esc_html( $opening_hours[$i][0] ) : '';
+				$closes = !empty( $opening_hours[$i][1] ) ? esc_html( $opening_hours[$i][1] ) : '';
+				if( $opens || $closes ) {
+					$formatted_hours .= sprintf( '
+						<tr>
+							<th>%s</th>
+							<td>%s</td>
+							<td>%s</td>
+						</tr>',
+						$day_name,
+						$opens,
+						$closes
+					);
+				}
+			}
+			
+			// Finish table and return
+			if( !empty( $formatted_hours ) ) {
+				$formatted_hours = sprintf( '
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+								<td>Opens</td>
+								<td>Closes</td>
+							</tr>
+						</thead>
+						<tbody>
+							%s
+						</tbody>
+					</table>
+					',
+					$formatted_hours
+				);
+			}
+			return $formatted_hours;
+			
+		}
+		
 		
 	}
 }
