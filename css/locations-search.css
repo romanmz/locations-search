@@ -153,19 +153,22 @@
 	list-style: none;
 	overflow: hidden;
 }
-.lsform__results li {
+.lsform__result {
 	margin-top: -1px;
 	padding: 1.5em;
 	border-top: 1px solid #EEE;
 	transition: background .5s;
 }
-.lsform__results li:hover {
+.lsform__result:hover {
 	background: #EEE;
 }
-.lsform__results h3 {
+.lsform__result__heading {
 	margin: 0;
 }
-.lsform__resultselected {
+.lsform__result__distance {
+	font-weight: bold;
+}
+.lsform__result--selected {
 	background: #F2F2F2;
 }
 

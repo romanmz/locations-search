@@ -103,7 +103,7 @@ jQuery(document).ready(function($){
 		// Create list
 		var list = $('<ul>');
 		$.each( locations, function( i, location ) {
-			var item = $('<li>').append( location.results_html );
+			var item = $('<li>',{ 'class':'lsform__result' }).append( location.results_html );
 			item.on( 'click', function(e){
 				if( location.marker && e.target.tagName.toLowerCase() != 'a' ) {
 					e.preventDefault();
@@ -348,8 +348,8 @@ jQuery(document).ready(function($){
 			location.infoWindow.open( googleMap );
 		}
 		if( location.resultsItem ) {
-			location.resultsItem.addClass( 'lsform__resultselected' )
-				.siblings().removeClass( 'lsform__resultselected' );
+			location.resultsItem.addClass( 'lsform__result--selected' )
+				.siblings().removeClass( 'lsform__result--selected' );
 		}
 	}
 	

@@ -202,10 +202,10 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// ------------------------------
 		static public function get_results_html( $post ) {
 			return sprintf( '
-				<h3>%s</h3>
-				<div><strong>Distance: %s %s</strong></div>
-				<div>%s</div>
-				<div><a href="%s">More info</a> | <a href="%s" target="_blank">Get directions</a></div>
+				<h3 class="lsform__result__heading">%s</h3>
+				<div class="lsform__result__distance">Distance: %s %s</div>
+				<address class="lsform__result__address">%s</address>
+				<div class="lsform__result__links"><a href="%s">More info</a> | <a href="%s" target="_blank">Get directions</a></div>
 				',
 				get_the_title( $post ),
 				round( $post->distance, 1 ),
