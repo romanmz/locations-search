@@ -135,11 +135,11 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			
 			wp_nonce_field( $this->nonce_action, $this->nonce_name );
 			?>
-			<div class="location_address__row">
+			<div class="lsedit__row">
 				<?php $this->display_text( $post, 'address' ) ?>
 				<?php $this->display_text( $post, 'suburb' ) ?>
 			</div>
-			<div class="location_address__row">
+			<div class="lsedit__row">
 				<?php $this->display_text( $post, 'postcode' ) ?>
 				<?php $this->display_dropdown( $post, 'state' ) ?>
 			</div>
@@ -147,7 +147,7 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 				<button class="button">Update Map</button>
 			</div>
 			<div id="location_address__options"></div>
-			<div class="location_address__row">
+			<div class="lsedit__row">
 				<?php $this->display_text( $post, 'lat' ) ?>
 				<?php $this->display_text( $post, 'lng' ) ?>
 			</div>
@@ -167,7 +167,7 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			
 			// Output
 			printf( '
-				<div class="location_address__col">
+				<div class="lsedit__column">
 					<div class="field-box %1$s_%2$s-box">
 						<label for="%1$s_%2$s">%3$s</label>
 						<input type="text" id="%1$s_%2$s" name="%2$s" value="%4$s" size="25">
@@ -197,7 +197,7 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 				);
 			}
 			printf( '
-				<div class="location_address__col">
+				<div class="lsedit__column">
 					<div class="field-box %1$s_%2$s-box">
 						<label for="%1$s_%2$s">%3$s</label>
 						<select id="%1$s_%2$s" name="%2$s">
