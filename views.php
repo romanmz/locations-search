@@ -201,7 +201,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// Get Results HTML
 		// ------------------------------
 		static public function get_results_html( $post ) {
-			return sprintf( '
+			$html = sprintf( '
 				<h3 class="lsform__result__heading">%s</h3>
 				<div class="lsform__result__distance">Distance: %s %s</div>
 				<address class="lsform__result__address">%s</address>
@@ -214,6 +214,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				get_permalink( $post ),
 				'https://maps.google.com/maps?'.http_build_query( array( 'saddr'=>'Current Location', 'daddr'=>$post->lat.','.$post->lng ) )
 			);
+			return apply_filters( 'locations_search_results_html', $html, $post );
 		}
 		
 		
