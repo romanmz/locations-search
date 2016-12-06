@@ -28,6 +28,14 @@
 	clear: both;
 }
 
+/* Small screens */
+@media (max-width: 782px) {
+	.lsedit__row .lsedit__column {
+		float: none;
+		width: calc( 100% - 20px );
+	}
+}
+
 /* Fields */
 .lsedit__column input,
 .lsedit__column select {
