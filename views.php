@@ -224,6 +224,25 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		}
 		
 		
+		// Get Info Window
+		// ------------------------------
+		static public function get_info_window( $post ) {
+			$html = sprintf( '
+				<div class="lsform__infowindow">
+					<div class="lsform__infowindow__title">%s</div>
+					<div class="lsform__infowindow__distance">Distance: %s %s</div>
+					<div class="lsform__infowindow__address">%s</div>
+				</div>
+				',
+				get_the_title( $post ),
+				round( $post->distance, 1 ),
+				$post->distance_units,
+				self::get_formatted_address( $post )
+			);
+			return apply_filters( 'locations_search_info_window', $html, $post );
+		}
+		
+		
 		
 		// Helper Functions
 		// ==================================================
