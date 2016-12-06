@@ -91,7 +91,7 @@
 }
 .lsform input[type=text],
 .lsform select {
-	line-height: 1;
+	line-height: 1.5;
 	background: none;
 }
 .lsform button {
