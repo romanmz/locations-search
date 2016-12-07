@@ -125,6 +125,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'focus_country_strict' => 'Focus Country Mode',
 				'map_styles' => 'Map Styles',
 				'map_marker' => 'Map Markers',
+				'map_marker_active' => 'Active Marker',
 			);
 			foreach( $fields as $field_key => $field_label ) {
 				add_settings_field(
@@ -225,6 +226,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 					);
 					break;
 				case 'map_marker':
+				case 'map_marker_active':
 					printf( '
 						<div class="lsmediaupload" data-frame-title="%s" data-frame-button-text="%s">
 							<div class="lsmediaupload__preview">
@@ -245,7 +247,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						'Select File',
 						'Replace File',
 						'Remove File',
-						'Select an image to be used to create the markers on the map.'
+						$field['key'] == 'map_marker' ? 'Select an image to be used to create the markers on the map.' : 'You can use a different image to represent active markers (when a user clicks on a specific location).'
 					);
 					break;
 			}
@@ -271,6 +273,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'focus_country_strict' => '',
 				'map_styles' => '',
 				'map_marker' => '',
+				'map_marker_active' => '',
 			);
 			$data = shortcode_atts( $defaults, $user_data );
 			
@@ -311,6 +314,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$data['focus_country_strict'] = (bool) $data['focus_country_strict'];
 			$data['map_styles'] = trim( $data['map_styles'] );
 			$data['map_marker'] = !empty( $data['map_marker'] ) ? absint( $data['map_marker'] ) : '';
+			$data['map_marker_active'] = !empty( $data['map_marker_active'] ) ? absint( $data['map_marker_active'] ) : '';
 			
 			// Save
 			return $data;

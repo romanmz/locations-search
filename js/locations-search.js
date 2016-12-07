@@ -272,22 +272,29 @@ jQuery(document).ready(function($){
 		});
 		return infoWindow;
 	}
-	var mapReplaceMarkerIcon = function( location, markerIcon ) {
-		if( location && markerIcon ) {
+	var mapParseIcon = function( iconData ) {
+		if( iconData ) {
 			try {
-				location.marker.setIcon({
-					url: markerIcon.url,
-					size: new google.maps.Size( markerIcon.size[0], markerIcon.size[1] ),
-					scaledSize: new google.maps.Size( markerIcon.scaledSize[0], markerIcon.scaledSize[1] ),
-					origin: new google.maps.Point( markerIcon.origin[0], markerIcon.origin[1] ),
-					anchor: new google.maps.Point( markerIcon.anchor[0], markerIcon.anchor[1] ),
-				});
-				location.infoWindow.setOptions({
-					pixelOffset: new google.maps.Size( 0, ( markerIcon.scaledSize[1] * -1 ) ),
-				});
+				iconData = {
+					url: iconData.url,
+					size: new google.maps.Size( iconData.size[0], iconData.size[1] ),
+					scaledSize: new google.maps.Size( iconData.scaledSize[0], iconData.scaledSize[1] ),
+					origin: new google.maps.Point( iconData.origin[0], iconData.origin[1] ),
+					anchor: new google.maps.Point( iconData.anchor[0], iconData.anchor[1] ),
+				}
+				return iconData;
 			} catch( error ) {
 				console.log( error );
 			}
+		}
+		return false;
+	}
+	var mapReplaceMarkerIcon = function( location, markerIcon ) {
+		if( markerIcon ) {
+			location.marker.setIcon( markerIcon );
+			location.infoWindow.setOptions({
+				pixelOffset: new google.maps.Size( 0, ( markerIcon.scaledSize.height * -1 ) ),
+			});
 		}
 	}
 	var mapAddLocation = function( location ) {
@@ -303,7 +310,8 @@ jQuery(document).ready(function($){
 		allLocations.push( location );
 		
 		// Set custom icon
-		mapReplaceMarkerIcon( location, location.map_marker );
+		location.defaultMarker = mapParseIcon( location.map_marker );
+		mapReplaceMarkerIcon( location, location.defaultMarker );
 		
 		// Show info windows when clicking on the marker
 		google.maps.event.addListener( location.marker, 'click', function(){
@@ -339,6 +347,7 @@ jQuery(document).ready(function($){
 	var mapOpenWindow = function( location ) {
 		$.each( allLocations, function( i, location ){
 			location.infoWindow.close();
+			mapReplaceMarkerIcon( location, location.defaultMarker );
 		});
 		if( location.infoWindow ) {
 			location.infoWindow.open( googleMap );
@@ -347,6 +356,8 @@ jQuery(document).ready(function($){
 			location.resultsItem.addClass( 'lsform__result--selected' )
 				.siblings().removeClass( 'lsform__result--selected' );
 		}
+		var activeMarker = mapParseIcon( locations_search.map_marker_active );
+		mapReplaceMarkerIcon( location, activeMarker );
 	}
 	
 	

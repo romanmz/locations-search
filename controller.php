@@ -45,6 +45,7 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				'initial_lat' => -33.865,
 				'initial_lng' => 151.2094,
 				'text_current_location' => '(current location)',
+				'map_marker_active' => apply_filters( 'locations_search_map_marker_active', LocationsSearchModel::get_marker_data( LocationsSearchSettings::get( 'map_marker_active' ) ) ),
 			) );
 			wp_enqueue_style( 'locations-search', LocationsSearch::get_url().'/css/locations-search.css', array(), LOCATIONSSEARCHVERSION );
 		}
