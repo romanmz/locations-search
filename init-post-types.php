@@ -138,9 +138,10 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 				<?php $this->display_text( $post, 'address' ) ?>
 				<?php $this->display_text( $post, 'suburb' ) ?>
 			</div>
-			<div class="lsedit__row">
+			<div class="lsedit__row lsedit__row--3cols">
 				<?php $this->display_text( $post, 'postcode' ) ?>
 				<?php $this->display_text( $post, 'state' ) ?>
+				<?php $this->display_text( $post, 'country' ) ?>
 			</div>
 			<div id="location_address__update">
 				<button class="button">Update Map</button>
@@ -163,6 +164,15 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			// Init vars
 			$label = isset( $this->meta_fields[ $meta_key ]['label'] ) ? $this->meta_fields[ $meta_key ]['label'] : $meta_key;
 			$meta_value = get_post_meta( $post->ID, $meta_key, true );
+			
+			// Default country
+			if( $meta_key == 'country' && empty( $meta_value ) ) {
+				$countries = LocationsSearch::get_country_codes();
+				$default_country = LocationsSearchSettings::get( 'focus_country' );
+				if( isset( $countries[ $default_country ] ) ) {
+					$meta_value = $countries[ $default_country ];
+				}
+			}
 			
 			// Output
 			printf( '

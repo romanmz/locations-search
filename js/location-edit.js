@@ -14,7 +14,7 @@ jQuery(document).ready(function($){
 	var suburb = $('#location_address_suburb');
 	var state = $('#location_address_state');
 	var postcode = $('#location_address_postcode');
-	var country = 'Australia';
+	var country = $('#location_address_country');
 	var lat = $('#location_address_lat');
 	var lng = $('#location_address_lng');
 	
@@ -100,7 +100,7 @@ jQuery(document).ready(function($){
 		
 		// Prepare data
 		var geocodeArguments = {
-			address: $.trim( address.val()+' '+suburb.val()+' '+state.val()+' '+postcode.val()+' '+country ),
+			address: $.trim( address.val()+' '+suburb.val()+' '+state.val()+' '+postcode.val()+' '+country.val() ),
 			componentRestrictions: {},
 		};
 		if( state.val() ) {
@@ -109,8 +109,8 @@ jQuery(document).ready(function($){
 		if( postcode.val() ) {
 			geocodeArguments.componentRestrictions.postalCode = postcode.val();
 		}
-		if( country ) {
-			geocodeArguments.componentRestrictions.country = country;
+		if( country.val() ) {
+			geocodeArguments.componentRestrictions.country = country.val();
 		}
 		
 		// Prepare callback
