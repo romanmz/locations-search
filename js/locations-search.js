@@ -108,7 +108,7 @@ jQuery(document).ready(function($){
 					e.preventDefault();
 					mapOpenWindow( location );
 				}
-			});
+			}).addClass( 'lsform__result--clickable' );
 			list.append( item );
 			location.resultsItem = item;
 		});

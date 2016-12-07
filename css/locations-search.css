@@ -176,6 +176,9 @@
 }
 
 /* Selected Result */
+.lsform__result--clickable {
+	cursor: pointer;
+}
 .lsform__result--selected {
 	background: #F2F2F2;
 }
