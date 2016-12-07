@@ -16,8 +16,7 @@
 	position: relative;
 }
 .lsform__results {
-	display: none;
-	height: 400px;
+	max-height: 600px;
 	overflow: auto;
 	-webkit-overflow-scrolling: scrolling;
 	-webkit-overflow-scrolling: touch;
@@ -114,7 +113,7 @@
 		width: 50%;
 	}
 	.lsform__results {
-		display: block;
+		height: 600px;
 	}
 	.lsform__map {
 		position: absolute;

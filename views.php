@@ -21,8 +21,8 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					<div class="lsform__options"></div>
 					<div class="lsform__summary"></div>
 					<noscript><div class="lsform__summary"><p>You need to enable javascript to be able to use this form.</p></div></noscript>
-					<div class="lsform__results"></div>
 					<div class="lsform__map"></div>
+					<div class="lsform__results"></div>
 				</div>
 				',
 				self::get_search_form( $custom_atts )
