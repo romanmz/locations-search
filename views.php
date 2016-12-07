@@ -98,7 +98,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				esc_attr( 'Query' ),
 				esc_attr( 'Enter your postcode or city' )
 			);
-			return $html;
+			return apply_filters( 'locations_search_form_query', $html, $query );
 			
 		}
 		
