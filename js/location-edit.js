@@ -11,6 +11,7 @@ jQuery(document).ready(function($){
 	
 	// Address fields
 	var address = $('#location_address_address');
+	var address2 = $('#location_address_address2');
 	var suburb = $('#location_address_suburb');
 	var state = $('#location_address_state');
 	var postcode = $('#location_address_postcode');
@@ -100,7 +101,7 @@ jQuery(document).ready(function($){
 		
 		// Prepare data
 		var geocodeArguments = {
-			address: $.trim( address.val()+' '+suburb.val()+' '+state.val()+' '+postcode.val()+' '+country.val() ),
+			address: $.trim( address.val()+' '+address2.val()+' '+suburb.val()+' '+state.val()+' '+postcode.val()+' '+country.val() ),
 			componentRestrictions: {},
 		};
 		if( state.val() ) {

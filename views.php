@@ -248,13 +248,14 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// ==================================================
 		
 		static public function get_formatted_address( $post ) {
-			$meta_keys = array( 'address', 'suburb', 'state', 'postcode', );
+			$meta_keys = array( 'address', 'address2', 'suburb', 'state', 'postcode', );
 			foreach( $meta_keys as $meta_key ) {
 				$$meta_key = trim( esc_html( get_post_meta( $post->ID, $meta_key, true ) ) );
 			}
 			$address_line_1 = $address;
-			$address_line_2 = trim( "{$suburb} {$state} {$postcode}" );
-			$formatted_address = implode( '<br>', array_filter( array( $address_line_1, $address_line_2, ) ) );
+			$address_line_2 = $address2;
+			$address_line_3 = trim( "{$suburb} {$state} {$postcode}" );
+			$formatted_address = implode( '<br>', array_filter( array( $address_line_1, $address_line_2, $address_line_3, ) ) );
 			return $formatted_address;
 		}
 		

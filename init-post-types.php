@@ -82,6 +82,9 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			'address' => array(
 				'label' => 'Address',
 			),
+			'address2' => array(
+				'label' => 'Address (line 2)',
+			),
 			'suburb' => array(
 				'label' => 'Suburb / City',
 			),
@@ -134,8 +137,9 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			
 			wp_nonce_field( $this->nonce_action, $this->nonce_name );
 			?>
-			<div class="lsedit__row">
+			<div class="lsedit__row lsedit__row--3cols">
 				<?php $this->display_text( $post, 'address' ) ?>
+				<?php $this->display_text( $post, 'address2' ) ?>
 				<?php $this->display_text( $post, 'suburb' ) ?>
 			</div>
 			<div class="lsedit__row lsedit__row--3cols">
