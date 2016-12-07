@@ -90,7 +90,6 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			),
 			'state' => array(
 				'label' => 'State / Territory',
-				'options' => array( 'ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA', ),
 			),
 			'country' => array(
 				'label' => 'Country',
@@ -141,7 +140,7 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			</div>
 			<div class="lsedit__row">
 				<?php $this->display_text( $post, 'postcode' ) ?>
-				<?php $this->display_dropdown( $post, 'state' ) ?>
+				<?php $this->display_text( $post, 'state' ) ?>
 			</div>
 			<div id="location_address__update">
 				<button class="button">Update Map</button>
