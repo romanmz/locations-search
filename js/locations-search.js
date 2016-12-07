@@ -102,7 +102,7 @@ jQuery(document).ready(function($){
 		// Create list
 		var list = $('<ul>');
 		$.each( locations, function( i, location ) {
-			var item = $('<li>',{ 'class':'lsform__result' }).append( location.results_html );
+			var item = $('<li>',{ 'class':'lsform__result' }).append( location.resultsItemHTML );
 			item.on( 'click', function(e){
 				if( location.marker && e.target.tagName.toLowerCase() != 'a' ) {
 					e.preventDefault();
@@ -306,12 +306,12 @@ jQuery(document).ready(function($){
 		
 		// Add marker and info window
 		location.marker = mapAddMarker( location.lat, location.lng );
-		location.infoWindow = mapAddWindow( location.lat, location.lng, location.info_window );
+		location.infoWindow = mapAddWindow( location.lat, location.lng, location.infoWindowHTML );
 		allLocations.push( location );
 		
 		// Set custom icon
-		location.defaultMarker = mapParseIcon( location.map_marker );
-		mapReplaceMarkerIcon( location, location.defaultMarker );
+		location.markerIcon = mapParseIcon( location.markerIconData );
+		mapReplaceMarkerIcon( location, location.markerIcon );
 		
 		// Show info windows when clicking on the marker
 		google.maps.event.addListener( location.marker, 'click', function(){
@@ -347,7 +347,7 @@ jQuery(document).ready(function($){
 	var mapOpenWindow = function( location ) {
 		$.each( allLocations, function( i, location ){
 			location.infoWindow.close();
-			mapReplaceMarkerIcon( location, location.defaultMarker );
+			mapReplaceMarkerIcon( location, location.markerIcon );
 		});
 		if( location.infoWindow ) {
 			location.infoWindow.open( googleMap );

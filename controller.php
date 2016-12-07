@@ -67,10 +67,10 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				$_post->lat = $post->lat;
 				$_post->lng = $post->lng;
 				$_post->distance = $post->distance;
-				$_post->distance_units = $post->distance_units;
-				$_post->results_html = LocationsSearchViews::get_results_html( $post );
-				$_post->info_window = LocationsSearchViews::get_info_window( $post );
-				$_post->map_marker = apply_filters( 'locations_search_map_marker', LocationsSearchModel::get_marker_data() );
+				$_post->distanceUnits = $post->distance_units;
+				$_post->resultsItemHTML = LocationsSearchViews::get_results_html( $post );
+				$_post->infoWindowHTML = LocationsSearchViews::get_info_window( $post );
+				$_post->markerIconData = apply_filters( 'locations_search_map_marker', LocationsSearchModel::get_marker_data() );
 				$posts[ $i ] = $_post;
 			}
 			header( 'Content-type: application/json' );
