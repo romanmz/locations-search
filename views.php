@@ -262,7 +262,8 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			$details = array();
 			$phone = esc_html( get_post_meta( $post->ID, 'phone', true ) );
 			$email = is_email( get_post_meta( $post->ID, 'email', true ) );
-			$website = esc_url( get_post_meta( $post->ID, 'website', true ) );
+			$website_raw = get_post_meta( $post->ID, 'website', true );
+			$website = esc_url( $website_raw );
 			if( $phone ) {
 				$details[] = '<strong>Phone:</strong> '.$phone;
 			}
@@ -270,7 +271,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				$details[] = '<strong>Email:</strong> <a href="mailto:'.$email.'">'.$email.'</a>';
 			}
 			if( $website ) {
-				$details[] = '<strong>Website:</strong> <a href="'.$website.'" target="_blank">'.$website.'</a>';
+				$details[] = '<strong>Website:</strong> <a href="'.$website.'" target="_blank">'.esc_html( $website_raw ).'</a>';
 			}
 			$details = implode( '<br>', $details );
 			return $details;
