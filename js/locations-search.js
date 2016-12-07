@@ -276,6 +276,24 @@ jQuery(document).ready(function($){
 		});
 		return infoWindow;
 	}
+	var mapReplaceMarkerIcon = function( location, markerIcon ) {
+		if( location && markerIcon ) {
+			try {
+				location.marker.setIcon({
+					url: markerIcon.url,
+					size: new google.maps.Size( markerIcon.size[0], markerIcon.size[1] ),
+					scaledSize: new google.maps.Size( markerIcon.scaledSize[0], markerIcon.scaledSize[1] ),
+					origin: new google.maps.Point( markerIcon.origin[0], markerIcon.origin[1] ),
+					anchor: new google.maps.Point( markerIcon.anchor[0], markerIcon.anchor[1] ),
+				});
+				location.infoWindow.setOptions({
+					pixelOffset: new google.maps.Size( 0, ( markerIcon.scaledSize[1] * -1 ) ),
+				});
+			} catch( error ) {
+				console.log( error );
+			}
+		}
+	}
 	var mapAddLocation = function( location ) {
 		
 		// Exit if map doesn't exist
@@ -292,22 +310,7 @@ jQuery(document).ready(function($){
 		mapWindows.push( infoWindow );
 		
 		// Set custom icon
-		if( location.map_marker ) {
-			try {
-				marker.setIcon({
-					url: location.map_marker.url,
-					size: new google.maps.Size( location.map_marker.size[0], location.map_marker.size[1] ),
-					scaledSize: new google.maps.Size( location.map_marker.scaledSize[0], location.map_marker.scaledSize[1] ),
-					origin: new google.maps.Point( location.map_marker.origin[0], location.map_marker.origin[1] ),
-					anchor: new google.maps.Point( location.map_marker.anchor[0], location.map_marker.anchor[1] ),
-				});
-				infoWindow.setOptions({
-					pixelOffset: new google.maps.Size( 0, ( location.map_marker.scaledSize[1] * -1 ) ),
-				});
-			} catch( error ) {
-				console.log( error );
-			}
-		}
+		mapReplaceMarkerIcon( location, location.map_marker );
 		
 		// Show info windows when clicking on the marker
 		google.maps.event.addListener( marker, 'click', function(){
