@@ -31,8 +31,7 @@ jQuery(document).ready(function($){
 		var googleMapStyles = [];
 	}
 	var googleMap = map.length ? new google.maps.Map( map[0], { zoom:15, styles:googleMapStyles, } ) : false;
-	var mapMarkers = [];
-	var mapWindows = [];
+	var allLocations = [];
 	
 	// Init geolocation data
 	var userPosition = {
@@ -242,14 +241,11 @@ jQuery(document).ready(function($){
 	// Map Functions
 	// ------------------------------
 	var mapDeleteLocations = function() {
-		$.each( mapMarkers, function( i, marker ) {
-			marker.setMap( null );
+		$.each( allLocations, function( i, location ) {
+			location.marker.setMap( null );
+			location.infoWindow.close();
 		});
-		mapMarkers = [];
-		$.each( mapWindows, function( i, infoWindow ) {
-			infoWindow.close();
-		});
-		mapWindows = [];
+		allLocations = [];
 	}
 	var mapAddMarker = function( lat, lng ) {
 		
@@ -302,18 +298,15 @@ jQuery(document).ready(function($){
 		}
 		
 		// Add marker and info window
-		var marker = mapAddMarker( location.lat, location.lng );
-		var infoWindow = mapAddWindow( location.lat, location.lng, location.info_window );
-		location.marker = marker;
-		location.infoWindow = infoWindow;
-		mapMarkers.push( marker );
-		mapWindows.push( infoWindow );
+		location.marker = mapAddMarker( location.lat, location.lng );
+		location.infoWindow = mapAddWindow( location.lat, location.lng, location.info_window );
+		allLocations.push( location );
 		
 		// Set custom icon
 		mapReplaceMarkerIcon( location, location.map_marker );
 		
 		// Show info windows when clicking on the marker
-		google.maps.event.addListener( marker, 'click', function(){
+		google.maps.event.addListener( location.marker, 'click', function(){
 			mapOpenWindow( location );
 			formScrollToLocation( location );
 		});
@@ -344,8 +337,8 @@ jQuery(document).ready(function($){
 		
 	}
 	var mapOpenWindow = function( location ) {
-		$.each( mapWindows, function( i, infoW ){
-			infoW.close();
+		$.each( allLocations, function( i, location ){
+			location.infoWindow.close();
 		});
 		if( location.infoWindow ) {
 			location.infoWindow.open( googleMap );
