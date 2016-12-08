@@ -64,13 +64,14 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 			$posts = LocationsSearchModel::get_closest_locations_from_array( $_POST );
 			foreach( $posts as $i => $post ) {
 				$_post = new stdClass;
+				$_post->i = $post->i = $i;
 				$_post->lat = $post->lat;
 				$_post->lng = $post->lng;
 				$_post->distance = $post->distance;
 				$_post->distanceUnits = $post->distance_units;
-				$_post->resultsItemHTML = LocationsSearchViews::get_results_html( $post );
-				$_post->infoWindowHTML = LocationsSearchViews::get_info_window( $post );
-				$_post->markerIconData = apply_filters( 'locations_search_map_marker', LocationsSearchModel::get_marker_data() );
+				$_post->resultsItemHTML = $post->resultsItemHTML = LocationsSearchViews::get_results_html( $post );
+				$_post->infoWindowHTML = $post->infoWindowHTML = LocationsSearchViews::get_info_window( $post );
+				$_post->markerIconData = $post->markerIconData = apply_filters( 'locations_search_map_marker', LocationsSearchModel::get_marker_data() );
 				$posts[ $i ] = $_post;
 			}
 			header( 'Content-type: application/json' );
