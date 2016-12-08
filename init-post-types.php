@@ -56,11 +56,59 @@ if( !function_exists( 'locationssearch_post_type_location' ) ) {
 if( !function_exists( 'locationssearch_flush_rewrites' ) ) {
 	function locationssearch_flush_rewrites() {
 		locationssearch_post_type_location();
+		locationssearch_tax_location_category();
 		flush_rewrite_rules();
 	}
 }
 register_activation_hook( LocationsSearch::get_main_file(), 'locationssearch_flush_rewrites' );
 register_deactivation_hook( LocationsSearch::get_main_file(), 'flush_rewrite_rules' );
+
+
+
+// TAXONOMY: Location Category
+// ==================================================
+
+if( !function_exists( 'locationssearch_tax_location_category' ) ) {
+	function locationssearch_tax_location_category() {
+		
+		// Define labels
+		$labels = array(
+			'name'                       => 'Location Categories',
+			'singular_name'              => 'Location Category',
+			'menu_name'                  => 'Categories',			
+			'all_items'                  => "All Location Categories",
+			'edit_item'                  => "Edit Location Category",
+			'view_item'                  => "View Location Category",
+			'update_item'                => "Update Location Category",
+			'add_new_item'               => "Add New Location Category",
+			'new_item_name'              => "New Location Category Name",
+			'parent_item'                => "Parent Location Category",
+			'parent_item_colon'          => "Parent Location Category:",
+			'search_items'               => "Search Location Categories",
+			'popular_items'              => "Popular Location Categories",
+			'separate_items_with_commas' => "Separate location categories with commas",
+			'add_or_remove_items'        => "Add or remove location categories",
+			'choose_from_most_used'      => "Choose from the most used location categories",
+			'not_found'                  => "No location categories found.",
+		);
+		
+		// Register taxonomy
+		$url_slug = LocationsSearchSettings::get( 'permalinks_category' );
+		$args = array(
+			'labels'                     => $labels,
+			'public'                     => true,
+			'show_admin_column'          => true,
+			'description'                => '',
+			'hierarchical'               => true,
+			'rewrite'                    => array(
+				'slug'                   => $url_slug,
+			),
+		);
+		register_taxonomy( 'location_category', 'location', $args );
+		
+	}
+	add_action( 'init', 'locationssearch_tax_location_category' );
+}
 
 
 

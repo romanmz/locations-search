@@ -35,6 +35,9 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			if( $field_key == 'permalinks_base' && empty( $field_value ) ) {
 				$field_value = 'locations';
 			}
+			if( $field_key == 'permalinks_category' && empty( $field_value ) ) {
+				$field_value = 'locations-category';
+			}
 			// $bias_bounds;
 			// $restrict_state;
 			// $restrict_postcode;
@@ -121,6 +124,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$fields = array(
 				'google_api_key' => 'Google API Key',
 				'permalinks_base' => 'Permalinks Base',
+				'permalinks_category' => 'Permalinks Base for Categories',
 				'focus_country' => 'Focus Country',
 				'focus_country_strict' => 'Focus Country Mode',
 				'map_styles' => 'Map Styles',
@@ -178,6 +182,16 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 					printf( '
 						<input id="%s" type="text" name="%s" class="regular-text" value="%s">
 						<p class="description">Text to be used as a base for creating the urls for each location, e.g: '.home_url( '/' ).'<strong>locations</strong>/location-name/</p>
+						',
+						esc_attr( $id ),
+						esc_attr( $name ),
+						esc_attr( $value )
+					);
+					break;
+				case 'permalinks_category':
+					printf( '
+						<input id="%s" type="text" name="%s" class="regular-text" value="%s">
+						<p class="description">Text to be used to create the urls for each category, e.g: '.home_url( '/' ).'<strong>locations-category</strong>/category-name/</p>
 						',
 						esc_attr( $id ),
 						esc_attr( $name ),
@@ -269,6 +283,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$defaults = array(
 				'google_api_key' => '',
 				'permalinks_base' => '',
+				'permalinks_category' => '',
 				'focus_country' => '',
 				'focus_country_strict' => '',
 				'map_styles' => '',
@@ -310,6 +325,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			// Sanitize
 			$data['google_api_key'] = sanitize_text_field( $data['google_api_key'] );
 			$data['permalinks_base'] = sanitize_title( $data['permalinks_base'] );
+			$data['permalinks_category'] = sanitize_title( $data['permalinks_category'] );
 			$data['focus_country'] = sanitize_title( $data['focus_country'] );
 			$data['focus_country_strict'] = (bool) $data['focus_country_strict'];
 			$data['map_styles'] = trim( $data['map_styles'] );
