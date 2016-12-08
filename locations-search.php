@@ -24,6 +24,10 @@ if( !class_exists( 'LocationsSearch' ) ) {
 		static public function get_main_file() {
 			return __FILE__;
 		}
+		static public function get_country_name( $code ) {
+			$country_codes = self::get_country_codes();
+			return isset( $country_codes[ $code ] ) ? $country_codes[ $code ] : '';
+		}
 		static public function get_country_codes() {
 			return array(
 				'af' => 'Afghanistan',
