@@ -232,11 +232,60 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			// Wrap and return
 			if( !empty( $html ) ) {
 				$html = sprintf( '
-					<div class="lsform__field lsform__categorychecks">
+					<div class="lsform__field lsform__lcategory">
 						<span class="lsform__label">%s</span>
 						%s
 					</div>',
 					'Categories',
+					$html
+				);
+			}
+			return apply_filters( 'locations_search_form_categorychecks', $html, $selected );
+			
+		}
+		
+		
+		// Get Category Dropdown
+		// ------------------------------
+		static private function get_category_dropdown() {
+			
+			// Get requested categories
+			$selected = !empty( $_REQUEST['lcategory'] ) ? absint( $_REQUEST['lcategory'] ) : 0;
+			if( is_array( $selected ) ) {
+				$selected = reset( $selected );
+			}
+			
+			// Get existing terms
+			$terms = get_terms( array(
+				'taxonomy' => 'location_category',
+				'fields' => 'id=>name',
+				'hide_empty' => true,
+			) );
+			
+			// Generate options
+			$html = '';
+			foreach( $terms as $term_id => $term_name ) {
+				$html .= sprintf( '
+					<option value="%s"%s>%s</option>
+					',
+					$term_id,
+					selected( $term_id, $selected, false ),
+					$term_name
+				);
+			}
+			
+			// Wrap and return
+			if( !empty( $html ) ) {
+				$html = sprintf( '
+					<div class="lsform__field lsform__lcategory">
+						<label id="lsform__lcategory" class="lsform__label">%s</label>
+						<select id="lsform__lcategory" name="lcategory">
+							<option value="">%s</option>
+							%s
+						</select>
+					</div>',
+					'Categories',
+					'(all categories)',
 					$html
 				);
 			}
