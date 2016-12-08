@@ -247,7 +247,7 @@ jQuery(document).ready(function($){
 		});
 		allLocations = [];
 	}
-	var mapAddMarker = function( lat, lng, label='' ) {
+	var mapAddMarker = function( lat, lng, label ) {
 		
 		// Exit if map doesn't exist
 		if( !googleMap ) {
