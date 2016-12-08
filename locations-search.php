@@ -32,5 +32,5 @@ require_once 'LocationsSearchGeneric.php';
 require_once 'init-post-types.php';
 require_once 'init-settings.php';
 require_once 'LocationsSearchModel.php';
-require_once 'views.php';
+require_once 'LocationsSearchViews.php';
 require_once 'LocationsSearchController.php';
