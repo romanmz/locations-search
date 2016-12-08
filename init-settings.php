@@ -151,7 +151,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			// Prepare country dropdowns
 			if( $key == 'focus_country' ) {
 				$country_html ='';
-				$country_codes = LocationsSearch::get_country_codes();
+				$country_codes = LocationsSearchGeneric::get_country_codes();
 				foreach( $country_codes as $country_code => $country_name ) {
 					$country_html .= sprintf(
 						'<option value="%s"%s>%s</option>',

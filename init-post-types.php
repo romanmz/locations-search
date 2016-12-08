@@ -171,7 +171,7 @@ if( !class_exists( 'LocationsSearchAddressMetabox' ) ) {
 			
 			// Default country
 			if( $meta_key == 'country' && empty( $meta_value ) ) {
-				$meta_value = LocationsSearch::get_country_name( LocationsSearchSettings::get( 'focus_country' ) );
+				$meta_value = LocationsSearchGeneric::get_country_name( LocationsSearchSettings::get( 'focus_country' ) );
 			}
 			
 			// Output

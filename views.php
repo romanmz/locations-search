@@ -252,7 +252,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			foreach( $meta_keys as $meta_key ) {
 				$$meta_key = trim( esc_html( get_post_meta( $post->ID, $meta_key, true ) ) );
 			}
-			$focus_country = LocationsSearch::get_country_name( LocationsSearchSettings::get( 'focus_country' ) );
+			$focus_country = LocationsSearchGeneric::get_country_name( LocationsSearchSettings::get( 'focus_country' ) );
 			if( $country == $focus_country ) {
 				$country = '';
 			}
