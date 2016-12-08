@@ -248,13 +248,17 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// ==================================================
 		
 		static public function get_formatted_address( $post ) {
-			$meta_keys = array( 'address', 'address2', 'suburb', 'state', 'postcode', );
+			$meta_keys = array( 'address', 'address2', 'suburb', 'state', 'postcode', 'country', );
 			foreach( $meta_keys as $meta_key ) {
 				$$meta_key = trim( esc_html( get_post_meta( $post->ID, $meta_key, true ) ) );
 			}
+			$focus_country = LocationsSearch::get_country_name( LocationsSearchSettings::get( 'focus_country' ) );
+			if( $country == $focus_country ) {
+				$country = '';
+			}
 			$address_line_1 = $address;
 			$address_line_2 = $address2;
-			$address_line_3 = trim( "{$suburb} {$state} {$postcode}" );
+			$address_line_3 = implode( ', ', array_filter( array( $suburb, $state, $postcode, $country ) ) );
 			$formatted_address = implode( '<br>', array_filter( array( $address_line_1, $address_line_2, $address_line_3, ) ) );
 			return $formatted_address;
 		}
