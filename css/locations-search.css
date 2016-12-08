@@ -80,6 +80,11 @@
 	margin: .25em 1em 0;
 	font-weight: bolder;
 }
+.lsform__check {
+	display: inline-block;
+	font-weight: normal;
+	margin: .25em 1em;
+}
 .lsform input[type=text],
 .lsform select,
 .lsform button {

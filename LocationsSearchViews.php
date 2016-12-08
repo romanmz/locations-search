@@ -65,6 +65,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				<form class="lsform" action="%s" method="%s"%s>
 					%s
 					%s
+					%s
 					<div class="lsform__submit">
 						<button id="lsform__submit" type="submit">Search</button>
 					</div>
@@ -73,7 +74,8 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				( strtolower( $method ) == 'post' ) ? 'post' : 'get',
 				$autoload ? ' data-lsautosearch="1"' : '',
 				self::get_query_field(),
-				self::get_distance_field( $distance, $distance_units )
+				self::get_distance_field( $distance, $distance_units ),
+				self::get_category_checkboxes()
 			);
 			return $html;
 			
@@ -189,6 +191,56 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			
 			// Return
 			return $html;
+			
+		}
+		
+		
+		// Get Category Checkboxes
+		// ------------------------------
+		static private function get_category_checkboxes() {
+			
+			// Get requested categories
+			$selected = !empty( $_REQUEST['lcategory'] ) ? $_REQUEST['lcategory'] : array();
+			if( !is_array( $selected ) ) {
+				$selected = array( $selected );
+			}
+			
+			// Get existing terms
+			$terms = get_terms( array(
+				'taxonomy' => 'location_category',
+				'fields' => 'id=>name',
+				'hide_empty' => true,
+				// 'include' => '',
+				// 'parent' => 12,
+			) );
+			
+			// Generate checkboxes
+			$html = '';
+			foreach( $terms as $term_id => $term_name ) {
+				$html .= sprintf( '
+					<label class="lsform__check">
+						<input type="checkbox" name="lcategory[]" value="%s"%s>
+						<span>%s</span>
+					</label>
+					',
+					$term_id,
+					checked( true, in_array( $term_id, $selected ), false ),
+					$term_name
+				);
+			}
+			
+			// Wrap and return
+			if( !empty( $html ) ) {
+				$html = sprintf( '
+					<div class="lsform__field lsform__categorychecks">
+						<span class="lsform__label">%s</span>
+						%s
+					</div>',
+					'Categories',
+					$html
+				);
+			}
+			return apply_filters( 'locations_search_form_categorychecks', $html, $selected );
 			
 		}
 		

@@ -16,6 +16,7 @@ jQuery(document).ready(function($){
 	var fieldQuery = $('#lsform__query');
 	var fieldDistance = $('#lsform__distance');
 	var fieldDistanceUnits = $('#lsform__distanceunits');
+	var fieldCategories = $('.lsform__categorychecks input');
 	
 	// No scripts necessary if there's no search form, or a place to display the results
 	if( !searchForm.length || ( !searchResults.length && !map.length ) ) {
@@ -218,6 +219,10 @@ jQuery(document).ready(function($){
 		query.lng = lng;
 		query.distance = fieldDistance.val();
 		query.distance_units = fieldDistanceUnits.val();
+		query.lcategory = [];
+		$.each( fieldCategories.filter( ':checked' ), function( i, lCategory ){
+			query.lcategory.push( parseInt( $(lCategory).val() ) );
+		});
 		
 		// Submit query
 		formLock();

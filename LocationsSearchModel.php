@@ -68,14 +68,63 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 			
 		}
 		static public function get_closest_locations_from_array( $atts=array() ) {
+			
+			// Init vars
 			$defaults = array(
 				'lat' => 0,
 				'lng' => 0,
 				'distance' => 0,
 				'distance_units' => '',
+				'lcategory' => false,
 			);
 			extract( shortcode_atts( $defaults, $atts ) );
-			return self::get_closest_locations( $lat, $lng, $distance, $distance_units );
+			$filters = array();
+			$posts = array();
+			
+			// Filter: location category
+			if( !empty( $lcategory ) ) {
+				$filters['tax_query'] = array();
+				$filters['tax_query'][] = array(
+					'taxonomy' => 'location_category',
+					'field' => 'term_id',
+					'terms' => $lcategory,
+					'operator' => 'AND',
+				);
+			}
+			
+			// Search: Distance + Filters
+			if( $distance && !empty( $filters ) ) {
+				$posts = self::get_closest_locations( $lat, $lng, $distance, $distance_units );
+				if( empty( $posts ) ) {
+					return $posts;
+				}
+				$post_ids = array_map( function( $post ){ return $post->ID; }, $posts );
+				$filters['post_type'] = 'location';
+				$filters['post__in'] = $post_ids;
+				$filters['orderby'] = 'post__in';
+				$filters['fields'] = 'ids';
+				$filtered_ids = get_posts( $filters );
+				foreach( $posts as $i => $post ) {
+					if( !in_array( $post->ID, $filtered_ids ) ) {
+						unset( $posts[ $i ] );
+					}
+				}
+				$posts = array_values( $posts );
+			}
+			// Search: Distance only
+			elseif( $distance ) {
+				$posts = self::get_closest_locations( $lat, $lng, $distance, $distance_units );
+			}
+			// Search: Filters only
+			elseif( !empty( $filters ) ) {
+				$filters['post_type'] = 'location';
+				$filters['posts_per_page'] = -1;
+				$filters['orderby'] = 'post_title';
+				$posts = get_posts( $filters );
+			}
+			
+			// Return
+			return $posts;
 		}
 		
 		
