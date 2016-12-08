@@ -30,7 +30,7 @@ if( !class_exists( 'LocationsSearch' ) ) {
 // Load includes
 require_once 'LocationsSearchGeneric.php';
 require_once 'init-post-types.php';
-require_once 'init-settings.php';
+require_once 'LocationsSearchSettings.php';
 require_once 'LocationsSearchModel.php';
 require_once 'LocationsSearchViews.php';
 require_once 'LocationsSearchController.php';
