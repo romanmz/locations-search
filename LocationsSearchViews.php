@@ -90,7 +90,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			// Output field
 			$html = sprintf( '
 				<div class="lsform__field lsform__query">
-					<label for="lsform__query">%s</label>
+					<label for="lsform__query" class="lsform__label">%s</label>
 					<input id="lsform__query" type="text" name="query" value="%s" title="%s" placeholder="%s">
 				</div>',
 				esc_html( 'Query' ),
@@ -142,7 +142,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					);
 				}
 				$distance_html = sprintf( '
-					<label for="lsform__distance">%s</label>
+					<label for="lsform__distance" class="lsform__label">%s</label>
 					<select id="lsform__distance" name="distance" title="%s">
 						%s
 					</select>
@@ -165,7 +165,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			else {
 				$units_html = sprintf(
 					'
-					<label for="lsform__distanceunits">%s</label>
+					<label for="lsform__distanceunits" class="lsform__label">%s</label>
 					<select id="lsform__distanceunits" name="distance_units" title="%s">
 						<option value="km"%s>km</option>
 						<option value="miles"%s>miles</option>

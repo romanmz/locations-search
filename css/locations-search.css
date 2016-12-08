@@ -34,6 +34,7 @@
 	box-sizing: border-box;
 	position: relative;
 	background: white;
+	font-weight: normal;
 }
 .lsform__field:nth-child( odd ) {
 	clear: both;
@@ -73,10 +74,11 @@
 }
 
 /* Form Fields Style */
-.lsform label {
+.lsform__label {
 	display: block;
 	width: auto;
 	margin: .25em 1em 0;
+	font-weight: bolder;
 }
 .lsform input[type=text],
 .lsform select,
