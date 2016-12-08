@@ -247,7 +247,7 @@ jQuery(document).ready(function($){
 		});
 		allLocations = [];
 	}
-	var mapAddMarker = function( lat, lng ) {
+	var mapAddMarker = function( lat, lng, label='' ) {
 		
 		// Exit if map doesn't exist
 		if( !googleMap ) {
@@ -259,6 +259,7 @@ jQuery(document).ready(function($){
 		var marker = new google.maps.Marker({
 			map: googleMap,
 			position: position,
+			label: label,
 		});
 		
 		// Return marker
@@ -306,7 +307,7 @@ jQuery(document).ready(function($){
 		}
 		
 		// Add marker and info window
-		location.marker = mapAddMarker( location.lat, location.lng );
+		location.marker = mapAddMarker( location.lat, location.lng, location.markerIconLabel );
 		location.infoWindow = mapAddWindow( location.lat, location.lng, location.infoWindowHTML );
 		allLocations.push( location );
 		
