@@ -281,6 +281,7 @@ jQuery(document).ready(function($){
 					scaledSize: new google.maps.Size( iconData.scaledSize[0], iconData.scaledSize[1] ),
 					origin: new google.maps.Point( iconData.origin[0], iconData.origin[1] ),
 					anchor: new google.maps.Point( iconData.anchor[0], iconData.anchor[1] ),
+					labelOrigin: new google.maps.Point( iconData.labelOrigin[0], iconData.labelOrigin[1] ),
 				}
 				return iconData;
 			} catch( error ) {

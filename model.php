@@ -117,6 +117,7 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 				'scaledSize' => array( $scaledWidth, $scaledHeight, ),
 				'origin' => array( 0, 0, ),
 				'anchor' => array( round( $scaledWidth / 2 ), $scaledHeight ),
+				'labelOrigin' => array( round( $scaledWidth / 2 ), ( $scaledHeight * .4 ) ),
 			);
 			return $marker;
 			
