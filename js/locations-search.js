@@ -28,7 +28,6 @@ jQuery(document).ready(function($){
 	try {
 		var googleMapStyles = JSON.parse( locations_search.map_styles );
 	} catch( error ) {
-		console.log( error );
 		var googleMapStyles = [];
 	}
 	var googleMap = map.length ? new google.maps.Map( map[0], { zoom:15, styles:googleMapStyles, } ) : false;
@@ -293,7 +292,6 @@ jQuery(document).ready(function($){
 				}
 				return iconData;
 			} catch( error ) {
-				console.log( error );
 			}
 		}
 		return false;
