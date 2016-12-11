@@ -113,16 +113,16 @@
 
 /* Desktop View */
 @media screen and (min-width: 750px) {
-	.lsform,
-	.lsform__options,
-	.lsform__summary,
-	.lsform__results {
+	.lsform__container--vertical .lsform,
+	.lsform__container--vertical .lsform__options,
+	.lsform__container--vertical .lsform__summary,
+	.lsform__container--vertical .lsform__results {
 		width: 50%;
 	}
-	.lsform__results {
+	.lsform__container--vertical .lsform__results {
 		height: 600px;
 	}
-	.lsform__map {
+	.lsform__container--vertical .lsform__map {
 		position: absolute;
 		top: 0;
 		bottom: 0;
