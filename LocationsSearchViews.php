@@ -46,6 +46,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				'method' => 'get',
 				'distance' => '5,10,25,50,100',
 				'distance_units' => 'km',
+				'categories' => '',
 			);
 			extract( shortcode_atts( $default_atts, $custom_atts ) );
 			
@@ -75,7 +76,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				$autoload ? ' data-lsautosearch="1"' : '',
 				self::get_query_field(),
 				self::get_distance_field( $distance, $distance_units ),
-				self::get_category_checkboxes()
+				self::get_category_dropdown( $categories )
 			);
 			return $html;
 			
@@ -197,21 +198,23 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		
 		// Get Category Checkboxes
 		// ------------------------------
-		static private function get_category_checkboxes() {
+		static private function get_category_checkboxes( $categories='' ) {
 			
-			// Get requested categories
-			$selected = !empty( $_REQUEST['lcategory'] ) ? $_REQUEST['lcategory'] : array();
-			if( !is_array( $selected ) ) {
-				$selected = array( $selected );
+			// Check for multiple parent categories
+			$parents = explode( ',', $categories );
+			$parents = array_filter( $parents, 'trim' );
+			if( count( $parents ) > 1 ) {
+				return implode( '', array_map( array( get_class(), 'get_category_checkboxes' ), $parents ) );
 			}
 			
 			// Get existing terms
+			$selected = !empty( $_REQUEST['lcategory'] ) ? $_REQUEST['lcategory'] : array();
+			$parent_term = get_term( absint( $categories ), 'location_category' );
 			$terms = get_terms( array(
 				'taxonomy' => 'location_category',
 				'fields' => 'id=>name',
 				'hide_empty' => true,
-				// 'include' => '',
-				// 'parent' => 12,
+				'parent' => $categories,
 			) );
 			
 			// Generate checkboxes
@@ -236,7 +239,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 						<span class="lsform__label">%s</span>
 						%s
 					</div>',
-					'Categories',
+					!empty( $parent_term->name ) ? $parent_term->name : 'Categories',
 					$html
 				);
 			}
@@ -247,19 +250,23 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		
 		// Get Category Dropdown
 		// ------------------------------
-		static private function get_category_dropdown() {
+		static private function get_category_dropdown( $categories='' ) {
 			
-			// Get requested categories
-			$selected = !empty( $_REQUEST['lcategory'] ) ? absint( $_REQUEST['lcategory'] ) : 0;
-			if( is_array( $selected ) ) {
-				$selected = reset( $selected );
+			// Check for multiple parent categories
+			$parents = explode( ',', $categories );
+			$parents = array_filter( $parents, 'trim' );
+			if( count( $parents ) > 1 ) {
+				return implode( '', array_map( array( get_class(), 'get_category_dropdown' ), $parents ) );
 			}
 			
 			// Get existing terms
+			$selected = !empty( $_REQUEST['lcategory'] ) ? $_REQUEST['lcategory'] : array();
+			$parent_term = get_term( absint( $categories ), 'location_category' );
 			$terms = get_terms( array(
 				'taxonomy' => 'location_category',
 				'fields' => 'id=>name',
 				'hide_empty' => true,
+				'parent' => $categories,
 			) );
 			
 			// Generate options
@@ -269,7 +276,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					<option value="%s"%s>%s</option>
 					',
 					$term_id,
-					selected( $term_id, $selected, false ),
+					selected( true, in_array( $term_id, $selected ), false ),
 					$term_name
 				);
 			}
@@ -278,13 +285,14 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			if( !empty( $html ) ) {
 				$html = sprintf( '
 					<div class="lsform__field lsform__lcategory">
-						<label id="lsform__lcategory" class="lsform__label">%s</label>
-						<select id="lsform__lcategory" name="lcategory">
-							<option value="">%s</option>
-							%s
+						<label id="lsform__lcategory%1$s" class="lsform__label">%2$s</label>
+						<select id="lsform__lcategory%1$s" name="lcategory">
+							<option value="">%3$s</option>
+							%4$s
 						</select>
 					</div>',
-					'Categories',
+					!empty( $parent_term->term_id ) ? '-'.$parent_term->term_id : '',
+					!empty( $parent_term->name ) ? $parent_term->name : 'Category',
 					'(all categories)',
 					$html
 				);
