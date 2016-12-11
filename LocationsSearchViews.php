@@ -302,12 +302,24 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// Get Results HTML
 		// ------------------------------
 		static public function get_results_html( $post ) {
+			
+			// Get location details
 			$details = self::get_formatted_details( $post );
 			$hours = self::get_formatted_hours_list( $post );
+			
+			// Get categories
+			$categories = get_the_terms( $post, 'location_category' );
+			if( empty( $categories ) ) $categories = array();
+			foreach( $categories as $i => $category ) {
+				$categories[ $i ] = "<span class=\"lsform__result__cat lsform__result__cat-{$category->slug}\">{$category->name}</span>";
+			}
+			
+			// Output markup
 			$html = sprintf( '
 				<h3 class="lsform__result__heading">%s</h3>
 				<div class="lsform__result__distance">Distance: %s %s</div>
 				<address class="lsform__result__address"><p>%s</p></address>
+				%s
 				%s
 				%s
 				<div class="lsform__result__links"><a href="%s">More info</a> | <a href="%s" target="_blank">Get directions</a></div>
@@ -318,10 +330,12 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				self::get_formatted_address( $post ),
 				$details ? '<p class="lsform__result__details">'.$details.'</p>' : '',
 				$hours ? '<p class="lsform__result__hours">'.$hours.'</p>' : '',
+				!empty( $categories ) ? '<p class="lsform__result__cats">'.implode( '', $categories ).'</p>' : '',
 				get_permalink( $post ),
 				'https://maps.google.com/maps?'.http_build_query( array( 'saddr'=>'Current Location', 'daddr'=>$post->lat.','.$post->lng ) )
 			);
 			return apply_filters( 'locations_search_results_html', $html, $post );
+			
 		}
 		
 		

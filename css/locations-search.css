@@ -179,6 +179,14 @@
 }
 .lsform__result__hours {
 }
+.lsform__result__cats {}
+.lsform__result__cat {
+	margin: 0 10px 0 0;
+}
+.lsform__result__cat:before {
+	content: '»';
+	margin: 0 5px 0 0;
+}
 .lsform__result__links {
 }
 
