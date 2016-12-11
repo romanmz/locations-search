@@ -48,6 +48,7 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 				WHERE
 					latitude.meta_key = 'lat'
 					AND longitude.meta_key = 'lng'
+					AND posts.post_status = 'publish'
 				HAVING
 					distance < $max_distance
 				ORDER BY
@@ -118,6 +119,7 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 			// Search: Filters only
 			elseif( !empty( $filters ) ) {
 				$filters['post_type'] = 'location';
+				$filters['post_status'] = 'publish';
 				$filters['posts_per_page'] = -1;
 				$filters['orderby'] = 'post_title';
 				$posts = get_posts( $filters );
