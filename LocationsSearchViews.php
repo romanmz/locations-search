@@ -88,6 +88,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					%s
 					%s
 					%s
+					%s
 					<div class="lsform__submit">
 						<button id="lsform__submit" type="submit">Search</button>
 					</div>
@@ -97,6 +98,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				$autoload ? ' data-lsautosearch="1"' : '',
 				self::get_query_field(),
 				self::get_distance_field( $distance, $distance_units ),
+				self::get_state_field(),
 				$categories_html
 			);
 			return $html;
@@ -213,6 +215,27 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			
 			// Return
 			return $html;
+			
+		}
+		
+		
+		// Get "State" Field 
+		// ------------------------------
+		static private function get_state_field() {
+			
+			// Get requested query
+			$state = !empty( $_REQUEST['state'] ) ? trim( $_REQUEST['state'] ) : '';
+			
+			// Output field
+			$html = sprintf( '
+				<div class="lsform__field lsform__state">
+					<label for="lsform__state" class="lsform__label">%s</label>
+					<input id="lsform__state" type="text" name="state" value="%s">
+				</div>',
+				esc_html( 'State' ),
+				esc_attr( $state )
+			);
+			return apply_filters( 'locations_search_form_state', $html, $state );
 			
 		}
 		
