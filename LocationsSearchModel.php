@@ -175,5 +175,53 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 		}
 		
 		
+		// Get Cluster Data from Attachment
+		// ------------------------------
+		static public function get_cluster_data( $attachment_id=false ) {
+			
+			// Check attachment_id
+			if( $attachment_id === false ) {
+				$attachment_id = LocationsSearchSettings::get( 'map_cluster' );
+			}
+			$attachment_id = absint( $attachment_id );
+			
+			// Get data
+			$attachment_data = wp_get_attachment_image_src( $attachment_id, 'medium' );
+			if( empty( $attachment_data ) ) {
+				return false;
+			}
+			
+			// Prepare data
+			$url = $attachment_data[0];
+			$width = $scaledWidth = $attachment_data[1];
+			$height = $scaledHeight = $attachment_data[2];
+			if( $scaledWidth > 40 ) {
+				$ratio = 40 / $scaledWidth;
+				$scaledWidth = 40;
+				$scaledHeight = round( $scaledHeight * $ratio );
+			}
+			if( $scaledHeight > 40 ) {
+				$ratio = 40 / $scaledHeight;
+				$scaledHeight = 40;
+				$scaledWidth = round( $scaledWidth * $ratio );
+			}
+			
+			// Return data
+			$cluster = array(
+				array(
+					'url' => $url,
+					'width' => $scaledWidth,
+					'height' => $scaledHeight,
+					'backgroundPosition' => 'center center; background-size: contain',
+					// 'anchor' => array( 0, 0 ),
+					// 'textColor' => '#FFFFFF',
+					// 'textSize' => 12,
+				),
+			);
+			return $cluster;
+			
+		}
+		
+		
 	}
 }
