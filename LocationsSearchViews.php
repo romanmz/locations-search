@@ -15,8 +15,16 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		// Get Full Container
 		// ------------------------------
 		static public function get_container( $custom_atts=array(), $content='' ) {
+			
+			// Parse settings
+			$default_atts = array(
+				'layout' => '',
+			);
+			extract( shortcode_atts( $default_atts, $custom_atts ) );
+			
+			// Output markup
 			$html = sprintf( '
-				<div class="lsform__container">
+				<div class="lsform__container%s">
 					%s
 					<div class="lsform__options"></div>
 					<div class="lsform__summary"></div>
@@ -25,9 +33,11 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					<div class="lsform__results"></div>
 				</div>
 				',
-				self::get_search_form( $custom_atts )
+				$layout == 'vertical' ? ' lsform__container--vertical' : '',
+				self::get_search_form( $custom_atts ),
 			);
 			return $html;
+			
 		}
 		
 		
