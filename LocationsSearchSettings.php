@@ -130,6 +130,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'map_styles' => 'Map Styles',
 				'map_marker' => 'Map Markers',
 				'map_marker_active' => 'Active Marker',
+				'map_cluster' => 'Map Clusters',
 			);
 			foreach( $fields as $field_key => $field_label ) {
 				add_settings_field(
@@ -240,7 +241,15 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 					);
 					break;
 				case 'map_marker':
+					$description = 'Select an image to be used to create the markers on the map.';
 				case 'map_marker_active':
+					if( !isset( $description ) ) {
+						$description = 'You can use a different image to represent active markers (when a user clicks on a specific location).';
+					}
+				case 'map_cluster':
+					if( !isset( $description ) ) {
+						$description = 'Image to be used when creating clusters (if they are enabled).';
+					}
 					printf( '
 						<div class="lsmediaupload" data-frame-title="%s" data-frame-button-text="%s">
 							<div class="lsmediaupload__preview">
@@ -261,7 +270,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 						'Select File',
 						'Replace File',
 						'Remove File',
-						$field['key'] == 'map_marker' ? 'Select an image to be used to create the markers on the map.' : 'You can use a different image to represent active markers (when a user clicks on a specific location).'
+						$description
 					);
 					break;
 			}
@@ -289,6 +298,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 				'map_styles' => '',
 				'map_marker' => '',
 				'map_marker_active' => '',
+				'map_cluster' => '',
 			);
 			$data = shortcode_atts( $defaults, $user_data );
 			
@@ -331,6 +341,7 @@ if( !class_exists( 'LocationsSearchSettings' ) ) {
 			$data['map_styles'] = trim( $data['map_styles'] );
 			$data['map_marker'] = !empty( $data['map_marker'] ) ? absint( $data['map_marker'] ) : '';
 			$data['map_marker_active'] = !empty( $data['map_marker_active'] ) ? absint( $data['map_marker_active'] ) : '';
+			$data['map_cluster'] = !empty( $data['map_cluster'] ) ? absint( $data['map_cluster'] ) : '';
 			
 			// Save
 			return $data;
