@@ -26,7 +26,8 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 		// ------------------------------
 		static public function frontend_scripts() {
 			wp_enqueue_script( 'locations-search-google-maps-api', '//maps.googleapis.com/maps/api/js?key='.LocationsSearchSettings::get( 'google_api_key' ) );
-			wp_enqueue_script( 'locations-search', LocationsSearch::get_url().'/js/locations-search.js', array( 'locations-search-google-maps-api', 'jquery', ), LOCATIONSSEARCHVERSION );
+			wp_enqueue_script( 'locations-search-clusterer', LocationsSearch::get_url().'/vendor/marker-clusterer/markerclusterer.js', array(), LOCATIONSSEARCHVERSION );
+			wp_enqueue_script( 'locations-search', LocationsSearch::get_url().'/js/locations-search.js', array( 'locations-search-google-maps-api', 'locations-search-clusterer', 'jquery', ), LOCATIONSSEARCHVERSION );
 			wp_localize_script( 'locations-search', 'locations_search', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'ajax_action' => 'lsajax_search_results',
