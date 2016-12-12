@@ -47,6 +47,11 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				'initial_lng' => 151.2094,
 				'text_current_location' => '(current location)',
 				'map_marker_active' => apply_filters( 'locations_search_map_marker_active', LocationsSearchModel::get_marker_data( LocationsSearchSettings::get( 'map_marker_active' ) ) ),
+				'map_cluster' => apply_filters( 'locations_search_map_cluster', array(
+					'imagePath' => LocationsSearch::get_url().'/vendor/marker-clusterer/m',
+					'maxZoom' => 13,
+					'styles' => LocationsSearchModel::get_cluster_data(),
+				) ),
 			) );
 			wp_enqueue_style( 'locations-search', LocationsSearch::get_url().'/css/locations-search.css', array(), LOCATIONSSEARCHVERSION );
 		}

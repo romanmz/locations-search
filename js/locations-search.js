@@ -32,6 +32,7 @@ jQuery(document).ready(function($){
 	}
 	var googleMap = map.length ? new google.maps.Map( map[0], { zoom:15, styles:googleMapStyles, } ) : false;
 	var allLocations = [];
+	var markerClusterer = new MarkerClusterer( googleMap, [], locations_search.map_cluster );
 	
 	// Init geolocation data
 	var userPosition = {
@@ -337,6 +338,7 @@ jQuery(document).ready(function($){
 		// Reset map
 		mapDeleteLocations();
 		var newBounds = new google.maps.LatLngBounds();
+		markerClusterer.clearMarkers();
 		
 		// Add locations
 		$.each( locations, function( i, location ){
@@ -344,6 +346,9 @@ jQuery(document).ready(function($){
 			newBounds.extend( location );
 		});
 		googleMap.fitBounds( newBounds );
+		if( map.data( 'show-clusters' ) ) {
+			markerClusterer.addMarkers( allLocations.map(function( location ){ return location.marker }) );
+		}
 		
 		// Don't zoom in too close
 		if( googleMap.getZoom() > 15 ) {
@@ -365,6 +370,10 @@ jQuery(document).ready(function($){
 		}
 		var activeMarker = mapParseIcon( locations_search.map_marker_active );
 		mapReplaceMarkerIcon( location, activeMarker );
+		
+		if( map.data( 'show-clusters' ) && googleMap.getZoom() <= markerClusterer.getMaxZoom() ) {
+			googleMap.setZoom( markerClusterer.getMaxZoom()+1 );
+		}
 	}
 	
 	

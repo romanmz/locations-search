@@ -19,6 +19,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			// Parse settings
 			$default_atts = array(
 				'layout' => '',
+				'show_clusters' => false,
 			);
 			extract( shortcode_atts( $default_atts, $custom_atts ) );
 			
@@ -29,12 +30,13 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 					<div class="lsform__options"></div>
 					<div class="lsform__summary"></div>
 					<noscript><div class="lsform__summary"><p>You need to enable javascript to be able to use this form.</p></div></noscript>
-					<div class="lsform__map"></div>
+					<div class="lsform__map"%s></div>
 					<div class="lsform__results"></div>
 				</div>
 				',
 				$layout == 'vertical' ? ' lsform__container--vertical' : '',
 				self::get_search_form( $custom_atts ),
+				$show_clusters ? ' data-show-clusters="1"' : ''
 			);
 			return $html;
 			
