@@ -125,6 +125,13 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 				$posts = get_posts( $filters );
 			}
 			
+			// Cast vars
+			foreach( $posts as $post ) {
+				$post->lat = floatval( $post->lat );
+				$post->lng = floatval( $post->lng );
+				$post->distance = floatval( $post->distance );
+			}
+			
 			// Return
 			return $posts;
 		}
