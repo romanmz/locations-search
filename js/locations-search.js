@@ -396,11 +396,13 @@ jQuery(document).ready(function($){
 	// searching by current position is always available if geo data was stored (with new request or with cached data)
 	// it should only be triggered (either manually or automatically on page load) when the query field is empty
 	var geolocSearchIsAvailable = function() {
-		return ( fieldQuery.val() == '' && userPosition.lat && userPosition.lng );
+		return ( fieldQuery.val() == '' && fieldState.val() == '' && userPosition.lat && userPosition.lng );
 	}
 	var geolocUpdatePlaceholder = function() {
-		if( userPosition.lat && userPosition.lng ) {
+		if( fieldState.val() == '' && userPosition.lat && userPosition.lng ) {
 			fieldQuery.attr( 'placeholder', locations_search.text_current_location );
+		} else {
+			fieldQuery.attr( 'placeholder', fieldQuery.data( 'default-placeholder' ) );
 		}
 	}
 	var geolocGetClosestLocations = function() {
@@ -440,7 +442,9 @@ jQuery(document).ready(function($){
 	}
 	
 	// Update placeholder for "query" field
-	fieldQuery.on( 'change keydown', geolocUpdatePlaceholder ).trigger( 'change' );
+	fieldQuery.data( 'default-placeholder', fieldQuery.attr( 'placeholder' ) );
+	searchForm.find( ':input' ).on( 'change keydown keyup', geolocUpdatePlaceholder );
+	geolocUpdatePlaceholder();
 	
 	// Search locations on form submit
 	searchForm.on( 'submit', function(e){
