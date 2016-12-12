@@ -47,6 +47,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				'distance' => '5,10,25,50,100',
 				'distance_units' => 'km',
 				'categories' => '',
+				'categories_display' => 'off',
 			);
 			extract( shortcode_atts( $default_atts, $custom_atts ) );
 			
@@ -59,6 +60,14 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				$autoload = true;
 			} else {
 				$autoload = false;
+			}
+			
+			// Get categories
+			$categories_html = '';
+			if( $categories_display == 'dropdown' ) {
+				$categories_html = self::get_category_dropdown( $categories );
+			} elseif( $categories_display == 'checks' ) {
+				$categories_html = self::get_category_checkboxes( $categories );
 			}
 			
 			// Output form
@@ -76,7 +85,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				$autoload ? ' data-lsautosearch="1"' : '',
 				self::get_query_field(),
 				self::get_distance_field( $distance, $distance_units ),
-				self::get_category_dropdown( $categories )
+				$categories_html
 			);
 			return $html;
 			
