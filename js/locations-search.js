@@ -16,6 +16,7 @@ jQuery(document).ready(function($){
 	var fieldQuery = $('#lsform__query');
 	var fieldDistance = $('#lsform__distance');
 	var fieldDistanceUnits = $('#lsform__distanceunits');
+	var fieldState = $('#lsform__state');
 	var fieldCategories = $('.lsform__lcategory :input');
 	
 	// No scripts necessary if there's no search form, or a place to display the results
@@ -133,6 +134,9 @@ jQuery(document).ready(function($){
 			return false;
 		}
 		
+		// Prepare data
+		var state = $.trim( fieldState.val() );
+		
 		// Prepare geocode query
 		var query = {};
 		query.address = $.trim( fieldQuery.val() );
@@ -145,7 +149,9 @@ jQuery(document).ready(function($){
 		query.componentRestrictions = {};
 		// query.componentRestrictions.route;
 		// query.componentRestrictions.locality;
-		// query.componentRestrictions.administrativeArea;
+		if( state ) {
+			query.componentRestrictions.administrativeArea = state;
+		}
 		// query.componentRestrictions.postalCode;
 		if( locations_search.focus_country && locations_search.focus_country_strict ) {
 			query.componentRestrictions.country = locations_search.focus_country;
@@ -153,7 +159,11 @@ jQuery(document).ready(function($){
 		
 		// Check that query is valid
 		if( !query.address ) {
-			alert( locations_search.text_please_enter_address );
+			if( state ) {
+				locationsSubmitQuery();
+			} else {
+				alert( locations_search.text_please_enter_address );
+			}
 			return;
 		}
 		
@@ -215,10 +225,13 @@ jQuery(document).ready(function($){
 		// Prepare query
 		var query = {}
 		query.action = locations_search.ajax_action;
-		query.lat = lat;
-		query.lng = lng;
-		query.distance = fieldDistance.val();
-		query.distance_units = fieldDistanceUnits.val();
+		if( lat && lng ) {
+			query.lat = lat;
+			query.lng = lng;
+			query.distance = fieldDistance.val();
+			query.distance_units = fieldDistanceUnits.val();
+		}
+		query.state = fieldState.val();
 		query.lcategory = [];
 		$.each( fieldCategories.filter( ':checked, select' ), function( i, lCategory ){
 			if( $(lCategory).val() ) {
@@ -242,6 +255,7 @@ jQuery(document).ready(function($){
 				formShowResults( locations );
 			},
 		});
+		
 	}
 	
 	
