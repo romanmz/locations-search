@@ -203,9 +203,9 @@ jQuery(document).ready(function($){
 	var locationsSubmitQueryByGeocode = function( geocodeResult ) {
 		var lat = geocodeResult.geometry.location.lat();
 		var lng = geocodeResult.geometry.location.lng();
-		locationsSubmitQuery( lat, lng );
+		locationsSubmitQueryByCoordinates( lat, lng );
 	}
-	var locationsSubmitQuery = function( lat, lng ) {
+	var locationsSubmitQueryByCoordinates = function( lat, lng ) {
 		
 		// Check lock
 		if( searchForm.data( 'isLocked' ) ) {
@@ -392,7 +392,7 @@ jQuery(document).ready(function($){
 	var geolocGetClosestLocations = function() {
 		if( userPosition.lat && userPosition.lng ) {
 			fieldQuery.val( '' ).trigger( 'change' );
-			locationsSubmitQuery( userPosition.lat, userPosition.lng );
+			locationsSubmitQueryByCoordinates( userPosition.lat, userPosition.lng );
 		}
 	}
 	var geolocGetUserPosition = function() {
