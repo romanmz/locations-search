@@ -346,7 +346,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			// Output markup
 			$html = sprintf( '
 				<h3 class="lsform__result__heading">%s</h3>
-				<div class="lsform__result__distance">Distance: %s %s</div>
+				%s
 				<address class="lsform__result__address"><p>%s</p></address>
 				%s
 				%s
@@ -354,8 +354,7 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 				<div class="lsform__result__links"><a href="%s">More info</a> | <a href="%s" target="_blank">Get directions</a></div>
 				',
 				get_the_title( $post ),
-				round( $post->distance, 1 ),
-				$post->distance_units,
+				$post->distance ? '<div class="lsform__result__distance">Distance: '.round( $post->distance, 1 ).' '.$post->distance_units.'</div>' : '',
 				self::get_formatted_address( $post ),
 				$details ? '<p class="lsform__result__details">'.$details.'</p>' : '',
 				$hours ? '<p class="lsform__result__hours">'.$hours.'</p>' : '',
@@ -374,13 +373,12 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 			$html = sprintf( '
 				<div class="lsform__infowindow">
 					<div class="lsform__infowindow__title">%s</div>
-					<div class="lsform__infowindow__distance">Distance: %s %s</div>
+					%s
 					<div class="lsform__infowindow__address">%s</div>
 				</div>
 				',
 				get_the_title( $post ),
-				round( $post->distance, 1 ),
-				$post->distance_units,
+				$post->distance ? '<div class="lsform__infowindow__distance">Distance: '.round( $post->distance, 1 ).' '.$post->distance_units.'</div>' : '',
 				self::get_formatted_address( $post )
 			);
 			return apply_filters( 'locations_search_info_window', $html, $post );
