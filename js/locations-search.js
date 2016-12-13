@@ -213,9 +213,31 @@ jQuery(document).ready(function($){
 	var locationsSubmitQueryByGeocode = function( geocodeResult ) {
 		var lat = geocodeResult.geometry.location.lat();
 		var lng = geocodeResult.geometry.location.lng();
-		locationsSubmitQuery( lat, lng );
+		var query_type = null;
+		var query_values = null;
+		$.each( geocodeResult.types, function( i, type ) {
+			if( type == 'country' ) {
+				query_type = 'country';
+			} else if( type == 'administrative_area_level_1' ) {
+				query_type = 'state';
+			} else if( type == 'locality' ) {
+				query_type = 'suburb';
+			} else if( type == 'postal_code' ) {
+				query_type = 'postcode';
+			}
+			if( query_type ) {
+				$.each( geocodeResult.address_components, function( i, component ){
+					if( $.inArray( type, component.types ) > -1 ) {
+						query_values = [ component.short_name, component.long_name ];
+						return false;
+					}
+				});
+				return false;
+			}
+		});
+		locationsSubmitQuery( lat, lng, query_type, query_values );
 	}
-	var locationsSubmitQuery = function( lat, lng ) {
+	var locationsSubmitQuery = function( lat, lng, query_type, query_values ) {
 		
 		// Check lock
 		if( searchForm.data( 'isLocked' ) ) {
@@ -230,6 +252,10 @@ jQuery(document).ready(function($){
 			query.lng = lng;
 			query.distance = fieldDistance.val();
 			query.distance_units = fieldDistanceUnits.val();
+		}
+		if( query_type && query_values ) {
+			query.query_type = query_type;
+			query.query_values = query_values;
 		}
 		query.state = fieldState.val();
 		query.lcategory = [];
