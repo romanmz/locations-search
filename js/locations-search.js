@@ -293,6 +293,7 @@ jQuery(document).ready(function($){
 			location.infoWindow.close();
 		});
 		allLocations = [];
+		markerClusterer.clearMarkers();
 	}
 	var mapAddMarker = function( lat, lng, label ) {
 		
@@ -378,7 +379,6 @@ jQuery(document).ready(function($){
 		// Reset map
 		mapDeleteLocations();
 		var newBounds = new google.maps.LatLngBounds();
-		markerClusterer.clearMarkers();
 		
 		// Add locations
 		$.each( locations, function( i, location ){
