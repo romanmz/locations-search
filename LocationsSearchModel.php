@@ -14,7 +14,7 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 		
 		// Get Closest Locations
 		// ------------------------------
-		static public function get_closest_locations( $lat, $lng, $max_distance=0, $distance_units='km' ) {
+		static public function get_closest_ids( $lat, $lng, $max_distance=0, $distance_units='km' ) {
 			
 			// Init vars
 			global $wpdb;
@@ -30,27 +30,28 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 					posts.*,
 					latitude.meta_value as lat,
 					longitude.meta_value as lng,
-					'${distance_units}' as distance_units,
+					'{$distance_units}' as distance_units,
 					(
 						ACOS(
-							SIN( RADIANS( $lat ) )
+							SIN( RADIANS( {$lat} ) )
 							* SIN( RADIANS( latitude.meta_value ) )
-							+ COS( RADIANS( $lat ) )
+							+ COS( RADIANS( {$lat} ) )
 							* COS( RADIANS( latitude.meta_value ) )
-							* COS( RADIANS( $lng - longitude.meta_value ) )
+							* COS( RADIANS( {$lng} - longitude.meta_value ) )
 						)
-						* $distance_factor
-					) AS distance
+						* {$distance_factor}
+					) as distance
 				FROM
-					{$wpdb->prefix}postmeta AS latitude
-					LEFT JOIN {$wpdb->prefix}postmeta as longitude ON latitude.post_id = longitude.post_id
-					LEFT JOIN {$wpdb->prefix}posts as posts ON latitude.post_id = posts.ID
+					{$wpdb->prefix}posts as posts
+					LEFT JOIN {$wpdb->prefix}postmeta as latitude ON latitude.post_id = posts.ID
+					LEFT JOIN {$wpdb->prefix}postmeta as longitude ON longitude.post_id = posts.ID
 				WHERE
-					latitude.meta_key = 'lat'
-					AND longitude.meta_key = 'lng'
+					posts.post_type = 'location'
 					AND posts.post_status = 'publish'
+					AND latitude.meta_key = 'lat'
+					AND longitude.meta_key = 'lng'
 				HAVING
-					distance < $max_distance
+					distance < {$max_distance}
 				ORDER BY
 					distance ASC
 			";
@@ -58,13 +59,6 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 			// Get posts
 			$posts = $wpdb->get_results( $query );
 			$posts = !empty( $posts ) ? $posts : array();
-			
-			// Cast vars
-			foreach( $posts as $post ) {
-				$post->lat = floatval( $post->lat );
-				$post->lng = floatval( $post->lng );
-				$post->distance = floatval( $post->distance );
-			}
 			return $posts;
 			
 		}
