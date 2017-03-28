@@ -43,8 +43,8 @@ if( !class_exists( 'LocationsSearchController' ) ) {
 				'error_query_limit' => 'You have exceeded the maximum number of allowed queries, please wait for some time before trying again',
 				'error_no_results' => 'No results found, please try a different address',
 				'error_unknown' => 'There was an unknown error',
-				'initial_lat' => -33.865,
-				'initial_lng' => 151.2094,
+				'initial_lat' => apply_filters( 'locations_search_initial_lat', -33.865 ),
+				'initial_lng' => apply_filters( 'locations_search_initial_lng', 151.2094 ),
 				'text_current_location' => '(current location)',
 				'map_marker_active' => apply_filters( 'locations_search_map_marker_active', LocationsSearchModel::get_marker_data( LocationsSearchSettings::get( 'map_marker_active' ) ) ),
 				'map_cluster' => apply_filters( 'locations_search_map_cluster', array(
