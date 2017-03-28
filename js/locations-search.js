@@ -278,7 +278,11 @@ jQuery(document).ready(function($){
 			},
 			success: function( locations, status, jqXHR ) {
 				formUnlock();
-				formShowResults( locations );
+				if( !locations.length ) {
+					alert( locations_search.error_no_results );
+				} else {
+					formShowResults( locations );
+				}
 			},
 		});
 		
