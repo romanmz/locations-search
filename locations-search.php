@@ -1,36 +1,39 @@
 <?php
-/*
-Plugin Name: Locations Search
-Plugin URI:
-Description: Create and search locations by keyword, postcode and categories
-Author: Roman Martinez
-Author URI: http://romanmartinez.me/
-Version: 0.1.1
-*/
+/**
+ * Plugin Name:         Locations Search
+ * Plugin URI:          
+ * Description:         Easily manage your locations database, and display maps on the frontend to allow users to search by location
+ * Version:             1.0.0
+ * Author:              Roman Martinez
+ * Author URI:          https://www.romanmartinez.me
+ * License:             GPL2+
+ * License URI:         https://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:         locations-search
+ * Domain Path:         /languages/
+ * 
+ * @version 1.0.0
+ * @since 1.0.0
+ * @package Locations_Search\Main
+ */
 
-// No direct access
-defined( 'ABSPATH' ) or die( 'No direct access' );
+namespace Locations_Search;
 
-// Define constants and static class
-define( 'LOCATIONSSEARCHVERSION', '0.1.0' );
-if( !class_exists( 'LocationsSearch' ) ) {
-	class LocationsSearch {
-		static public function get_url() {
-			return plugins_url( '', __FILE__ );
-		}
-		static public function get_path() {
-			return dirname( __FILE__ );
-		}
-		static public function get_main_file() {
-			return __FILE__;
-		}
-	}
-}
+// Exit if accessed directly
+if( !defined( 'ABSPATH' ) ) exit;
 
-// Load includes
-require_once 'LocationsSearchGeneric.php';
-require_once 'init-post-types.php';
-require_once 'LocationsSearchSettings.php';
-require_once 'LocationsSearchModel.php';
-require_once 'LocationsSearchViews.php';
-require_once 'LocationsSearchController.php';
+// Define constants
+define( __NAMESPACE__.'\NS', __NAMESPACE__.'\\' );
+define( NS.'PLUGIN_NAME', 'locations-search' );
+define( NS.'PLUGIN_VERSION', '1.0.0' );
+define( NS.'PLUGIN_FILE', __FILE__ );
+define( NS.'PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( NS.'PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( NS.'PLUGIN_TEXT_DOMAIN', 'locations-search' );
+define( NS.'REQUIRED_PHP_VERSION', '5.6.0' );
+define( NS.'INCLUDES_DIR', PLUGIN_DIR.'inc/' );
+
+// Load required files
+require_once( PLUGIN_DIR.'inc/core/class.autoloader.php' );
+
+// Initialize
+Core\Initializer::run();
