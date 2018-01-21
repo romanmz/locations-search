@@ -42,6 +42,9 @@ class Initializer {
 		if( self::has_required_php_version() ) {
 			add_action( 'plugins_loaded', [__CLASS__, 'load_text_domain'] );
 			NS\Common\Initializer::run();
+			if( is_admin() ) {
+				NS\Admin\Initializer::run();
+			}
 		}
 	}
 	

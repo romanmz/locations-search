@@ -1,0 +1,30 @@
+
+/* Meta Box Fields */
+.locsearch_metabox {}
+.locsearch_metabox__row {}
+.locsearch_metabox__field {
+	margin: 1em 0;
+}
+.locsearch_metabox__field input[type=text] {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	padding: .5em;
+}
+@media (min-width: 783px) {
+	.locsearch_metabox__row {
+		display: flex;
+	}
+	.locsearch_metabox__field {
+		flex: 1 1 0;
+		margin: .5em 0;
+	}
+	.locsearch_metabox__field:nth-child( n+2 ) {
+		margin-left: 1em;
+	}
+}
+
+/* Location Address Map */
+#locsearch_metabox__map {
+	height: 400px;
+}
