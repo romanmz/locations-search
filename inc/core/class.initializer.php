@@ -41,6 +41,7 @@ class Initializer {
 		// Add the rest of the hooks
 		if( self::has_required_php_version() ) {
 			add_action( 'plugins_loaded', [__CLASS__, 'load_text_domain'] );
+			NS\Common\Initializer::run();
 		}
 	}
 	
@@ -65,6 +66,9 @@ class Initializer {
 			$error_message = esc_html__( 'This plugin requires a minimum PHP Version of %s.', 'locations-search' );
 			wp_die( sprintf( $error_message, NS\REQUIRED_PHP_VERSION ) );
 		}
+		NS\Common\Custom_Post_Types::register_all();
+		NS\Common\Custom_Taxonomies::register_all();
+		flush_rewrite_rules();
 	}
 	
 	/**
@@ -73,6 +77,9 @@ class Initializer {
 	 * @return void
 	 */
 	static public function on_deactivation() {
+		NS\Common\Custom_Post_Types::unregister_all();
+		NS\Common\Custom_Taxonomies::unregister_all();
+		flush_rewrite_rules();
 	}
 	
 	/**
