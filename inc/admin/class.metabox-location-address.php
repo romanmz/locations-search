@@ -18,15 +18,20 @@ use Locations_Search as NS;
 class Metabox_Location_Address extends Metabox {
 	
 	/**
+	 * @var Metabox_Location_Address
+	 */
+	static protected $instance = null;
+	
+	/**
 	 * @var string|array The name of the post type(s) that should load this metabox
 	 * @todo Test different types of screens (post_type|'link'|'comment'|admin_page|admin_menu|WP_Screen|array)
 	 */
-	static public $post_type = 'location';
+	public $post_type = 'location';
 	
 	/**
 	 * @var array Meta box attributes
 	 */
-	static public $metabox = [
+	public $metabox = [
 		'id' => 'location_address',
 		'title' => 'Location Address',
 		'context' => 'advanced',			// 'advanced'*|'normal'|'side'
@@ -37,7 +42,7 @@ class Metabox_Location_Address extends Metabox {
 	/**
 	 * @var array Keys to generate and verify 'nonce' fields
 	 */
-	static public $nonce = [
+	public $nonce = [
 		'name' => 'location_address_nonce',
 		'action' => 'location_address_save_',
 	];
@@ -45,7 +50,7 @@ class Metabox_Location_Address extends Metabox {
 	/**
 	 * @var array List of fields and their attributes
 	 */
-	static public $fields = [
+	public $fields = [
 		'address' => [
 			'label' => 'Address',
 		],
@@ -80,12 +85,12 @@ class Metabox_Location_Address extends Metabox {
 	 * @param string $hook
 	 * @return void
 	 */
-	static public function load_assets( $hook ) {
+	public function load_assets( $hook ) {
 		
 		// Load only on the necessary screens
 		if(
 			!in_array( $hook, ['post.php', 'post-new.php'] )
-			|| get_post_type() != self::$post_type
+			|| get_post_type() != $this->post_type
 		) {
 			return;
 		}

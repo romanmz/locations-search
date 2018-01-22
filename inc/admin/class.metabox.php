@@ -18,40 +18,69 @@ use Locations_Search as NS;
 class Metabox {
 	
 	/**
+	 * @var Metabox
+	 */
+	static protected $instance = null;
+	
+	/**
 	 * @var string|array The name of the post type(s) that should load this metabox
 	 * @todo Test different types of screens (post_type|'link'|'comment'|admin_page|admin_menu|WP_Screen|array)
 	 */
-	static public $post_type = '';
+	public $post_type = '';
 	
 	/**
 	 * @var array Meta box attributes
 	 */
-	static public $metabox = [];
+	public $metabox = [];
 	
 	/**
 	 * @var array Keys to generate and verify 'nonce' fields
 	 */
-	static public $nonce = [];
+	public $nonce = [];
 	
 	/**
 	 * @var array List of fields and their attributes
 	 */
-	static public $fields = [];
+	public $fields = [];
 	
 	/**
-	 * Init function
+	 * Retrieve the single instance of the current class
+	 * 
+	 * @return Metabox
+	 */
+	static public function getInstance() {
+		if( is_null( static::$instance ) ) {
+			static::$instance = new static;
+		}
+		return static::$instance;
+	}
+	
+	/**
+	 * Init function (static)
+	 * 
+	 * Registers the necessary hooks and functions
+	 * 
+	 * @return Metabox
+	 */
+	static public function init() {
+		static::getInstance()->initialize();
+		return static::getInstance();
+	}
+	
+	/**
+	 * Init function (instance)
 	 * 
 	 * Registers the necessary hooks and functions
 	 * 
 	 * @return void
 	 */
-	static public function init() {
-		foreach( self::$fields as $field_name => $field_data ) {
-			self::$fields[ $field_name ] = self::prepare_field_data( $field_name, $field_data );
+	protected function initialize() {
+		foreach( $this->fields as $field_name => $field_data ) {
+			$this->fields[ $field_name ] = $this->prepare_field_data( $field_name, $field_data );
 		}
-		add_action( 'add_meta_boxes_'.self::$post_type, [__CLASS__, 'register_metabox'] );
-		add_action( 'save_post', [__CLASS__, 'save_post_meta'] );
-		add_action( 'admin_enqueue_scripts', [__CLASS__, 'load_assets'] );
+		add_action( 'add_meta_boxes_'.$this->post_type, [$this, 'register_metabox'] );
+		add_action( 'save_post', [$this, 'save_post_meta'] );
+		add_action( 'admin_enqueue_scripts', [$this, 'load_assets'] );
 	}
 	
 	/**
@@ -61,10 +90,10 @@ class Metabox {
 	 * @param array $field_data
 	 * @return array
 	 */
-	static public function prepare_field_data( $field_name, $field_data ) {
+	public function prepare_field_data( $field_name, $field_data ) {
 		$default_atts = [
 			'label' => '',
-			'id' => self::$metabox['id'].'_'.$field_name,
+			'id' => $this->metabox['id'].'_'.$field_name,
 			'type' => 'text',
 			'sanitize' => null,
 		];
@@ -78,14 +107,14 @@ class Metabox {
 	 * 
 	 * @return void
 	 */
-	static public function register_metabox( $post ) {
+	public function register_metabox( $post ) {
 		add_meta_box(
-			self::$metabox['id'],
-			self::$metabox['title'],
-			[__CLASS__, 'render_metabox'],
-			self::$post_type,
-			self::$metabox['context'],
-			self::$metabox['priority']
+			$this->metabox['id'],
+			$this->metabox['title'],
+			[$this, 'render_metabox'],
+			$this->post_type,
+			$this->metabox['context'],
+			$this->metabox['priority']
 		);
 	}
 	
@@ -95,20 +124,20 @@ class Metabox {
 	 * @param int $post_id
 	 * @return void
 	 */
-	static public function save_post_meta( $post_id ) {
+	public function save_post_meta( $post_id ) {
 		
 		// Validate request
-		$nonce_action = self::$nonce['action'].$post_id;
+		$nonce_action = $this->nonce['action'].$post_id;
 		if(
-			get_post_type( $post_id ) !== self::$post_type
-			|| !isset( $_POST[ self::$nonce['name'] ] )
-			|| !wp_verify_nonce( $_POST[ self::$nonce['name'] ], $nonce_action )
+			get_post_type( $post_id ) !== $this->post_type
+			|| !isset( $_POST[ $this->nonce['name'] ] )
+			|| !wp_verify_nonce( $_POST[ $this->nonce['name'] ], $nonce_action )
 		) {
 			return;
 		}
 		
 		// Loop meta values
-		foreach( self::$fields as $field_name => $field_data ) {
+		foreach( $this->fields as $field_name => $field_data ) {
 			
 			// Get new value and sanitize it
 			$new_value = isset( $_POST[ $field_name ] ) ? $_POST[ $field_name ] : '';
@@ -138,12 +167,12 @@ class Metabox {
 	 * @param string $hook
 	 * @return void
 	 */
-	static public function load_assets( $hook ) {
+	public function load_assets( $hook ) {
 		
 		// Load only on the necessary screens
 		if(
 			!in_array( $hook, ['post.php', 'post-new.php'] )
-			|| get_post_type() != self::$post_type
+			|| get_post_type() != $this->post_type
 		) {
 			return;
 		}
@@ -158,11 +187,11 @@ class Metabox {
 	 * @param WP_Post $post
 	 * @return void
 	 */
-	static function render_metabox( $post ) {
-		$nonce_action = self::$nonce['action'].$post->ID;
-		wp_nonce_field( $nonce_action, self::$nonce['name'] );
+	function render_metabox( $post ) {
+		$nonce_action = $this->nonce['action'].$post->ID;
+		wp_nonce_field( $nonce_action, $this->nonce['name'] );
 		// Load template
-		$file_path = 'views/'.self::$metabox['file'];
+		$file_path = trailingslashit(__DIR__).'views/'.$this->metabox['file'];
 		if( is_file( $file_path ) && is_readable( $file_path ) ) {
 			include( $file_path );
 		}
@@ -174,12 +203,12 @@ class Metabox {
 	 * @param string $field_name
 	 * @return void
 	 */
-	static function render_field( $field_name ) {
-		if( !isset( self::$fields[ $field_name ] ) ) {
+	function render_field( $field_name ) {
+		if( !isset( $this->fields[ $field_name ] ) ) {
 			return;
 		}
 		global $post;
-		$atts = self::$fields[ $field_name ];
+		$atts = $this->fields[ $field_name ];
 		$atts['value'] = get_post_meta( $post->ID, $field_name, true );
 		
 		// Variations for email and website fields
