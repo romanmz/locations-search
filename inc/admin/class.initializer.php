@@ -36,6 +36,7 @@ class Initializer {
 		
 		// Run functions and add hooks
 		Metabox_Location_Address::init();
+		Metabox_Location_Details::init();
 	}
 	
 }

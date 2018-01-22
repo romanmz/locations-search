@@ -2,24 +2,25 @@
 /* Meta Box Fields */
 .locsearch_metabox {}
 .locsearch_metabox__row {}
-.locsearch_metabox__field {
+.locsearch_metabox__column {
 	margin: 1em 0;
 }
-.locsearch_metabox__field input[type=text] {
+.locsearch_metabox input[type=text],
+.locsearch_metabox input[type=email] {
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
-	padding: .5em;
+	padding: .4em;
 }
 @media (min-width: 783px) {
 	.locsearch_metabox__row {
 		display: flex;
 	}
-	.locsearch_metabox__field {
+	.locsearch_metabox__column {
 		flex: 1 1 0;
 		margin: .5em 0;
 	}
-	.locsearch_metabox__field:nth-child( n+2 ) {
+	.locsearch_metabox__column:nth-child( n+2 ) {
 		margin-left: 1em;
 	}
 }
@@ -27,4 +28,28 @@
 /* Location Address Map */
 #locsearch_metabox__map {
 	height: 400px;
+}
+
+/* Subheading */
+.locsearch_metabox__subheading {
+	font-weight: bold !important;
+	padding: 0 !important;
+	margin: 1em 0 0 !important;
+}
+
+/* Table */
+.locsearch_metabox__table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.locsearch_metabox__table td,
+.locsearch_metabox__table th {
+	width: 33.3%;
+	padding: .25em 0;
+	text-align: left;
+	font-weight: normal;
+}
+.locsearch_metabox__table td:nth-child( n+2 ),
+.locsearch_metabox__table th:nth-child( n+2 ) {
+	padding-left: 1em;
 }

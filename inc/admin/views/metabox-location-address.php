@@ -1,6 +1,6 @@
 <?php
 /**
- * Displays the markup for an individual meta box text field
+ * Displays the markup for the Location Address meta box
  * 
  * @version 1.0.0
  * @since 1.0.0

@@ -9,13 +9,13 @@ namespace Locations_Search\Admin;
 use Locations_Search as NS;
 
 /**
- * Class for Managing the Location Address Metabox
+ * Class for Managing the Location Details Metabox
  * 
  * @version 1.0.0
  * @since 1.0.0
  * @todo Support i18n
  */
-class Metabox_Location_Address {
+class Metabox_Location_Details {
 	
 	/**
 	 * @var string|array The name of the post type(s) that should load this metabox
@@ -27,8 +27,8 @@ class Metabox_Location_Address {
 	 * @var array Meta box attributes
 	 */
 	static public $metabox = [
-		'id' => 'location_address',
-		'title' => 'Location Address',
+		'id' => 'location_details',
+		'title' => 'Location Details',
 		'context' => 'advanced',			// 'advanced'*|'normal'|'side'
 		'priority' => 'default',			// 'default'*|'high'|'low'
 	];
@@ -37,39 +37,26 @@ class Metabox_Location_Address {
 	 * @var array Keys to generate and verify 'nonce' fields
 	 */
 	static public $nonce = [
-		'name' => 'location_address_nonce',
-		'action' => 'location_address_save_',
+		'name' => 'location_details_nonce',
+		'action' => 'location_details_save_',
 	];
 	
 	/**
 	 * @var array List of fields and their attributes
 	 */
 	static public $fields = [
-		'address' => [
-			'label' => 'Address',
+		'phone' => [
+			'label' => 'Phone Number',
 		],
-		'address2' => [
-			'label' => 'Address (line 2)',
+		'email' => [
+			'label' => 'Email',
+			'type' => 'email',
 		],
-		'city' => [
-			'label' => 'City/Suburb',
+		'website' => [
+			'label' => 'Website',
 		],
-		'postcode' => [
-			'label' => 'Postcode',
-		],
-		'state' => [
-			'label' => 'State/Territory',
-		],
-		'country' => [
-			'label' => 'Country',
-		],
-		'lat' => [
-			'label' => 'Latitude',
-			'sanitize' => 'floatval',
-		],
-		'lng' => [
-			'label' => 'Longitude',
-			'sanitize' => 'floatval',
+		'opening_hours' => [
+			'label' => 'Opening Hours',
 		],
 	];
 	
@@ -148,7 +135,15 @@ class Metabox_Location_Address {
 			// Get new value and sanitize it
 			$new_value = isset( $_POST[ $field_name ] ) ? $_POST[ $field_name ] : '';
 			$sanitize_func = is_callable( $field_data['sanitize'] ) ? $field_data['sanitize'] : 'sanitize_text_field';
-			$new_value = call_user_func( $sanitize_func, $new_value );
+			if( $field_name == 'opening_hours' ) {
+				if( !is_array( $new_value ) ) {
+					$new_value = false;
+				} else {
+					array_walk_recursive( $new_value, 'sanitize_text_field' );
+				}
+			} else {
+				$new_value = call_user_func( $sanitize_func, $new_value );
+			}
 			
 			// Update database
 			if( empty( $new_value ) ) {
@@ -177,8 +172,6 @@ class Metabox_Location_Address {
 		
 		// Load assets
 		wp_enqueue_style( NS\PLUGIN_NAME.'_edit-screen', NS\PLUGIN_URL.'assets/css/edit-screen.css', [], NS\PLUGIN_VERSION );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key=' );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_edit-screen', NS\PLUGIN_URL.'assets/js/edit-screen.js', [NS\PLUGIN_NAME.'_google-maps-api', 'jquery'], NS\PLUGIN_VERSION );
 	}
 	
 	/**
@@ -190,7 +183,7 @@ class Metabox_Location_Address {
 	static function render_metabox( $post ) {
 		$nonce_action = self::$nonce['action'].$post->ID;
 		wp_nonce_field( $nonce_action, self::$nonce['name'] );
-		include( 'views/metabox-location-address.php' );
+		include( 'views/metabox-location-details.php' );
 	}
 	
 	/**
@@ -206,7 +199,24 @@ class Metabox_Location_Address {
 		global $post;
 		$atts = self::$fields[ $field_name ];
 		$atts['value'] = get_post_meta( $post->ID, $field_name, true );
-		include( 'views/metabox-text-field.php' );
+		
+		// Variations for email and website fields
+		// !pre-escaping/validation/value types (array|string|int|etc)
+		// !default values
+		if( $field_name == 'email' ) {
+			$atts['value'] = is_email( $atts['value'] );
+		} elseif( $field_name == 'website' ) {
+			$atts['value'] = esc_url( $atts['value'] );
+		} elseif( $field_name == 'opening_hours' && empty( $atts['value'] ) ) {
+			$atts['value'] = [];
+		}
+		
+		// Load template
+		if( $field_name == 'opening_hours' ) {
+			include( 'views/metabox-opening-hours.php' );
+		} else {
+			include( 'views/metabox-text-field.php' );
+		}
 	}
 	
 }
