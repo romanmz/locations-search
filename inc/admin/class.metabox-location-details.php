@@ -57,12 +57,15 @@ class Metabox_Location_Details extends Metabox {
 		'email' => [
 			'label' => 'Email',
 			'type' => 'email',
+			'escape_func' => 'is_email',
 		],
 		'website' => [
 			'label' => 'Website',
+			'escape_func' => 'esc_url',
 		],
 		'opening_hours' => [
 			'label' => 'Opening Hours',
+			'file' => 'metabox-opening-hours.php',
 		],
 	];
 	

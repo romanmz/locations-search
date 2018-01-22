@@ -14,6 +14,7 @@ use Locations_Search as NS;
  * @version 1.0.0
  * @since 1.0.0
  * @todo Support i18n
+ * @todo Support default values|type checks (e.g. arrays)
  */
 class Metabox {
 	
@@ -96,6 +97,8 @@ class Metabox {
 			'id' => $this->metabox['id'].'_'.$field_name,
 			'type' => 'text',
 			'sanitize' => null,
+			'escape_func' => null,
+			'file' => 'metabox-text-field.php',
 		];
 		$field_data = wp_parse_args( $field_data, $default_atts );
 		$field_data['name'] = $field_name;
@@ -211,22 +214,20 @@ class Metabox {
 		$atts = $this->fields[ $field_name ];
 		$atts['value'] = get_post_meta( $post->ID, $field_name, true );
 		
-		// Variations for email and website fields
-		// !pre-escaping/validation/value types (array|string|int|etc)
-		// !default values
-		if( $field_name == 'email' ) {
-			$atts['value'] = is_email( $atts['value'] );
-		} elseif( $field_name == 'website' ) {
-			$atts['value'] = esc_url( $atts['value'] );
-		} elseif( $field_name == 'opening_hours' && empty( $atts['value'] ) ) {
+		// Escape values
+		if( is_callable( $atts['escape_func'] ) ) {
+			$atts['value'] = call_user_func( $atts['escape_func'], $atts['value'] );
+		}
+		
+		// ! Default values
+		if( $field_name == 'opening_hours' && !is_array( $atts['value'] ) ) {
 			$atts['value'] = [];
 		}
 		
 		// Load template
-		if( $field_name == 'opening_hours' ) {
-			include( 'views/metabox-opening-hours.php' );
-		} else {
-			include( 'views/metabox-text-field.php' );
+		$file_path = trailingslashit(__DIR__).'views/'.$atts['file'];
+		if( is_file( $file_path ) && is_readable( $file_path ) ) {
+			include( $file_path );
 		}
 	}
 	
