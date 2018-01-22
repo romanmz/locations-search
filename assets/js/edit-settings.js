@@ -3,18 +3,17 @@ jQuery(document).ready(function($){
 	
 	// Media Uploads
 	// ==================================================
-	
-	$('.lsmediaupload').each(function(){
+	$('.locsearch_mediaupload').each(function(){
 		
 		
 		// Init Vars
 		// ------------------------------
 		var mediaLibrary;
 		var container = $(this);
-		var imagePreview = container.find( '.lsmediaupload__preview' );
-		var imageInput = container.find( '.lsmediaupload__field' );
-		var imageUpload = container.find( '.lsmediaupload__upload' );
-		var imageReset = container.find( '.lsmediaupload__reset' );
+		var imagePreview = container.find( '.locsearch_mediaupload__preview' );
+		var imageInput = container.find( '.locsearch_mediaupload__field' );
+		var imageUpload = container.find( '.locsearch_mediaupload__upload' );
+		var imageReset = container.find( '.locsearch_mediaupload__reset' );
 		var allowedTypes = {
 			type: 'image/png',
 		}
@@ -29,7 +28,7 @@ jQuery(document).ready(function($){
 		
 		// Init Functions
 		// ------------------------------
-		var openMediaLibrary = function() {
+		function openMediaLibrary() {
 			
 			// If the media frame already exists, reopen it.
 			if( mediaLibrary ) {
@@ -50,7 +49,7 @@ jQuery(document).ready(function($){
 			mediaLibrary.open();
 			
 		}
-		var selectedMedia = function() {
+		function selectedMedia() {
 			var item = mediaLibrary.state().get( 'selection' ).first().toJSON();
 			if( item.sizes.medium ) {
 				var itemURL = item.sizes.medium.url;
@@ -64,7 +63,7 @@ jQuery(document).ready(function($){
 			imageUpload.val( imageUpload.data( 'label-replace' ) );
 			imageReset.removeClass( 'hidden' );
 		}
-		var resetMedia = function() {
+		function resetMedia() {
 			imagePreview.empty();
 			imageInput.val( '' );
 			imageUpload.val( imageUpload.data( 'label-select' ) );
@@ -85,6 +84,4 @@ jQuery(document).ready(function($){
 		
 		
 	});
-	
-	
 });

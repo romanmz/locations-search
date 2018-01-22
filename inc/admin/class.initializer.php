@@ -35,6 +35,7 @@ class Initializer {
 		self::$initalized = true;
 		
 		// Run functions and add hooks
+		Settings_Page_General::init();
 		Metabox_Location_Address::init();
 		Metabox_Location_Details::init();
 	}
