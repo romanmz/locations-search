@@ -57,7 +57,7 @@ class Custom_Post_Types {
 	static public function register_location() {
 		
 		// Define labels
-		$labels = array(
+		$labels = [
 			'name'                  => _x( 'Locations', 'post type general name', 'locations-search' ),
 			'singular_name'         => _x( 'Location', 'post type singular name', 'locations-search' ),
 			'name_admin_bar'        => _x( 'Location', 'post type name on the admin toolbar', 'locations-search' ),
@@ -84,25 +84,25 @@ class Custom_Post_Types {
 			'filter_items_list'     => __( 'Filter locations list', 'locations-search' ),
 			'items_list_navigation' => __( 'Locations list navigation', 'locations-search' ),
 			'items_list'            => __( 'Locations list', 'locations-search' ),
-		);
+		];
 		
 		// Register post type
 		$permalinks_slug = 'locations';
-		$args = array(
+		$args = [
 			'labels'                => $labels,
 			'public'                => true,
 			'menu_position'         => 20,
 			'menu_icon'             => 'dashicons-location',
 			'hierarchical'          => false,
-			'supports'              => array( 'title', 'editor', 'excerpt', 'revisions', ),
+			'supports'              => ['title', 'editor', 'excerpt', 'revisions'],
 			'has_archive'           => $permalinks_slug,
 			'can_export'            => true,
 			'delete_with_user'      => false,
 			'capability_type'       => 'page',
-			'rewrite'               => array(
+			'rewrite'               => [
 				'slug'              => $permalinks_slug,
-			),
-		);
+			],
+		];
 		register_post_type( 'location', $args );
 		
 	}

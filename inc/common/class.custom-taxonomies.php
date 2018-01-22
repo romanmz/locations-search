@@ -57,7 +57,7 @@ class Custom_Taxonomies {
 	static public function register_location_category() {
 		
 		// Define labels
-		$labels = array(
+		$labels = [
 			'name'                       => _x( 'Location Categories', 'taxonomy general name', 'locations-search' ),
 			'singular_name'              => _x( 'Location Category', 'taxonomy singular name', 'locations-search' ),
 			'name_admin_bar'             => _x( 'Location Category', 'taxonomy name on the admin toolbar', 'locations-search' ),
@@ -82,20 +82,20 @@ class Custom_Taxonomies {
 			'items_list'                 => __( 'Location categories list', 'locations-search' ),
 			'most_used'                  => _x( 'Most Used', 'location categories', 'locations-search' ),
 			'back_to_items'              => __( '&larr; Back to Location Categories', 'locations-search' ),
-		);
+		];
 		
 		// Register taxonomy
 		$permalinks_slug = 'locations-category';
-		$args = array(
+		$args = [
 			'labels'                     => $labels,
 			'public'                     => true,
 			'show_admin_column'          => true,
 			'description'                => '',
 			'hierarchical'               => true,
-			'rewrite'                    => array(
+			'rewrite'                    => [
 				'slug'                   => $permalinks_slug,
-			),
-		);
+			],
+		];
 		register_taxonomy( 'location_category', 'location', $args );
 		
 	}
