@@ -17,11 +17,6 @@ use Locations_Search as NS;
 class Initializer {
 	
 	/**
-	 * @var bool Indicates whether or not the plugin has already been initialized
-	 */
-	static private $initalized = false;
-	
-	/**
 	 * Runs the initializer functions and hooks
 	 * 
 	 * @return void
@@ -29,10 +24,11 @@ class Initializer {
 	static public function run() {
 		
 		// Initialize only once
-		if( self::$initalized ) {
+		static $initalized = false;
+		if( $initalized ) {
 			return;
 		}
-		self::$initalized = true;
+		$initalized = true;
 		
 		// Run functions and add hooks
 		Custom_Post_Types::init();

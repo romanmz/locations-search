@@ -2,14 +2,14 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Admin
+ * @package Locations_Search\Frontend
  */
 
-namespace Locations_Search\Admin;
+namespace Locations_Search\Frontend;
 use Locations_Search as NS;
 
 /**
- * Admin Initializer Class
+ * Frontend Initializer Class
  * 
  * @version 1.0.0
  * @since 1.0.0
@@ -31,9 +31,7 @@ class Initializer {
 		$initalized = true;
 		
 		// Run functions and add hooks
-		Settings_Page_General::init();
-		Metabox_Location_Address::init();
-		Metabox_Location_Details::init();
+		Search_Map::init();
 	}
 	
 }

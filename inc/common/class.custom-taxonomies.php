@@ -61,7 +61,7 @@ class Custom_Taxonomies {
 			'name'                       => _x( 'Location Categories', 'taxonomy general name', 'locations-search' ),
 			'singular_name'              => _x( 'Location Category', 'taxonomy singular name', 'locations-search' ),
 			'name_admin_bar'             => _x( 'Location Category', 'taxonomy name on the admin toolbar', 'locations-search' ),
-			'menu_name'                  => _x( 'Locations', 'taxonomy name on the admin menu', 'locations-search' ),
+			'menu_name'                  => _x( 'Categories', 'taxonomy name on the admin menu', 'locations-search' ),
 			'search_items'               => __( 'Search Location Categories', 'locations-search' ),
 			'popular_items'              => __( 'Popular Location Categories', 'locations-search' ),
 			'all_items'                  => __( 'All Location Categories', 'locations-search' ),
