@@ -12,58 +12,6 @@ if( !class_exists( 'LocationsSearchModel' ) ) {
 	class LocationsSearchModel {
 		
 		
-		// Get Closest Locations
-		// ------------------------------
-		static public function get_closest_ids( $lat, $lng, $max_distance=0, $distance_units='km' ) {
-			
-			// Init vars
-			global $wpdb;
-			$lat = floatval( $lat );
-			$lng = floatval( $lng );
-			$max_distance = $max_distance ? floatval( $max_distance ) : 9999999;
-			$distance_units = ( $distance_units == 'miles' ) ? 'miles' : 'km';
-			$distance_factor = ( $distance_units == 'miles' ) ? 3959 : 6371;
-			
-			// Prepare query
-			$query = "
-				SELECT DISTINCT
-					posts.*,
-					latitude.meta_value as lat,
-					longitude.meta_value as lng,
-					'{$distance_units}' as distance_units,
-					(
-						ACOS(
-							SIN( RADIANS( {$lat} ) )
-							* SIN( RADIANS( latitude.meta_value ) )
-							+ COS( RADIANS( {$lat} ) )
-							* COS( RADIANS( latitude.meta_value ) )
-							* COS( RADIANS( {$lng} - longitude.meta_value ) )
-						)
-						* {$distance_factor}
-					) as distance
-				FROM
-					{$wpdb->prefix}posts as posts
-					LEFT JOIN {$wpdb->prefix}postmeta as latitude ON latitude.post_id = posts.ID
-					LEFT JOIN {$wpdb->prefix}postmeta as longitude ON longitude.post_id = posts.ID
-				WHERE
-					posts.post_type = 'location'
-					AND posts.post_status = 'publish'
-					AND latitude.meta_key = 'lat'
-					AND longitude.meta_key = 'lng'
-				HAVING
-					distance < {$max_distance}
-				ORDER BY
-					distance ASC
-			";
-			
-			// Get posts
-			$posts = $wpdb->get_results( $query );
-			$posts = !empty( $posts ) ? $posts : array();
-			return $posts;
-			
-		}
-		
-		
 		// Get Closest Locations from Array
 		// ------------------------------
 		static public function get_closest_locations_from_array( $atts=array() ) {

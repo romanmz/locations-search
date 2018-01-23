@@ -55,6 +55,12 @@ jQuery(document).ready(function($){
 		});
 	}
 	
+	// Delete markers
+	function removeMarkers( map, markers ) {
+		$.each( markers, function( i, marker ) {
+			marker.setMap( null );
+		});
+	}
 	
 	// GEOCODING
 	// ------------------------------
@@ -109,13 +115,52 @@ jQuery(document).ready(function($){
 		}
 		if( status != 'OK' ) {
 			// UNKNOWN_ERROR and REQUEST_DENIED
-			alert( locsearch.alerts.error_unknown );
+			alert( locsearch.alerts.unknown_error );
 		}
 	}
 	
 	// DATABASE QUERIES
 	// ------------------------------
 	
+	// Prepare a geocode result and submit a database query
+	function databaseQueryFromGeocode( caller, result ) {
+		var lat = result.geometry.location.lat();
+		var lng = result.geometry.location.lng();
+		databaseQuery( caller, lat, lng );
+	}
+	
+	// Submit a database query
+	function databaseQuery( caller, lat, lng ) {
+		
+		// Check lock
+		if( caller.data( 'isLocked' ) ) {
+			return;
+		}
+		
+		// Prepare query
+		var query = {};
+		query.action = 'locations_map_search';
+		query.lat = lat;
+		query.lng = lng;
+		
+		// Send query
+		caller.trigger( 'locsearch_database_lock' );
+		$.post({
+			url:      locsearch.ajax_url,
+			data:     query,
+			dataType: 'json',
+			error: function( jqXHR, status, error ) {
+				alert( error ? 'Error: '+error : locsearch.alerts.unknown_error );
+			},
+			success: function( locations, status, jqXHR ) {
+				caller.trigger( 'locsearch_database_results', [locations] );
+			},
+			complete: function( jqXHR, status ) {
+				// status: success notmodified nocontent error timeout abort parsererror
+				caller.trigger( 'locsearch_database_unlock' );
+			}
+		});
+	}
 	
 	
 	// ==================================================
@@ -144,6 +189,7 @@ jQuery(document).ready(function($){
 		var searchMesages = box.find('.locsearch_box__messages');
 		var addressField = searchForm.find( 'input[name=address]' );
 		var map = createMap( mapContainer[0] );
+		var markers = [];
 		if( !geocoder ) {
 			geocoder = new google.maps.Geocoder();
 		}
@@ -155,12 +201,12 @@ jQuery(document).ready(function($){
 		});
 		
 		// Lock/unlock box
-		box.on( 'locsearch_geocode_lock', function(){
+		box.on( 'locsearch_geocode_lock locsearch_database_lock', function(){
 			$(this).data( 'isLocked', true );
 			$(this).addClass( 'locsearch_box--loading' );
 			$(this).find( ':input' ).prop( 'disabled', true );
 		});
-		box.on( 'locsearch_geocode_unlock', function(){
+		box.on( 'locsearch_geocode_unlock locsearch_database_unlock', function(){
 			$(this).data( 'isLocked', false );
 			$(this).removeClass( 'locsearch_box--loading' );
 			$(this).find( ':input' ).prop( 'disabled', false );
@@ -168,6 +214,7 @@ jQuery(document).ready(function($){
 		
 		// Process geocode results
 		box.on( 'locsearch_geocode_1_result', function( e, result ){
+			databaseQueryFromGeocode( box, result );
 		});
 		box.on( 'locsearch_geocode_many_results', function( e, results ){
 			var list = $('<ul>');
@@ -176,11 +223,28 @@ jQuery(document).ready(function($){
 				var link = $('<a>',{ href: '#', text: result.formatted_address });
 				link.on( 'click', function(e){
 					e.preventDefault();
+					databaseQueryFromGeocode( box, result );
 				});
 				list.append( item.append( link ) );
 			});
 			searchMesages.html( '<div>'+locsearch.text.did_you_mean+'</div>' );
 			searchMesages.append( list );
+		// Process database query results
+		box.on( 'locsearch_database_results', function( e, locations ){
+			
+			// Display number of results
+			if( !locations.length ) {
+				searchMesages.html( '<p>'+locsearch.text['0_results']+'</p>' );
+			} else if( locations.length == 1 ) {
+				searchMesages.html( '<p>'+locsearch.text['1_result']+'</p>' );
+			} else {
+				searchMesages.html( '<p>'+locsearch.text.many_results.replace( '%s', locations.length ) +'</p>' );
+			}
+			
+			// Add markers
+			removeMarkers( map, markers );
+			markers = addMarkers( map, locations );
+		});
 		});
 		
 	});

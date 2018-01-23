@@ -39,6 +39,8 @@ class Search_Map {
 		add_action( 'wp_enqueue_scripts', [$this, 'load_assets'] );
 		add_shortcode( 'locations_map', [$this, 'locations_map'] );
 		add_shortcode( 'locations_map_search', [$this, 'locations_map_search'] );
+		add_action( 'wp_ajax_'.'locations_map_search', [Search_Map_Model::class, 'ajax_closest_locations'] );
+		add_action( 'wp_ajax_nopriv_'.'locations_map_search', [Search_Map_Model::class, 'ajax_closest_locations'] );
 	}
 	
 	/**
@@ -70,6 +72,9 @@ class Search_Map {
 			],
 			'text'                => [
 				'did_you_mean'    => __( 'Did you mean:', 'locations-search' ),
+				'0_results'       => __( 'No locations found', 'locations-search' ),
+				'1_result'        => __( '1 locations found', 'locations-search' ),
+				'many_results'    => __( '%s locations found', 'locations-search' ),
 			],
 		];
 		wp_localize_script( NS\PLUGIN_NAME.'_search-map', 'locsearch', $js_data );
