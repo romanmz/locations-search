@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+	<style>
+		.svg-loading-icon-path {
+			fill: #333;
+		}
+	</style>
+	<rect width="100" height="100" class="bk" fill="none"/>
+	<rect x="47.5" y="32" width="5" height="12" rx="3" ry="3" transform="rotate(0 50 50)" class="svg-loading-icon-path">
+		<animate attributeName="opacity" from="1" to="0" dur="1s" begin="0s" repeatCount="indefinite"/>
+	</rect>
+	<rect x="47.5" y="32" width="5" height="12" rx="3" ry="3" transform="rotate(45 50 50)" class="svg-loading-icon-path">
+		<animate attributeName="opacity" from="1" to="0" dur="1s" begin="0.125s" repeatCount="indefinite"/>
+	</rect>
+	<rect x="47.5" y="32" width="5" height="12" rx="3" ry="3" transform="rotate(90 50 50)" class="svg-loading-icon-path">
+		<animate attributeName="opacity" from="1" to="0" dur="1s" begin="0.25s" repeatCount="indefinite"/>
+	</rect>
+	<rect x="47.5" y="32" width="5" height="12" rx="3" ry="3" transform="rotate(135 50 50)" class="svg-loading-icon-path">
+		<animate attributeName="opacity" from="1" to="0" dur="1s" begin="0.375s" repeatCount="indefinite"/>
+	</rect>
+	<rect x="47.5" y="32" width="5" height="12" rx="3" ry="3" transform="rotate(180 50 50)" class="svg-loading-icon-path">
+		<animate attributeName="opacity" from="1" to="0" dur="1s" begin="0.5s" repeatCount="indefinite"/>
+	</rect>
+	<rect x="47.5" y="32" width="5" height="12" rx="3" ry="3" transform="rotate(225 50 50)" class="svg-loading-icon-path">
+		<animate attributeName="opacity" from="1" to="0" dur="1s" begin="0.625s" repeatCount="indefinite"/>
+	</rect>
+	<rect x="47.5" y="32" width="5" height="12" rx="3" ry="3" transform="rotate(270 50 50)" class="svg-loading-icon-path">
+		<animate attributeName="opacity" from="1" to="0" dur="1s" begin="0.75s" repeatCount="indefinite"/>
+	</rect>
+	<rect x="47.5" y="32" width="5" height="12" rx="3" ry="3" transform="rotate(315 50 50)" class="svg-loading-icon-path">
+		<animate attributeName="opacity" from="1" to="0" dur="1s" begin="0.875s" repeatCount="indefinite"/>
+	</rect>
+</svg>

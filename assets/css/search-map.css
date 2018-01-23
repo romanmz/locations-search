@@ -1,0 +1,38 @@
+
+/* Simple Map */
+.locsearch_map {
+	min-height: 500px;
+	border: 1px solid #CCC;
+}
+
+/* Map Search Box */
+.locsearch_box {
+	border: 1px solid #CCC;
+	position: relative;
+	overflow: hidden;
+}
+.locsearch_box--loading:after {
+	content: '';
+	position: absolute;
+	z-index: 10;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba( 255, 255, 255, .75 ) url(../images/loading.svg) center center no-repeat;
+}
+.locsearch_box__form {
+	display: flex;
+}
+.locsearch_box__form button {
+	flex: 0 1 auto;
+}
+.locsearch_box__messages:not( :empty ) {
+	padding: 1em;
+}
+.locsearch_box__messages ul {
+	list-style: disc inside;
+}
+.locsearch_box__map {
+	min-height: 500px;
+}
