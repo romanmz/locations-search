@@ -73,7 +73,7 @@ class Search_Map {
 			'text'                => [
 				'did_you_mean'    => __( 'Did you mean:', 'locations-search' ),
 				'0_results'       => __( 'No locations found', 'locations-search' ),
-				'1_result'        => __( '1 locations found', 'locations-search' ),
+				'1_result'        => __( '1 location found', 'locations-search' ),
 				'many_results'    => __( '%s locations found', 'locations-search' ),
 			],
 		];

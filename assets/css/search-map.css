@@ -30,8 +30,12 @@
 .locsearch_box__messages:not( :empty ) {
 	padding: 1em;
 }
+.locsearch_box__messages p {
+	margin: 0;
+}
 .locsearch_box__messages ul {
 	list-style: disc inside;
+	margin: 0;
 }
 .locsearch_box__map {
 	min-height: 500px;

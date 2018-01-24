@@ -134,6 +134,13 @@ class Search_Map_Model {
 		if( isset( $data['distance'] ) ) {
 			$data['distance'] = floatval( $data['distance'] );
 		}
+		// Add marker images
+		$settings = get_option( 'locsearch' );
+		$data['images'] = [];
+		if( $settings['map_marker'] ) {
+			$data['images']['marker'] = Search_Map_Helpers::get_marker_attributes( $settings['map_marker'] );
+		}
+		// Return
 		return $data;
 	}
 	
