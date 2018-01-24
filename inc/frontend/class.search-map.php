@@ -39,6 +39,7 @@ class Search_Map {
 		add_action( 'wp_enqueue_scripts', [$this, 'load_assets'] );
 		add_shortcode( 'locations_map', [$this, 'locations_map'] );
 		add_shortcode( 'locations_map_search', [$this, 'locations_map_search'] );
+		add_shortcode( 'locations_search_form', [$this, 'locations_search_form'] );
 		add_action( 'wp_ajax_'.'locations_map_search', [Search_Map_Model::class, 'ajax_closest_locations'] );
 		add_action( 'wp_ajax_nopriv_'.'locations_map_search', [Search_Map_Model::class, 'ajax_closest_locations'] );
 	}
@@ -130,18 +131,60 @@ class Search_Map {
 		];
 		$atts = shortcode_atts( $default_atts, $atts, 'locations_map_search' );
 		
-		// Generate markup
+		// Output box
 		$html = sprintf(
 			'<div id="locsearch_box_%s" class="locsearch_box">
-				<form class="locsearch_box__form">
-					<input type="text" name="address" value="" placeholder="Address">
-					<button>Search</button>
-				</form>
+				%s
 				<div class="locsearch_box__messages"></div>
 				<div class="locsearch_box__map"></div>
 			</div>',
+			$counter,
+			$this->locations_search_form(),
 			$counter
 		);
 		return $html;
 	}
+	
+	/**
+	 * Generates a locations search form
+	 * 
+	 * @param array $atts
+	 * @param string $content
+	 * @return string
+	 */
+	public function locations_search_form( $atts=[], $content='' ) {
+		
+		// Increase counter
+		static $counter = 0;
+		$counter++;
+		
+		// Parse settings
+		$default_atts = [
+			'url'    => is_singular() ? get_permalink() : '',
+			'method' => 'post',
+		];
+		$atts = shortcode_atts( $default_atts, $atts, 'locations_search_form' );
+		
+		// Read user submitted values
+		$autoload = !empty( $_POST['autosearch'] ) && wp_get_referer();
+		$address = !empty( $_REQUEST['address'] ) ? $_REQUEST['address'] : '';
+		
+		// Output form
+		$html = sprintf(
+			'<form id="locsearch_box__form_%s" class="locsearch_box__form" action="%s" method="%s"%s>
+				<input type="text" name="address" value="%s" placeholder="%s">
+				<input type="hidden" name="autosearch" value="1">
+				<button>%s</button>
+			</form>',
+			$counter,
+			esc_url( $atts['url'] ),
+			esc_attr( $atts['method'] ),
+			$autoload ? ' data-locsearch-autosearch="1"' : '',
+			esc_attr( $address ),
+			__( 'Enter your address', 'locations-search' ),
+			_x( 'Search', 'locations search form', 'locations-search' )
+		);
+		return $html;
+	}
+	
 }

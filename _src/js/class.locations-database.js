@@ -4,11 +4,11 @@ export default class LocationsDatabase {
 	static queryFromGeocode( caller, result ) {
 		let lat = result.geometry.location.lat();
 		let lng = result.geometry.location.lng();
-		this.databaseQuery( caller, lat, lng );
+		this.query( caller, lat, lng );
 	}
 	
 	// Submit a database query
-	static databaseQuery( caller, lat, lng ) {
+	static query( caller, lat, lng ) {
 		
 		// Check lock
 		if( caller.data( 'isLocked' ) ) {

@@ -131,7 +131,7 @@ class Search_Map_Model {
 		$data['id']    = absint( $data['id'] );
 		$data['lat']   = floatval( $data['lat'] );
 		$data['lng']   = floatval( $data['lng'] );
-		$data['title'] = get_the_title( $data['id'] );
+		$data['title'] = '';
 		$data['url']   = get_permalink( $data['id'] );
 		if( isset( $data['distance'] ) ) {
 			$data['distance'] = floatval( $data['distance'] );

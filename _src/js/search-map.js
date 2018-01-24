@@ -1,5 +1,5 @@
 import LocationsMap from './class.locations-map.js';
-import LocationsMapMarker from './class.locations-map-marker.js';
+import LocationsGeolocation from './class.locations-geolocation.js';
 import LocationsGeocoder from './class.locations-geocoder.js';
 import LocationsDatabase from './class.locations-database.js';
 jQuery(document).ready(function($){
@@ -81,6 +81,21 @@ jQuery(document).ready(function($){
 			map.addMarkersFromLocations( locations );
 			
 		});
+		
+		// Trigger automatic searches
+		if( form.data( 'locsearch-autosearch' ) ) {
+			// on page load if the user arrived to this page from filling the form on another page
+			form.trigger( 'submit' );
+		} else if( LocationsGeolocation.cachedLocation ) {
+			// or search by the user's location if they previously gave permission
+			LocationsDatabase.query( box, LocationsGeolocation.cachedLocation.lat, LocationsGeolocation.cachedLocation.lng );
+		} else if( addressField.val().trim() == '' ) {
+			// or request user location (only if form is empty)
+			LocationsGeolocation.requestLocation();
+			if( LocationsGeolocation.cachedLocation ) {
+				LocationsDatabase.query( box, LocationsGeolocation.cachedLocation.lat, LocationsGeolocation.cachedLocation.lng );
+			}
+		}
 		
 	});
 });
