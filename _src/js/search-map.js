@@ -91,10 +91,9 @@ jQuery(document).ready(function($){
 			LocationsDatabase.query( box, LocationsGeolocation.cachedLocation.lat, LocationsGeolocation.cachedLocation.lng );
 		} else if( addressField.val().trim() == '' ) {
 			// or request user location (only if form is empty)
-			LocationsGeolocation.requestLocation();
-			if( LocationsGeolocation.cachedLocation ) {
-				LocationsDatabase.query( box, LocationsGeolocation.cachedLocation.lat, LocationsGeolocation.cachedLocation.lng );
-			}
+			LocationsGeolocation.requestLocation().then( location => {
+				LocationsDatabase.query( box, location.lat, location.lng );
+			});
 		}
 		
 	});

@@ -13,20 +13,23 @@ export default class LocationsGeolocation {
 	
 	// Detect the user's current location and cache it
 	static requestLocation() {
-		navigator.geolocation.getCurrentPosition(
-			location => {
-				sessionStorage.setItem( 'userLat', location.coords.latitude );
-				sessionStorage.setItem( 'userLng', location.coords.longitude );
-			},
-			error => {
-				console.log( error );
-			},
-			{
-				enableHighAccuracy: false,
-				timeout: 10000,
-				maximumAge: 0,
-			}
-		);
+		return new Promise( (resolve, reject) => {
+			navigator.geolocation.getCurrentPosition(
+				location => {
+					sessionStorage.setItem( 'userLat', location.coords.latitude );
+					sessionStorage.setItem( 'userLng', location.coords.longitude );
+					resolve( this.cachedLocation );
+				},
+				error => {
+					reject( Error( error.message ) );
+				},
+				{
+					enableHighAccuracy: false,
+					timeout: 10000,
+					maximumAge: 0,
+				}
+			);
+		});
 	}
 	
 }

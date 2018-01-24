@@ -47,14 +47,11 @@ export default class LocationsGeocoder {
 	static geocodeReadErrors( results, status ) {
 		if( status == 'INVALID_REQUEST' ) {
 			alert( locsearch.alerts.invalid_request );
-		}
-		if( status == 'OVER_QUERY_LIMIT' ) {
+		} else if( status == 'OVER_QUERY_LIMIT' ) {
 			alert( locsearch.alerts.query_limit );
-		}
-		if( status == 'ZERO_RESULTS' || ( status == 'OK' && !results.length ) ) {
+		} else if( status == 'ZERO_RESULTS' || ( status == 'OK' && !results.length ) ) {
 			alert( locsearch.alerts.no_results );
-		}
-		if( status != 'OK' ) {
+		} else if( status != 'OK' ) {
 			// UNKNOWN_ERROR and REQUEST_DENIED
 			alert( locsearch.alerts.unknown_error );
 		}
