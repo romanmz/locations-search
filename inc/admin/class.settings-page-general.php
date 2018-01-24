@@ -13,7 +13,7 @@ use Locations_Search as NS;
  * 
  * @version 1.0.0
  * @since 1.0.0
- * @todo Add support for setting other google maps settings: bias_bounds, restrict_state, restrict_postcode, restrict_suburb, restrict_street, language
+ * @todo Add support for setting other google maps settings: bias_bounds, restrict_state, restrict_postcode, restrict_city, restrict_street, language
  * @todo Apply flush_rewrite_rules() after updating permalinks
  */
 class Settings_Page_General extends Settings_Page {

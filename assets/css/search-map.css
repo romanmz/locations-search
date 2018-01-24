@@ -40,3 +40,13 @@
 .locsearch_box__map {
 	min-height: 500px;
 }
+
+/* Info Windows */
+.locsearch_infowindow {}
+.locsearch_infowindow__title {
+	font-weight: bold;
+}
+.locsearch_infowindow__distance {
+	font-style: italic;
+}
+.locsearch_infowindow__address {}

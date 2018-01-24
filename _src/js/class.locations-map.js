@@ -38,10 +38,7 @@ export default class LocationsMap {
 		let newMarkers = [];
 		let newBounds = new google.maps.LatLngBounds();
 		locations.forEach((location, i) => {
-			let newMarker = new LocationsMapMarker( this.map, location.lat, location.lng, location.title );
-			if( location.images.marker ) {
-				newMarker.replaceIcon( location.images.marker );
-			}
+			let newMarker = new LocationsMapMarker( this, location );
 			newMarkers.push( newMarker );
 			newBounds.extend( location );
 		});

@@ -119,6 +119,8 @@ class Search_Map_Model {
 	 * @return array
 	 */
 	static public function prepare_location_data( $data ) {
+		
+		// Prepare basic information
 		if( !is_array( $data ) ) {
 			$data = [
 				'id'    => $data,
@@ -134,14 +136,51 @@ class Search_Map_Model {
 		if( isset( $data['distance'] ) ) {
 			$data['distance'] = floatval( $data['distance'] );
 		}
+		
 		// Add marker images
 		$settings = get_option( 'locsearch' );
 		$data['images'] = [];
 		if( $settings['map_marker'] ) {
 			$data['images']['marker'] = Search_Map_Helpers::get_marker_attributes( $settings['map_marker'] );
 		}
+		if( $settings['map_marker_active'] ) {
+			$data['images']['marker_active'] = Search_Map_Helpers::get_marker_attributes( $settings['map_marker_active'] );
+		}
+		
+		// Add info window
+		$info_window = sprintf( '
+			<div class="locsearch_infowindow">
+				<div class="locsearch_infowindow__title">%s</div>
+				<div class="locsearch_infowindow__distance">%s</div>
+				<div class="locsearch_infowindow__address">%s</div>
+			</div>
+			',
+			esc_html( $data['title'] ),
+			isset( $data['distance'] ) ? 'Distance: '.round( $data['distance'], 1 ).' '.$data['distance_units'] : '',
+			static::get_formatted_address( $data['id'] )
+		);
+		$data['info_window'] = $info_window;
+		
 		// Return
 		return $data;
+	}
+	
+	/**
+	 * Returns a nicely formatted address from a location
+	 * 
+	 * @param int $post_id
+	 * @return string
+	 */
+	static public function get_formatted_address( $post_id ) {
+		$meta_keys = ['address', 'address2', 'city', 'state', 'postcode', 'country'];
+		foreach( $meta_keys as $meta_key ) {
+			$$meta_key = trim( esc_html( get_post_meta( $post_id, $meta_key, true ) ) );
+		}
+		$address_line_1 = $address;
+		$address_line_2 = $address2;
+		$address_line_3 = implode( ', ', array_filter( [$city, $state, $postcode, $country] ) );
+		$formatted_address = implode( '<br>', array_filter( [$address_line_1, $address_line_2, $address_line_3] ) );
+		return $formatted_address;
 	}
 	
 }

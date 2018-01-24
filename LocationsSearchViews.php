@@ -300,44 +300,9 @@ if( !class_exists( 'LocationsSearchViews' ) ) {
 		}
 		
 		
-		// Get Info Window
-		// ------------------------------
-		static public function get_info_window( $post ) {
-			$html = sprintf( '
-				<div class="lsform__infowindow">
-					<div class="lsform__infowindow__title">%s</div>
-					%s
-					<div class="lsform__infowindow__address">%s</div>
-				</div>
-				',
-				get_the_title( $post ),
-				$post->distance ? '<div class="lsform__infowindow__distance">Distance: '.round( $post->distance, 1 ).' '.$post->distance_units.'</div>' : '',
-				self::get_formatted_address( $post )
-			);
-			return apply_filters( 'locations_search_info_window', $html, $post );
-		}
-		
-		
 		
 		// Helper Functions
 		// ==================================================
-		
-		static public function get_formatted_address( $post ) {
-			$meta_keys = array( 'address', 'address2', 'suburb', 'state', 'postcode', 'country', );
-			foreach( $meta_keys as $meta_key ) {
-				$$meta_key = trim( esc_html( get_post_meta( $post->ID, $meta_key, true ) ) );
-			}
-			$focus_country = LocationsSearchGeneric::get_country_name( LocationsSearchSettings::get( 'focus_country' ) );
-			if( $country == $focus_country ) {
-				$country = '';
-			}
-			$address_line_1 = $address;
-			$address_line_2 = $address2;
-			$address_line_3 = implode( ', ', array_filter( array( $suburb, $state, $postcode, $country ) ) );
-			$formatted_address = implode( '<br>', array_filter( array( $address_line_1, $address_line_2, $address_line_3, ) ) );
-			return $formatted_address;
-		}
-		
 		static public function get_formatted_details( $post ) {
 			$details = array();
 			$phone = esc_html( get_post_meta( $post->ID, 'phone', true ) );
