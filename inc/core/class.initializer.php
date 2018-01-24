@@ -37,9 +37,12 @@ class Initializer {
 		// Add the rest of the hooks
 		if( self::has_required_php_version() ) {
 			add_action( 'plugins_loaded', [__CLASS__, 'load_text_domain'] );
-			NS\Common\Initializer::run();
-			NS\Admin\Initializer::run();
-			NS\Frontend\Initializer::run();
+			NS\Common\Custom_Post_Types::init();
+			NS\Common\Custom_Taxonomies::init();
+			NS\Admin\Settings_Page_General::init();
+			NS\Admin\Metabox_Location_Address::init();
+			NS\Admin\Metabox_Location_Details::init();
+			NS\Frontend\Search_Map::init();
 		}
 	}
 	
