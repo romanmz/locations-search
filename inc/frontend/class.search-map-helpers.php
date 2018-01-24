@@ -46,30 +46,35 @@ class Search_Map_Helpers {
 	/**
 	 * Get attributes array for cluster images
 	 * 
+	 * @link https://github.com/googlemaps/v3-utility-library/blob/master/markerclusterer/src/markerclusterer.js
 	 * @param int $attachment_id
 	 * @param int $max_size
 	 * @return false|array
 	 */
 	static public function get_cluster_attributes( $attachment_id, $max_size=40 ) {
-		
-		// Get image attributes
 		$image_atts = self::get_image_size_attributes( $attachment_id, $max_size );
-		if( !$image_atts ) {
-			return false;
-		}
-		
-		// Return data
 		$cluster_atts = [
-			[
-				'url'                => $image_atts[0],
-				'width'              => $image_atts[3],
-				'height'             => $image_atts[4],
-				'backgroundPosition' => 'center center; background-size: contain',
-				// 'anchor'          => [ 0, 0 ],
-				// 'textColor'       => '#FFFFFF',
-				// 'textSize'        => 12,
-			],
+			// gridSize
+			// zoomOnClick
+			// imageExtension
+			// averageCenter
+			// minimumClusterSize
+			'imagePath'   => NS\PLUGIN_URL.'assets/vendor/marker-clusterer/m',
+			'maxZoom'     => 13,
 		];
+		if( $image_atts ) {
+			$cluster_atts['styles'] = [
+				[
+					'url'                => $image_atts[0],
+					'width'              => $image_atts[3],
+					'height'             => $image_atts[4],
+					'backgroundPosition' => 'center center; background-size: contain',
+					// 'anchor'          => [ 0, 0 ],
+					// 'textColor'       => '#FFFFFF',
+					// 'textSize'        => 12,
+				]
+			];
+		}
 		return $cluster_atts;
 	}
 	

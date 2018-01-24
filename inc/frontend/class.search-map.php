@@ -61,6 +61,7 @@ class Search_Map {
 				'initial_lat'     => floatVal( -33.865 ),
 				'initial_lng'     => floatVal( 151.2094 ),
 				'max_zoom'        => absint( 15 ),
+				'clusters_image'  => Search_Map_Helpers::get_cluster_attributes( $settings['map_cluster'] ),
 			],
 			'alerts'              => [
 				'api_unavailable' => __( 'The Google Maps API is unavailable at the moment, try again later', 'locations-search' ),

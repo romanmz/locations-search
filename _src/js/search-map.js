@@ -63,6 +63,8 @@ jQuery(document).ready(function($){
 			});
 			messagesBox.html( '<div>'+locsearch.text.did_you_mean+'</div>' );
 			messagesBox.append( list );
+		});
+		
 		// Process database query results
 		box.on( 'locsearch_database_results', function( e, locations ){
 			

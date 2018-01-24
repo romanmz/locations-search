@@ -8,6 +8,11 @@ export default class LocationsMap {
 			styles: locsearch.map_attributes.styles,
 		});
 		this.markers = [];
+		if( typeof MarkerClusterer === 'function' && locsearch.map_attributes.clusters_image ) {
+			this.markerClusterer = new MarkerClusterer( this.map, [], locsearch.map_attributes.clusters_image );
+		} else {
+			this.markerClusterer = null;
+		}
 		this.resetMapLocation();
 	}
 	
@@ -43,6 +48,9 @@ export default class LocationsMap {
 		if( newMarkers.length ) {
 			this.map.fitBounds( newBounds );
 		}
+		if( this.markerClusterer ) {
+			this.markerClusterer.addMarkers( newMarkers.map( m=>m.marker ) );
+		}
 		this.checkZoomLevel();
 		this.markers = newMarkers;
 	}
@@ -51,6 +59,9 @@ export default class LocationsMap {
 	removeAllMarkers() {
 		this.markers.forEach( marker=>{marker.delete()} );
 		this.markers = [];
+		if( this.markerClusterer ) {
+			this.markerClusterer.clearMarkers();
+		}
 	}
 	
 }
