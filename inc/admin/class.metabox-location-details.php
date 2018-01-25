@@ -18,56 +18,53 @@ use Locations_Search as NS;
 class Metabox_Location_Details extends Metabox {
 	
 	/**
-	 * @var Metabox_Location_Details
+	 * Returns the configuration array for the meta box
+	 * 
+	 * @return array
 	 */
-	static protected $instance = null;
+	public function getConfig() {
+		return [
+			'post_type' => 'location',
+			'metabox' => [
+				'id' => 'location_details',
+				'title' => 'Location Details',
+				'context' => 'advanced',			// 'advanced'*|'normal'|'side'
+				'priority' => 'default',			// 'default'*|'high'|'low'
+				'file' => 'metabox-location-details.php',
+			],
+			'nonce' => [
+				'name' => 'location_details_nonce',
+				'action' => 'location_details_save_',
+			],
+			'fields' => [
+				'phone' => [
+					'label' => 'Phone Number',
+				],
+				'email' => [
+					'label' => 'Email',
+					'type' => 'email',
+					'escape_func' => 'is_email',
+				],
+				'website' => [
+					'label' => 'Website',
+					'escape_func' => 'esc_url',
+				],
+				'opening_hours' => [
+					'label' => 'Opening Hours',
+					'file' => 'metabox-opening-hours.php',
+				],
+			],
+		];
+	}
 	
 	/**
-	 * @var string|array The name of the post type(s) that should load this metabox
-	 * @todo Test different types of screens (post_type|'link'|'comment'|admin_page|admin_menu|WP_Screen|array)
+	 * Instance constructor
+	 * 
+	 * @return void
 	 */
-	public $post_type = 'location';
-	
-	/**
-	 * @var array Meta box attributes
-	 */
-	public $metabox = [
-		'id' => 'location_details',
-		'title' => 'Location Details',
-		'context' => 'advanced',			// 'advanced'*|'normal'|'side'
-		'priority' => 'default',			// 'default'*|'high'|'low'
-		'file' => 'metabox-location-details.php',
-	];
-	
-	/**
-	 * @var array Keys to generate and verify 'nonce' fields
-	 */
-	public $nonce = [
-		'name' => 'location_details_nonce',
-		'action' => 'location_details_save_',
-	];
-	
-	/**
-	 * @var array List of fields and their attributes
-	 */
-	public $fields = [
-		'phone' => [
-			'label' => 'Phone Number',
-		],
-		'email' => [
-			'label' => 'Email',
-			'type' => 'email',
-			'escape_func' => 'is_email',
-		],
-		'website' => [
-			'label' => 'Website',
-			'escape_func' => 'esc_url',
-		],
-		'opening_hours' => [
-			'label' => 'Opening Hours',
-			'file' => 'metabox-opening-hours.php',
-		],
-	];
+	public function __construct() {
+		parent::__constructor();
+	}
 	
 	/**
 	 * Load the necessary assets for the meta boxes

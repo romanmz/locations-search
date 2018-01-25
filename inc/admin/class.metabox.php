@@ -16,12 +16,14 @@ use Locations_Search as NS;
  * @todo Support i18n
  * @todo Support default values|type checks (e.g. arrays)
  */
-class Metabox {
+abstract class Metabox {
 	
 	/**
-	 * @var Metabox
+	 * Returns the configuration array for the meta box
+	 * 
+	 * @return array
 	 */
-	static protected $instance = null;
+	abstract public function getConfig();
 	
 	/**
 	 * @var string|array The name of the post type(s) that should load this metabox
@@ -45,40 +47,36 @@ class Metabox {
 	public $fields = [];
 	
 	/**
-	 * Retrieve the single instance of the current class
-	 * 
-	 * @return Metabox
-	 */
-	static public function getInstance() {
-		if( is_null( static::$instance ) ) {
-			static::$instance = new static;
-		}
-		return static::$instance;
-	}
-	
-	/**
-	 * Init function (static)
-	 * 
-	 * Registers the necessary hooks and functions
+	 * Init function
 	 * 
 	 * @return Metabox
 	 */
 	static public function init() {
-		static::getInstance()->initialize();
-		return static::getInstance();
+		static $instance = null;
+		if( is_null( $instance ) ) {
+			$instance = new static;
+		}
+		return $instance;
 	}
 	
 	/**
-	 * Init function (instance)
+	 * Instance constructor
 	 * 
 	 * Registers the necessary hooks and functions
 	 * 
 	 * @return void
 	 */
-	protected function initialize() {
-		foreach( $this->fields as $field_name => $field_data ) {
-			$this->fields[ $field_name ] = $this->prepare_field_data( $field_name, $field_data );
-		}
+	protected function __constructor() {
+		
+		// Copy and process configuration
+		$config = $this->getConfig();
+		$this->post_type = $config['post_type'];
+		$this->metabox = $config['metabox'];
+		$this->nonce = $config['nonce'];
+		$this->fields = $config['fields'];
+		array_walk( $this->fields, [$this, 'prepare_field_data'] );
+		
+		// Runs hooks
 		add_action( 'add_meta_boxes_'.$this->post_type, [$this, 'register_metabox'] );
 		add_action( 'save_post', [$this, 'save_post_meta'] );
 		add_action( 'admin_enqueue_scripts', [$this, 'load_assets'] );
@@ -87,22 +85,23 @@ class Metabox {
 	/**
 	 * Fill in default field attributes
 	 * 
-	 * @param string $field_name
-	 * @param array $field_data
+	 * @param string $name
+	 * @param array $data
 	 * @return array
 	 */
-	public function prepare_field_data( $field_name, $field_data ) {
+	public function prepare_field_data( &$data, $name ) {
 		$default_atts = [
 			'label' => '',
-			'id' => $this->metabox['id'].'_'.$field_name,
+			'id' => $this->metabox['id'].'_'.$name,
 			'type' => 'text',
+			'default' => '',
 			'sanitize' => null,
 			'escape_func' => null,
 			'file' => 'metabox-text-field.php',
 		];
-		$field_data = wp_parse_args( $field_data, $default_atts );
-		$field_data['name'] = $field_name;
-		return $field_data;
+		$data = wp_parse_args( $data, $default_atts );
+		$data['name'] = $name;
+		return $data;
 	}
 	
 	/**
@@ -213,6 +212,9 @@ class Metabox {
 		global $post;
 		$atts = $this->fields[ $field_name ];
 		$atts['value'] = get_post_meta( $post->ID, $field_name, true );
+		if( empty( $atts['value'] ) && !empty( $atts['default'] ) ) {
+			$atts['value'] = $atts['default'];
+		}
 		
 		// Escape values
 		if( is_callable( $atts['escape_func'] ) ) {

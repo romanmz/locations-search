@@ -18,66 +18,81 @@ use Locations_Search as NS;
 class Metabox_Location_Address extends Metabox {
 	
 	/**
-	 * @var Metabox_Location_Address
+	 * Returns the configuration array for the meta box
+	 * 
+	 * @return array
 	 */
-	static protected $instance = null;
+	public function getConfig() {
+		$settings = get_option( 'locsearch' );
+		return [
+			'post_type' => 'location',
+			'metabox' => [
+				'id' => 'location_address',
+				'title' => 'Location Address',
+				'context' => 'advanced',			// 'advanced'*|'normal'|'side'
+				'priority' => 'default',			// 'default'*|'high'|'low'
+				'file' => 'metabox-location-address.php',
+			],
+			'nonce' => [
+				'name' => 'location_address_nonce',
+				'action' => 'location_address_save_',
+			],
+			'fields' => [
+				'address' => [
+					'label' => 'Address',
+				],
+				'address2' => [
+					'label' => 'Address (line 2)',
+				],
+				'city' => [
+					'label' => 'City/Suburb',
+				],
+				'postcode' => [
+					'label' => 'Postcode',
+				],
+				'state' => [
+					'label' => 'State/Territory',
+				],
+				'country' => [
+					'label' => 'Country',
+					'file' => 'metabox-select-field.php',
+					'default' => $settings['focus_country'],
+				],
+				'lat' => [
+					'label' => 'Latitude',
+					'sanitize' => 'floatval',
+				],
+				'lng' => [
+					'label' => 'Longitude',
+					'sanitize' => 'floatval',
+				],
+			],
+		];
+	}
 	
 	/**
-	 * @var string|array The name of the post type(s) that should load this metabox
-	 * @todo Test different types of screens (post_type|'link'|'comment'|admin_page|admin_menu|WP_Screen|array)
+	 * Instance constructor
+	 * 
+	 * @return void
 	 */
-	public $post_type = 'location';
+	public function __construct() {
+		parent::__constructor();
+		add_filter( 'meta_box/select_options/country', [$this, 'country_select_options'] );
+	}
 	
 	/**
-	 * @var array Meta box attributes
+	 * Return the full list of countries
+	 * 
+	 * @param array $options
+	 * @return array
 	 */
-	public $metabox = [
-		'id' => 'location_address',
-		'title' => 'Location Address',
-		'context' => 'advanced',			// 'advanced'*|'normal'|'side'
-		'priority' => 'default',			// 'default'*|'high'|'low'
-		'file' => 'metabox-location-address.php',
-	];
-	
-	/**
-	 * @var array Keys to generate and verify 'nonce' fields
-	 */
-	public $nonce = [
-		'name' => 'location_address_nonce',
-		'action' => 'location_address_save_',
-	];
-	
-	/**
-	 * @var array List of fields and their attributes
-	 */
-	public $fields = [
-		'address' => [
-			'label' => 'Address',
-		],
-		'address2' => [
-			'label' => 'Address (line 2)',
-		],
-		'city' => [
-			'label' => 'City/Suburb',
-		],
-		'postcode' => [
-			'label' => 'Postcode',
-		],
-		'state' => [
-			'label' => 'State/Territory',
-		],
-		'country' => [
-			'label' => 'Country',
-		],
-		'lat' => [
-			'label' => 'Latitude',
-			'sanitize' => 'floatval',
-		],
-		'lng' => [
-			'label' => 'Longitude',
-			'sanitize' => 'floatval',
-		],
-	];
+	public function country_select_options( $options ) {
+		$options = array_merge(
+			['' => '- Select a country -'],
+			NS\Common\Data_Countries::get_all_countries()
+		);
+		return $options;
+	}
 	
 	/**
 	 * Load the necessary assets for the meta boxes

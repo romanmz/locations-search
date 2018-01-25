@@ -6,7 +6,8 @@
 	margin: 1em 0;
 }
 .locsearch_metabox input[type=text],
-.locsearch_metabox input[type=email] {
+.locsearch_metabox input[type=email],
+.locsearch_metabox select {
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
