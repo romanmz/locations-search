@@ -63,6 +63,8 @@ class Search_Map {
 				'initial_lng'     => floatVal( 151.2094 ),
 				'max_zoom'        => absint( 15 ),
 				'clusters_image'  => Search_Map_Helpers::get_cluster_attributes( $settings['map_cluster'] ),
+				'focus_country'   => esc_html( $settings['focus_country'] ),
+				'focus_strict'    => boolval( $settings['focus_strict'] ),
 			],
 			'alerts'              => [
 				'api_unavailable' => __( 'The Google Maps API is unavailable at the moment, try again later', 'locations-search' ),
@@ -74,6 +76,8 @@ class Search_Map {
 			],
 			'text'                => [
 				'did_you_mean'    => __( 'Did you mean:', 'locations-search' ),
+				'searching_near'  => __( 'Searching near:', 'locations-search' ),
+				'your_location'   => __( 'Your current location', 'locations-search' ),
 				'0_results'       => __( 'No locations found', 'locations-search' ),
 				'1_result'        => __( '1 location found', 'locations-search' ),
 				'many_results'    => __( '%s locations found', 'locations-search' ),

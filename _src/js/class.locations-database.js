@@ -7,6 +7,26 @@ export default class LocationsDatabase {
 		this.query( caller, lat, lng );
 	}
 	
+	// Gets useful info from a geocode result to be used on the db query
+	static getGeocodeData( result ) {
+		let db_fields = {
+			'country': 'country',
+			'administrative_area_level_1': 'state',
+			'postal_code': 'postcode',
+			'locality': 'city',
+		};
+		let result_type = result.types.find( type => db_fields[type] );
+		if( result_type ) {
+			let result_data = result.address_components.find( component => component.types.includes( result_type ) );
+			return {
+				code: result_data.short_name,
+				name: result_data.long_name,
+				field: db_fields[result_type],
+			}
+		}
+		return null;
+	}
+	
 	// Submit a database query
 	static query( caller, lat, lng ) {
 		

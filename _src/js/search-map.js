@@ -47,6 +47,7 @@ jQuery(document).ready(function($){
 		
 		// Process geocode results
 		box.on( 'locsearch_geocode_1_result', function( e, result ){
+			messagesBox.html( `<p>${locsearch.text.searching_near} ${result.formatted_address}</p>` );
 			LocationsDatabase.queryFromGeocode( box, result );
 		});
 		box.on( 'locsearch_geocode_many_results', function( e, results ){
@@ -57,6 +58,7 @@ jQuery(document).ready(function($){
 				let link = $('<a>',{ href: '#', text: result.formatted_address });
 				link.on( 'click', function(e){
 					e.preventDefault();
+					messagesBox.html( `<p>${locsearch.text.searching_near} ${result.formatted_address}</p>` );
 					LocationsDatabase.queryFromGeocode( box, result );
 				});
 				list.append( item.append( link ) );
@@ -70,11 +72,11 @@ jQuery(document).ready(function($){
 			
 			// Display number of results
 			if( !locations.length ) {
-				messagesBox.html( '<p>'+locsearch.text['0_results']+'</p>' );
+				messagesBox.append( '<p>'+locsearch.text['0_results']+'</p>' );
 			} else if( locations.length == 1 ) {
-				messagesBox.html( '<p>'+locsearch.text['1_result']+'</p>' );
+				messagesBox.append( '<p>'+locsearch.text['1_result']+'</p>' );
 			} else {
-				messagesBox.html( '<p>'+locsearch.text.many_results.replace( '%s', locations.length ) +'</p>' );
+				messagesBox.append( '<p>'+locsearch.text.many_results.replace( '%s', locations.length ) +'</p>' );
 			}
 			
 			// Add markers
@@ -88,10 +90,12 @@ jQuery(document).ready(function($){
 			form.trigger( 'submit' );
 		} else if( LocationsGeolocation.cachedLocation ) {
 			// or search by the user's location if they previously gave permission
+			messagesBox.html( `<p>${locsearch.text.searching_near} ${locsearch.text.your_location}</p>` );
 			LocationsDatabase.query( box, LocationsGeolocation.cachedLocation.lat, LocationsGeolocation.cachedLocation.lng );
 		} else if( addressField.val().trim() == '' ) {
 			// or request user location (only if form is empty)
 			LocationsGeolocation.requestLocation().then( location => {
+				messagesBox.html( `<p>${locsearch.text.searching_near} ${locsearch.text.your_location}</p>` );
 				LocationsDatabase.query( box, location.lat, location.lng );
 			});
 		}

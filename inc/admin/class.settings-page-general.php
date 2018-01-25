@@ -71,7 +71,7 @@ class Settings_Page_General extends Settings_Page {
 							'description' => 'If you want to focus the map search on a particular country, select it here.',
 							'file' => 'settings-select-field.php',
 						],
-						'focus_mode' => [
+						'focus_strict' => [
 							'title' => 'Focus Mode',
 							'file' => 'settings-bool-field.php',
 							'sanitize_func' => 'boolval',

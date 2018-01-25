@@ -6,6 +6,13 @@ export default class LocationsGeocoder {
 		return this.geocoder = new google.maps.Geocoder();
 	}
 	
+	// reverse geocoding
+	static reverseQuery( caller, lat, lng ) {
+		// let query = {}
+		// query.location = new google.maps.LatLng( lat, lng );
+		// query.placeId = string;
+	}
+	
 	// Submit geocoding query
 	static query( caller, address ) {
 		
@@ -17,7 +24,22 @@ export default class LocationsGeocoder {
 		// Prepare query
 		let query = {};
 		query.address = address.trim();
-		query.componentRestrictions = {};
+		// query.bounds
+		query.componentRestrictions = {
+			// route
+			// locality
+			// administrativeArea
+			// postalCode
+		};
+		
+		// Apply 'focus country' from user settings
+		if( locsearch.map_attributes.focus_country && !locsearch.map_attributes.focus_strict ) {
+			// !!! region can be continents or groups of countries, not only countries
+			query.region = locsearch.map_attributes.focus_country;
+		}
+		if( locsearch.map_attributes.focus_country && locsearch.map_attributes.focus_strict ) {
+			query.componentRestrictions.country = locsearch.map_attributes.focus_country;
+		}
 		
 		// Validate query
 		if( !query.address ) {
