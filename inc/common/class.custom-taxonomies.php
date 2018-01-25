@@ -85,7 +85,8 @@ class Custom_Taxonomies {
 		];
 		
 		// Register taxonomy
-		$permalinks_slug = 'locations-category';
+		$settings = get_option( 'locsearch' );
+		$permalinks_slug = $settings['permalinks_base'].'/'.$settings['permalinks_category'];
 		$args = [
 			'labels'                     => $labels,
 			'public'                     => true,

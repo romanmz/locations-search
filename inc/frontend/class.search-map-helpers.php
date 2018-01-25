@@ -60,7 +60,7 @@ class Search_Map_Helpers {
 			// averageCenter
 			// minimumClusterSize
 			'imagePath'   => NS\PLUGIN_URL.'assets/vendor/marker-clusterer/m',
-			'maxZoom'     => 13,
+			'maxZoom'     => 15,
 		];
 		if( $image_atts ) {
 			$cluster_atts['styles'] = [

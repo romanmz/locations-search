@@ -13,11 +13,26 @@ use Locations_Search as NS;
  * 
  * @version 1.0.0
  * @since 1.0.0
- * @todo Add a 'prepare_page_data' method
- * @todo Define settings from within a method to allow applying filters and functions to them
  * @todo i18n
  */
-class Settings_Page {
+abstract class Settings_Page {
+	
+	/**
+	 * Returns the configuration array for the settings page
+	 * 
+	 * @return array
+	 */
+	abstract public function getConfig();
+	
+	/**
+	 * @var string Name of the options array in the database
+	 */
+	public $settings_name = '';
+	
+	/**
+	 * @var array User settings stored in the database
+	 */
+	public $settings = [];
 	
 	/**
 	 * @var array General page attributes
@@ -30,16 +45,6 @@ class Settings_Page {
 	public $menu = [];
 	
 	/**
-	 * @var array General database option attributes
-	 */
-	public $option = [];
-	
-	/**
-	 * @var array List of sections and fields, and their attributes
-	 */
-	public $config = [];
-	
-	/**
 	 * @var array Processed list of section attributes
 	 */
 	public $sections = [];
@@ -50,11 +55,11 @@ class Settings_Page {
 	public $fields = [];
 	
 	/**
-	 * Retrieve the single instance of the current class
+	 * Init function
 	 * 
 	 * @return Settings_Page
 	 */
-	static public function getInstance() {
+	static public function init() {
 		static $instance = null;
 		if( is_null( $instance ) ) {
 			$instance = new static;
@@ -63,32 +68,26 @@ class Settings_Page {
 	}
 	
 	/**
-	 * Init function (static)
-	 * 
-	 * Registers the necessary hooks and functions
-	 * 
-	 * @return Settings_Page
-	 */
-	static public function init() {
-		static::getInstance()->initialize();
-		return static::getInstance();
-	}
-	
-	/**
-	 * Init function (instance)
+	 * Instance constructor
 	 * 
 	 * Loads the data stored in the database, and adds the required actions and filters
 	 * 
 	 * @return void
 	 */
-	protected function initialize() {
-		$this->option['data'] = get_option( $this->option['name'] );
-		foreach( $this->config as $section_slug => $section_data ) {
-			$this->sections[ $section_slug ] = $this->prepare_section_data( $section_slug, $section_data );
-			foreach( $section_data['fields'] as $field_slug => $field_data ) {
-				$this->fields[ $field_slug ] = $this->prepare_field_data( $field_slug, $field_data );
-			}
-		}
+	protected function __construct() {
+		
+		// Copy and process configuration
+		$config = $this->getConfig();
+		$this->settings_name = $config['settings_name'];
+		$this->settings = get_option( $this->settings_name );
+		$this->page = $config['page'];
+		$this->menu = $config['menu'];
+		$this->sections = $config['sections'];
+		$this->fields = call_user_func_array( 'array_merge', array_column( $config['sections'], 'fields' ) );
+		array_walk( $this->sections, [$this, 'prepare_section_data'] );
+		array_walk( $this->fields, [$this, 'prepare_field_data'] );
+		
+		// Runs hooks
 		add_action( 'admin_menu', [$this, 'register_page'] );
 		add_action( 'admin_init', [$this, 'register_settings'] );
 		add_action( 'admin_enqueue_scripts', [$this, 'load_assets'] );
@@ -97,48 +96,48 @@ class Settings_Page {
 	/**
 	 * Fill in default settings for sections
 	 * 
-	 * @param string $section_slug
-	 * @param array $section_data
+	 * @param array $data
+	 * @param string $slug
 	 * @return array
 	 */
-	public function prepare_section_data( $section_slug, $section_data ) {
+	public function prepare_section_data( &$data, $slug ) {
 		$default_values = [
-			'slug'        => $section_slug,
-			'id'          => "section-{$section_slug}",
+			'slug'        => $slug,
+			'id'          => "section-{$slug}",
 			'title'       => '',
 			'description' => '',
 			'fields'      => [],
 			'file'        => 'settings-section.php',
 		];
-		$section_data = wp_parse_args( $section_data, $default_values );
-		$section_data['fields'] = array_keys( $section_data['fields'] );
-		return $section_data;
+		$data = wp_parse_args( $data, $default_values );
+		$data['fields'] = array_keys( $data['fields'] );
+		return $data;
 	}
 	
 	/**
 	 * Fill in default settings for fields
 	 * 
-	 * @param string $field_slug
-	 * @param array $field_data
+	 * @param array $data
+	 * @param string $slug
 	 * @return array
 	 */
-	public function prepare_field_data( $field_slug, $field_data ) {
+	public function prepare_field_data( &$data, $slug ) {
 		$default_values = [
-			'slug'          => $field_slug,
-			'id'            => "field-{$field_slug}",
+			'slug'          => $slug,
+			'id'            => "field-{$slug}",
 			'type'          => 'text',
 			'title'         => '',
 			'description'   => '',
-			'class'         => "field-{$field_slug}",
-			'name'          => "{$this->option['name']}[{$field_slug}]",
+			'class'         => "field-{$slug}",
+			'name'          => "{$this->settings_name}[{$slug}]",
 			'default'       => '',
 			'sanitize_func' => null,
 			'file'          => 'settings-text-field.php',
 		];
-		$field_data = wp_parse_args( $field_data, $default_values );
-		$field_data['label_for'] = $field_data['id'];
-		$field_data['value'] = isset( $this->option['data'][ $field_slug ] ) ? $this->option['data'][ $field_slug ] : $field_data['default'];
-		return $field_data;
+		$data = wp_parse_args( $data, $default_values );
+		$data['label_for'] = $data['id'];
+		$data['value'] = isset( $this->settings[ $slug ] ) ? $this->settings[ $slug ] : $data['default'];
+		return $data;
 	}
 	
 	/**
@@ -149,11 +148,7 @@ class Settings_Page {
 	 * @return array
 	 */
 	public function get_default_values() {
-		$default_values = [];
-		foreach( $this->fields as $field_slug => $field_data ) {
-			$default_values[ $field_slug ] = $field_data['default'];
-		}
-		return $default_values;
+		return array_column( $this->fields, 'default', 'slug' );
 	}
 	
 	/**
@@ -167,16 +162,16 @@ class Settings_Page {
 	public function get_sanitized_values( $new_values ) {
 		$sanitized_values = [];
 		foreach( $this->fields as $field_slug => $field_data ) {
-			$new_value = isset( $new_values[ $field_slug ] ) ? $new_values[ $field_slug ] : '';
 			
-			// Sanitize
+			// Get and sanitize new value
+			$new_value = isset( $new_values[ $field_slug ] ) ? $new_values[ $field_slug ] : '';
 			$sanitize_func = is_callable( $field_data['sanitize_func'] ) ? $field_data['sanitize_func'] : 'sanitize_text_field';
 			$new_value = call_user_func( $sanitize_func, $new_value );
 			
 			// Validate required
 			if( !empty( $field_data['is_required'] ) && empty( $new_value ) ) {
 				add_settings_error(
-					$this->option['name'],
+					$this->settings_name,
 					$field_slug,
 					isset( $field_data['is_required_message'] ) ? esc_html( $field_data['is_required_message'] ) : "The field {$field_data['title']} is required",
 					isset( $field_data['is_required_type'] ) ? $field_data['is_required_type'] : 'error'
@@ -189,7 +184,7 @@ class Settings_Page {
 				$json_test = json_decode( $new_value );
 				if( json_last_error() !== JSON_ERROR_NONE ) {
 					add_settings_error(
-						$this->option['name'],
+						$this->settings_name,
 						$field_slug,
 						"The field {$field_data['title']} must have a valid JSON format",
 						'error'
@@ -241,7 +236,7 @@ class Settings_Page {
 	public function register_settings() {
 		register_setting(
 			$this->page['id'],
-			$this->option['name'],
+			$this->settings_name,
 			[
 				'sanitize_callback' => [$this, 'get_sanitized_values'],
 				'default' => $this->get_default_values(),					// available until after the 'admin_init' hook
@@ -289,10 +284,11 @@ class Settings_Page {
 			return;
 		}
 		if( isset( $_GET['settings-updated'] ) ) {
-			add_settings_error( $this->option['name'], 'settings-saved', 'Settings saved.', 'updated' );
+			add_settings_error( $this->settings_name, 'settings-saved', 'Settings saved.', 'updated' );
+			do_action( 'settings_page/updated', $this->page['id'] );
 		}
 		if( $this->menu['position'] !== 'options-general.php' ) {
-			settings_errors( $this->option['name'] );
+			settings_errors( $this->settings_name );
 		}
 		// Load template
 		$file_path = trailingslashit(__DIR__).'views/'.$this->page['file'];

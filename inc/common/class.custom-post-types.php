@@ -87,7 +87,8 @@ class Custom_Post_Types {
 		];
 		
 		// Register post type
-		$permalinks_slug = 'locations';
+		$settings = get_option( 'locsearch' );
+		$permalinks_slug = $settings['permalinks_base'];
 		$args = [
 			'labels'                => $labels,
 			'public'                => true,
