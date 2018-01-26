@@ -7,6 +7,7 @@
 
 namespace Locations_Search\Frontend;
 use Locations_Search as NS;
+use Locations_Search\Admin\Settings_Page_General as Settings;
 
 /**
  * Creates an interactive map to search and filter locations
@@ -50,21 +51,22 @@ class Search_Map {
 	 * @return void
 	 */
 	public function load_assets() {
-		$settings = get_option( 'locsearch' );
-		wp_enqueue_style( NS\PLUGIN_NAME.'_search-map', NS\PLUGIN_URL.'assets/css/search-map.css', [], NS\PLUGIN_VERSION );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.$settings['google_api_key'] );
+		wp_enqueue_style( NS\PLUGIN_NAME.'_shortcodes', NS\PLUGIN_URL.'assets/css/shortcodes.css', [], NS\PLUGIN_VERSION );
+		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.Settings::get( 'google_api_key' ) );
 		wp_enqueue_script( 'markerclusterer', NS\PLUGIN_URL.'assets/vendor/marker-clusterer/markerclusterer.js', [], NS\PLUGIN_VERSION );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_search-map', NS\PLUGIN_URL.'assets/js/search-map.js', [NS\PLUGIN_NAME.'_google-maps-api', 'markerclusterer', 'jquery'], NS\PLUGIN_VERSION );
+		wp_enqueue_script( NS\PLUGIN_NAME.'_shortcodes', NS\PLUGIN_URL.'assets/js/shortcodes.js', [NS\PLUGIN_NAME.'_google-maps-api', 'markerclusterer', 'jquery'], NS\PLUGIN_VERSION );
 		$js_data = [
 			'ajax_url'            => admin_url( 'admin-ajax.php' ),
 			'map_attributes'      => [
-				'styles'          => json_decode( $settings['map_styles'] ),
+				'styles'          => json_decode( Settings::get( 'map_styles' ) ),
 				'initial_lat'     => floatVal( -33.865 ),
 				'initial_lng'     => floatVal( 151.2094 ),
 				'max_zoom'        => absint( 15 ),
-				'clusters_image'  => Search_Map_Helpers::get_cluster_attributes( $settings['map_cluster'] ),
-				'focus_country'   => esc_html( $settings['focus_country'] ),
-				'focus_strict'    => boolval( $settings['focus_strict'] ),
+				'clusters_image'  => Search_Map_Helpers::get_cluster_attributes( Settings::get( 'map_cluster' ) ),
+				'focus_country'   => esc_html( Settings::get( 'focus_country' ) ),
+				'focus_strict'    => boolval( Settings::get( 'focus_strict' ) ),
+				'search_radius'   => absint( Settings::get( 'search_radius' ) ),
+				'max_radius'      => absint( Settings::get( 'max_radius' ) ),
 			],
 			'alerts'              => [
 				'api_unavailable' => __( 'The Google Maps API is unavailable at the moment, try again later', 'locations-search' ),
@@ -83,7 +85,7 @@ class Search_Map {
 				'many_results'    => __( '%s locations found', 'locations-search' ),
 			],
 		];
-		wp_localize_script( NS\PLUGIN_NAME.'_search-map', 'locsearch', $js_data );
+		wp_localize_script( NS\PLUGIN_NAME.'_shortcodes', 'locsearch', $js_data );
 	}
 	
 	/**

@@ -7,6 +7,7 @@
 
 namespace Locations_Search\Frontend;
 use Locations_Search as NS;
+use Locations_Search\Admin\Settings_Page_General as Settings;
 
 /**
  * Database queries for finding locations
@@ -26,7 +27,8 @@ class Search_Map_Model {
 		$lat = isset( $_POST['lat'] ) ? floatval( $_POST['lat'] ) : false;
 		$lng = isset( $_POST['lng'] ) ? floatval( $_POST['lng'] ) : false;
 		if( $lat !== false && $lng !== false ) {
-			$locations = static::get_closest_locations( $lat, $lng );
+			$search_radius = isset( $_POST['search_radius'] ) ? floatval( $_POST['search_radius'] ) : Settings::get( 'search_radius' );
+			$locations = static::get_closest_locations( $lat, $lng, $search_radius );
 		}
 		wp_send_json( $locations );
 	}
@@ -36,17 +38,17 @@ class Search_Map_Model {
 	 * 
 	 * @param float $lat
 	 * @param float $lng
-	 * @param float $max_distance
+	 * @param float $search_radius
 	 * @param string $distance_units
 	 * @return array
 	 */
-	static public function get_closest_locations( $lat, $lng, $max_distance=50, $distance_units='km' ) {
+	static public function get_closest_locations( $lat, $lng, $search_radius=0, $distance_units='km' ) {
 		
 		// Init vars
 		global $wpdb;
 		$lat = floatval( $lat );
 		$lng = floatval( $lng );
-		$max_distance = $max_distance ? floatval( $max_distance ) : 9999999;
+		$search_radius = $search_radius ? floatval( $search_radius ) : Settings::get( 'search_radius' );
 		$distance_units = ( $distance_units == 'miles' ) ? 'miles' : 'km';
 		$distance_factor = ( $distance_units == 'miles' ) ? 3959 : 6371;
 		
@@ -77,7 +79,7 @@ class Search_Map_Model {
 				AND latitude.meta_key = 'lat'
 				AND longitude.meta_key = 'lng'
 			HAVING
-				distance < {$max_distance}
+				distance < {$search_radius}
 			ORDER BY
 				distance ASC
 		";
@@ -138,13 +140,12 @@ class Search_Map_Model {
 		}
 		
 		// Add marker images
-		$settings = get_option( 'locsearch' );
 		$data['images'] = [];
-		if( $settings['map_marker'] ) {
-			$data['images']['marker'] = Search_Map_Helpers::get_marker_attributes( $settings['map_marker'] );
+		if( Settings::get( 'map_marker' ) ) {
+			$data['images']['marker'] = Search_Map_Helpers::get_marker_attributes( Settings::get( 'map_marker' ) );
 		}
-		if( $settings['map_marker_active'] ) {
-			$data['images']['marker_active'] = Search_Map_Helpers::get_marker_attributes( $settings['map_marker_active'] );
+		if( Settings::get( 'map_marker_active' ) ) {
+			$data['images']['marker_active'] = Search_Map_Helpers::get_marker_attributes( Settings::get( 'map_marker_active' ) );
 		}
 		
 		// Add info window

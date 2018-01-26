@@ -7,6 +7,7 @@
 
 namespace Locations_Search\Common;
 use Locations_Search as NS;
+use Locations_Search\Admin\Settings_Page_General as Settings;
 
 /**
  * Class for Managing Custom Post Types
@@ -87,8 +88,7 @@ class Custom_Post_Types {
 		];
 		
 		// Register post type
-		$settings = get_option( 'locsearch' );
-		$permalinks_slug = $settings['permalinks_base'];
+		$permalinks_slug = Settings::get( 'permalinks_base' );
 		$args = [
 			'labels'                => $labels,
 			'public'                => true,

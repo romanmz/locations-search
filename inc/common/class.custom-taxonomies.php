@@ -7,6 +7,7 @@
 
 namespace Locations_Search\Common;
 use Locations_Search as NS;
+use Locations_Search\Admin\Settings_Page_General as Settings;
 
 /**
  * Class for Managing Custom Taxonomies
@@ -85,8 +86,7 @@ class Custom_Taxonomies {
 		];
 		
 		// Register taxonomy
-		$settings = get_option( 'locsearch' );
-		$permalinks_slug = $settings['permalinks_base'].'/'.$settings['permalinks_category'];
+		$permalinks_slug = Settings::get( 'permalinks_base' ).'/'.Settings::get( 'permalinks_category' );
 		$args = [
 			'labels'                     => $labels,
 			'public'                     => true,

@@ -6,8 +6,8 @@ export default class LocationsGeolocation {
 			return null;
 		}
 		return {
-			lat: sessionStorage.getItem( 'userLat' ),
-			lng: sessionStorage.getItem( 'userLng' ),
+			lat: parseFloat( sessionStorage.getItem( 'userLat' ) ),
+			lng: parseFloat( sessionStorage.getItem( 'userLng' ) ),
 		};
 	}
 	

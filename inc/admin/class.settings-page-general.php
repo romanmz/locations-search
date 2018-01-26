@@ -78,6 +78,20 @@ class Settings_Page_General extends Settings_Page {
 							'description' => 'If you specified a "Focus Country": select <strong>bias</strong> to give it preference on the map results but still include results from other countries, or select <strong>restrict</strong> to only include map results from that country.',
 							'bool_values' => ['Bias', 'Restrict'],
 						],
+						'search_radius' => [
+							'title' => 'Search Radius',
+							'type' => 'number',
+							'sanitize_func' => 'absint',
+							'description' => 'Default radius size of the area to include in search results (in kilometers)',
+							'default' => 10,
+						],
+						'max_radius' => [
+							'title' => 'Maximum Radius',
+							'type' => 'number',
+							'sanitize_func' => 'absint',
+							'description' => 'Maximum radius size allowed for the search area',
+							'default' => 50,
+						],
 						'map_styles' => [
 							'title' => 'Map Styles',
 							'description' => 'Use this <a href="https://mapstyle.withgoogle.com/" target="_blank">tool to generate custom map styles</a> and paste the JSON code here.',

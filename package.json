@@ -1,0 +1,30 @@
+{
+  "name": "locations-search",
+  "version": "1.0.0",
+  "description": "Easily manage your locations database, and display maps on the frontend to allow users to search by location",
+  "main": "webpack.mix.js",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "browser-sync-webpack-plugin": "^1.2.0",
+    "laravel-mix": "^1.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romanmz/locations-search.git"
+  },
+  "keywords": [],
+  "author": "Roman Martinez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/romanmz/locations-search/issues"
+  },
+  "homepage": "https://github.com/romanmz/locations-search#readme"
+}

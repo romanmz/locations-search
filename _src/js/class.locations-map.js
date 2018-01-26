@@ -27,6 +27,9 @@ export default class LocationsMap {
 	
 	// Enforce max zoom level
 	checkZoomLevel() {
+		let newBounds = this.searchRadius ? this.searchRadius.getBounds() : new google.maps.LatLngBounds();
+		this.markers.forEach( m => { newBounds.extend( m.marker.getPosition() ) } );
+		this.map.fitBounds( newBounds );
 		if( this.map.getZoom() > locsearch.map_attributes.max_zoom ) {
 			this.map.setZoom( locsearch.map_attributes.max_zoom );
 		}
@@ -35,30 +38,51 @@ export default class LocationsMap {
 	// Create and add markers from a list of locations (deletes all previous markers)
 	addMarkersFromLocations( locations ) {
 		this.removeAllMarkers();
-		let newMarkers = [];
-		let newBounds = new google.maps.LatLngBounds();
-		locations.forEach((location, i) => {
-			let newMarker = new LocationsMapMarker( this, location );
-			newMarkers.push( newMarker );
-			newBounds.extend( location );
-		});
-		if( newMarkers.length ) {
-			this.map.fitBounds( newBounds );
-		}
+		this.markers = locations.map( location => new LocationsMapMarker( this, location ) );
 		if( this.markerClusterer ) {
-			this.markerClusterer.addMarkers( newMarkers.map( m=>m.marker ) );
+			this.markerClusterer.addMarkers( this.markers.map( m => m.marker ) );
 		}
 		this.checkZoomLevel();
-		this.markers = newMarkers;
 	}
 	
 	// Delete all existing markers
 	removeAllMarkers() {
-		this.markers.forEach( marker=>{marker.delete()} );
+		this.markers.forEach( marker => marker.delete() );
 		this.markers = [];
 		if( this.markerClusterer ) {
 			this.markerClusterer.clearMarkers();
 		}
+	}
+	
+	// Draw search radius on the map
+	drawRadius( lat, lng, radius ) {
+		if( this.searchRadius ) {
+			this.searchRadius.setMap( null );
+		}
+		this.searchRadius = new google.maps.Circle({
+			strokeWeight: 0,
+			fillColor: '#FF0000',
+			fillOpacity: 0.1,
+			map: this.map,
+			center: {lat, lng},
+			radius: radius * 1000,
+			editable: true,
+		});
+		this.checkZoomLevel();
+		google.maps.event.addListener( this.searchRadius, 'radius_changed', this.radiusResized.bind( this ) );
+		google.maps.event.addListener( this.searchRadius, 'center_changed', this.radiusMoved.bind( this ) );
+		return this.searchRadius;
+	}
+	
+	// Callbacks after resizing or moving around the search area
+	radiusResized() {
+		if( this.searchRadius.getRadius() > locsearch.map_attributes.max_radius * 1000 ) {
+			this.searchRadius.setRadius( locsearch.map_attributes.max_radius * 1000 );
+		}
+		this.checkZoomLevel();
+	}
+	radiusMoved() {
+		this.checkZoomLevel();
 	}
 	
 }

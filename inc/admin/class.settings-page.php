@@ -68,6 +68,24 @@ abstract class Settings_Page {
 	}
 	
 	/**
+	 * Static property getter
+	 * 
+	 * @param string $property
+	 * @return mixed
+	 */
+	static public function get( $property ) {
+		$instance = static::init();
+		if( !empty( $instance->settings[ $property ] ) ) {
+			return $instance->settings[ $property ];
+		}
+		$defaults = $instance->get_default_values();
+		if( !empty( $defaults[ $property ] ) ) {
+			return $defaults[ $property ];
+		}
+		return null;
+	}
+	
+	/**
 	 * Instance constructor
 	 * 
 	 * Loads the data stored in the database, and adds the required actions and filters
@@ -180,7 +198,7 @@ abstract class Settings_Page {
 			}
 			
 			// Validate JSON
-			if( !empty( $field_data['is_json'] ) ) {
+			if( !empty( $field_data['is_json'] ) && !empty( $new_value ) ) {
 				$json_test = json_decode( $new_value );
 				if( json_last_error() !== JSON_ERROR_NONE ) {
 					add_settings_error(
