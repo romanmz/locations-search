@@ -41,6 +41,7 @@ class AutoLoader {
 		// Build the final path to the matching file
 		$file_path = NS\INCLUDES_DIR;
 		foreach( $folders as $folder ) {
+			if( $folder == 'core' ) continue;
 			$file_path .= $folder.'/';
 		}
 		$file_path .= 'class.'.$file_name.'.php';

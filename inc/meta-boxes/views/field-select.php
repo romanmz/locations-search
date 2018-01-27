@@ -4,7 +4,7 @@
  * 
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Admin\Views
+ * @package Locations_Search\Meta_Boxes\Views
  */
 
 // Exit if accessed directly

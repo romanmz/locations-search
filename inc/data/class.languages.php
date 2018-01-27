@@ -2,10 +2,10 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Common
+ * @package Locations_Search\Data
  */
 
-namespace Locations_Search\Common;
+namespace Locations_Search\Data;
 use Locations_Search as NS;
 
 /**
@@ -14,7 +14,7 @@ use Locations_Search as NS;
  * @version 1.0.0
  * @since 1.0.0
  */
-class Data_Languages {
+class Languages {
 	
 	/**
 	 * Get full list of languages supported by the Google Maps API

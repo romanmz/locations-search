@@ -2,12 +2,12 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Frontend
+ * @package Locations_Search\Shortcodes
  */
 
-namespace Locations_Search\Frontend;
+namespace Locations_Search\Shortcodes;
 use Locations_Search as NS;
-use Locations_Search\Admin\Settings_Page_General as Settings;
+use Locations_Search\Settings\General as Settings;
 
 /**
  * Creates an interactive map to search and filter locations

@@ -2,10 +2,10 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Admin
+ * @package Locations_Search\Meta_Boxes
  */
 
-namespace Locations_Search\Admin;
+namespace Locations_Search\Meta_Boxes;
 use Locations_Search as NS;
 
 /**
@@ -14,7 +14,7 @@ use Locations_Search as NS;
  * @version 1.0.0
  * @since 1.0.0
  */
-abstract class Metabox {
+abstract class Meta_Box {
 	
 	/**
 	 * Returns the configuration array for the meta box
@@ -24,14 +24,14 @@ abstract class Metabox {
 	abstract public function getConfig();
 	
 	/**
-	 * @var string|array The name of the post type(s) that should load this metabox
+	 * @var string|array The name of the post type(s) that should load this meta box
 	 */
 	public $post_type = '';
 	
 	/**
 	 * @var array Meta box attributes
 	 */
-	public $metabox = [];
+	public $meta_box = [];
 	
 	/**
 	 * @var array Keys to generate and verify 'nonce' fields
@@ -46,7 +46,7 @@ abstract class Metabox {
 	/**
 	 * Init function
 	 * 
-	 * @return Metabox
+	 * @return Meta_Box
 	 */
 	static public function init() {
 		static $instance = null;
@@ -68,13 +68,13 @@ abstract class Metabox {
 		// Copy and process configuration
 		$config = $this->getConfig();
 		$this->post_type = $config['post_type'];
-		$this->metabox = $config['metabox'];
+		$this->meta_box = $config['meta_box'];
 		$this->nonce = $config['nonce'];
 		$this->fields = $config['fields'];
 		array_walk( $this->fields, [$this, 'prepare_field_data'] );
 		
 		// Runs hooks
-		add_action( 'add_meta_boxes_'.$this->post_type, [$this, 'register_metabox'] );
+		add_action( 'add_meta_boxes_'.$this->post_type, [$this, 'register_meta_box'] );
 		add_action( 'save_post', [$this, 'save_post_meta'] );
 		add_action( 'admin_enqueue_scripts', [$this, 'load_assets'] );
 	}
@@ -82,19 +82,19 @@ abstract class Metabox {
 	/**
 	 * Fill in default field attributes
 	 * 
-	 * @param string $name
 	 * @param array $data
+	 * @param string $name
 	 * @return array
 	 */
 	public function prepare_field_data( &$data, $name ) {
 		$default_atts = [
 			'label' => '',
-			'id' => $this->metabox['id'].'_'.$name,
+			'id' => $this->meta_box['id'].'_'.$name,
 			'type' => 'text',
 			'default' => '',
 			'sanitize' => null,
 			'escape_func' => null,
-			'file' => 'metabox-text-field.php',
+			'file' => 'field-text.php',
 		];
 		$data = wp_parse_args( $data, $default_atts );
 		$data['name'] = $name;
@@ -102,18 +102,19 @@ abstract class Metabox {
 	}
 	
 	/**
-	 * Registers the new metabox
+	 * Registers the new meta box
 	 * 
+	 * @param $post WP_Post
 	 * @return void
 	 */
-	public function register_metabox( $post ) {
+	public function register_meta_box( $post ) {
 		add_meta_box(
-			$this->metabox['id'],
-			$this->metabox['title'],
-			[$this, 'render_metabox'],
+			$this->meta_box['id'],
+			$this->meta_box['title'],
+			[$this, 'render_meta_box'],
 			$this->post_type,
-			$this->metabox['context'],
-			$this->metabox['priority']
+			$this->meta_box['context'],
+			$this->meta_box['priority']
 		);
 	}
 	
@@ -186,11 +187,11 @@ abstract class Metabox {
 	 * @param WP_Post $post
 	 * @return void
 	 */
-	function render_metabox( $post ) {
+	function render_meta_box( $post ) {
 		$nonce_action = $this->nonce['action'].$post->ID;
 		wp_nonce_field( $nonce_action, $this->nonce['name'] );
 		// Load template
-		$file_path = trailingslashit(__DIR__).'views/'.$this->metabox['file'];
+		$file_path = trailingslashit(__DIR__).'views/'.$this->meta_box['file'];
 		if( is_file( $file_path ) && is_readable( $file_path ) ) {
 			include( $file_path );
 		}

@@ -2,19 +2,19 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Admin
+ * @package Locations_Search\Meta_Boxes
  */
 
-namespace Locations_Search\Admin;
+namespace Locations_Search\Meta_Boxes;
 use Locations_Search as NS;
 
 /**
- * Class for Managing the Location Details Metabox
+ * Class for Managing the Location Details Meta_Box
  * 
  * @version 1.0.0
  * @since 1.0.0
  */
-class Metabox_Location_Details extends Metabox {
+class Location_Details extends Meta_Box {
 	
 	/**
 	 * Returns the configuration array for the meta box
@@ -24,12 +24,12 @@ class Metabox_Location_Details extends Metabox {
 	public function getConfig() {
 		return [
 			'post_type' => 'location',
-			'metabox' => [
+			'meta_box' => [
 				'id' => 'location_details',
 				'title' => 'Location Details',
 				'context' => 'advanced',			// 'advanced'*|'normal'|'side'
 				'priority' => 'default',			// 'default'*|'high'|'low'
-				'file' => 'metabox-location-details.php',
+				'file' => 'meta-box-location-details.php',
 			],
 			'nonce' => [
 				'name' => 'location_details_nonce',
@@ -50,7 +50,7 @@ class Metabox_Location_Details extends Metabox {
 				],
 				'opening_hours' => [
 					'label' => 'Opening Hours',
-					'file' => 'metabox-opening-hours.php',
+					'file' => 'field-opening-hours.php',
 				],
 			],
 		];

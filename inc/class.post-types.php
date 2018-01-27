@@ -2,12 +2,12 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Common
+ * @package Locations_Search\Core
  */
 
-namespace Locations_Search\Common;
+namespace Locations_Search\Core;
 use Locations_Search as NS;
-use Locations_Search\Admin\Settings_Page_General as Settings;
+use Locations_Search\Settings\General as Settings;
 
 /**
  * Class for Managing Custom Post Types
@@ -15,7 +15,7 @@ use Locations_Search\Admin\Settings_Page_General as Settings;
  * @version 1.0.0
  * @since 1.0.0
  */
-class Custom_Post_Types {
+class Post_Types {
 	
 	/**
 	 * Init function

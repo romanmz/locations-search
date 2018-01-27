@@ -13,7 +13,7 @@
  * 
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Main
+ * @package Locations_Search
  */
 
 namespace Locations_Search;
@@ -22,18 +22,18 @@ namespace Locations_Search;
 if( !defined( 'ABSPATH' ) ) exit;
 
 // Define constants
-define( __NAMESPACE__.'\NS', __NAMESPACE__.'\\' );
-define( NS.'PLUGIN_NAME', 'locations-search' );
-define( NS.'PLUGIN_VERSION', '1.0.0' );
-define( NS.'PLUGIN_FILE', __FILE__ );
-define( NS.'PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( NS.'PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( NS.'PLUGIN_TEXT_DOMAIN', 'locations-search' );
-define( NS.'REQUIRED_PHP_VERSION', '5.6.0' );
-define( NS.'INCLUDES_DIR', PLUGIN_DIR.'inc/' );
+define( 'Locations_Search\NS', __NAMESPACE__.'\\' );
+define( 'Locations_Search\PLUGIN_NAME', 'locations-search' );
+define( 'Locations_Search\PLUGIN_VERSION', '1.0.0' );
+define( 'Locations_Search\PLUGIN_FILE', __FILE__ );
+define( 'Locations_Search\PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'Locations_Search\PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'Locations_Search\PLUGIN_TEXT_DOMAIN', 'locations-search' );
+define( 'Locations_Search\REQUIRED_PHP_VERSION', '5.6.0' );
+define( 'Locations_Search\INCLUDES_DIR', PLUGIN_DIR.'inc/' );
 
 // Load required files
-require_once( PLUGIN_DIR.'inc/core/class.autoloader.php' );
+require_once( PLUGIN_DIR.'inc/class.autoloader.php' );
 
 // Initialize
 Core\Initializer::run();

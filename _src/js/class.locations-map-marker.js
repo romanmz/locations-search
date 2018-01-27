@@ -75,7 +75,6 @@ export default class LocationsMapMarker {
 	onClick() {
 		this.map.markers.forEach( marker => marker.deactivate() );
 		this.activate();
-		this.map.checkZoomLevel();
 	}
 	
 }

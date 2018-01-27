@@ -2,20 +2,20 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Admin
+ * @package Locations_Search\Meta_Boxes
  */
 
-namespace Locations_Search\Admin;
+namespace Locations_Search\Meta_Boxes;
 use Locations_Search as NS;
-use Locations_Search\Admin\Settings_Page_General as Settings;
+use Locations_Search\Settings\General as Settings;
 
 /**
- * Class for Managing the Location Address Metabox
+ * Class for Managing the Location Address Meta_Box
  * 
  * @version 1.0.0
  * @since 1.0.0
  */
-class Metabox_Location_Address extends Metabox {
+class Location_Address extends Meta_Box {
 	
 	/**
 	 * Returns the configuration array for the meta box
@@ -25,12 +25,12 @@ class Metabox_Location_Address extends Metabox {
 	public function getConfig() {
 		return [
 			'post_type' => 'location',
-			'metabox' => [
+			'meta_box' => [
 				'id' => 'location_address',
 				'title' => 'Location Address',
 				'context' => 'advanced',			// 'advanced'*|'normal'|'side'
 				'priority' => 'default',			// 'default'*|'high'|'low'
-				'file' => 'metabox-location-address.php',
+				'file' => 'meta-box-location-address.php',
 			],
 			'nonce' => [
 				'name' => 'location_address_nonce',
@@ -54,7 +54,7 @@ class Metabox_Location_Address extends Metabox {
 				],
 				'country' => [
 					'label' => 'Country',
-					'file' => 'metabox-select-field.php',
+					'file' => 'field-select.php',
 					'default' => Settings::get( 'focus_country' ),
 				],
 				'lat' => [
@@ -88,7 +88,7 @@ class Metabox_Location_Address extends Metabox {
 	public function country_select_options( $options ) {
 		$options = array_merge(
 			['' => '- Select a country -'],
-			NS\Common\Data_Countries::get_all_countries()
+			NS\Data\Countries::get_all_countries()
 		);
 		return $options;
 	}

@@ -2,10 +2,10 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Admin
+ * @package Locations_Search\Settings
  */
 
-namespace Locations_Search\Admin;
+namespace Locations_Search\Settings;
 use Locations_Search as NS;
 
 /**
@@ -149,7 +149,7 @@ abstract class Settings_Page {
 			'name'          => "{$this->settings_name}[{$slug}]",
 			'default'       => '',
 			'sanitize_func' => null,
-			'file'          => 'settings-text-field.php',
+			'file'          => 'field-text.php',
 		];
 		$data = wp_parse_args( $data, $default_values );
 		$data['label_for'] = $data['id'];

@@ -2,10 +2,10 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Admin
+ * @package Locations_Search\Settings
  */
 
-namespace Locations_Search\Admin;
+namespace Locations_Search\Settings;
 use Locations_Search as NS;
 
 /**
@@ -14,7 +14,7 @@ use Locations_Search as NS;
  * @version 1.0.0
  * @since 1.0.0
  */
-class Settings_Page_General extends Settings_Page {
+class General extends Settings_Page {
 	
 	/**
 	 * Returns the configuration array for the settings page
@@ -67,11 +67,11 @@ class Settings_Page_General extends Settings_Page {
 						'focus_country' => [
 							'title' => 'Focus Country',
 							'description' => 'If you want to focus the map search on a particular country, select it here.',
-							'file' => 'settings-select-field.php',
+							'file' => 'field-select.php',
 						],
 						'focus_strict' => [
 							'title' => 'Focus Mode',
-							'file' => 'settings-bool-field.php',
+							'file' => 'field-bool.php',
 							'sanitize_func' => 'boolval',
 							'description' => 'If you specified a "Focus Country": select <strong>bias</strong> to give it preference on the map results but still include results from other countries, or select <strong>restrict</strong> to only include map results from that country.',
 							'bool_values' => ['Bias', 'Restrict'],
@@ -93,25 +93,25 @@ class Settings_Page_General extends Settings_Page {
 						'map_styles' => [
 							'title' => 'Map Styles',
 							'description' => 'Use this <a href="https://mapstyle.withgoogle.com/" target="_blank">tool to generate custom map styles</a> and paste the JSON code here.',
-							'file' => 'settings-textarea-field.php',
+							'file' => 'field-textarea.php',
 							'is_json' => true,
 						],
 						'map_marker' => [
 							'title' => 'Map Markers',
 							'description' => 'Select an image to be used to create the markers on the map.',
-							'file' => 'settings-image-selector.php',
+							'file' => 'field-image-selector.php',
 							'sanitize_func' => 'absint',
 						],
 						'map_marker_active' => [
 							'title' => 'Active Marker',
 							'description' => 'You can use a different image to represent active markers (when a user clicks on a specific location).',
-							'file' => 'settings-image-selector.php',
+							'file' => 'field-image-selector.php',
 							'sanitize_func' => 'absint',
 						],
 						'map_cluster' => [
 							'title' => 'Map Clusters',
 							'description' => 'Image to be used when creating clusters (if they are enabled).',
-							'file' => 'settings-image-selector.php',
+							'file' => 'field-image-selector.php',
 							'sanitize_func' => 'absint',
 						],
 					],
@@ -154,7 +154,7 @@ class Settings_Page_General extends Settings_Page {
 	public function country_select_options( $options ) {
 		$options = array_merge(
 			['' => '- Select a country -'],
-			NS\Common\Data_Countries::get_all_countries()
+			NS\Data\Countries::get_all_countries()
 		);
 		return $options;
 	}

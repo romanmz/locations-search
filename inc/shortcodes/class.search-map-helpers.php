@@ -2,10 +2,10 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Frontend
+ * @package Locations_Search\Shortcodes
  */
 
-namespace Locations_Search\Frontend;
+namespace Locations_Search\Shortcodes;
 use Locations_Search as NS;
 
 /**
