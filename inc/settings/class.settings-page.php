@@ -86,6 +86,7 @@ abstract class Settings_Page {
 		$this->menu = $config['menu'];
 		$this->sections = $config['sections'];
 		$this->fields = call_user_func_array( 'array_merge', array_column( $config['sections'], 'fields' ) );
+		$this->prepare_page_data( $this->page );
 		array_walk( $this->sections, [$this, 'prepare_section_data'] );
 		array_walk( $this->fields, [$this, 'prepare_field_data'] );
 		
@@ -93,6 +94,27 @@ abstract class Settings_Page {
 		add_action( 'admin_menu', [$this, 'register_page'] );
 		add_action( 'admin_init', [$this, 'register_settings'] );
 		add_action( 'admin_enqueue_scripts', [$this, 'load_assets'] );
+	}
+	
+	/**
+	 * Fill in default page settings
+	 * 
+	 * @param array &$data
+	 * @return array
+	 */
+	public function prepare_page_data( &$data ) {
+		$default_values = [
+			'id'          => '',
+			'title'       => '',
+			'hook'        => '',
+			'required_capability' => 'manage_options',
+			'file'        => 'settings-page.php',
+		];
+		$data = wp_parse_args( $data, $default_values );
+		$data['url']  = is_string( $this->menu['position'] ) ? admin_url( $this->menu['position'] ) : admin_url( 'admin.php' );
+		$data['url'] .= strpos( $data['url'], '?' ) === false ? '?' : '&';
+		$data['url'] .= http_build_query( ['page' => $data['id'] ] );
+		return $data;
 	}
 	
 	/**

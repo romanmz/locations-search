@@ -27,13 +27,10 @@ class General extends Settings_Page {
 			'page' => [
 				'id' => 'locations-search',
 				'title' => 'Locations Search Settings',
-				'hook' => '',
-				'required_capability' => 'manage_options',
-				'file' => 'settings-page.php',
 			],
 			'menu' => [
-				'title' => 'Settings',
-				'position' => 'edit.php?post_type=location',
+				'title' => 'Locations Search',
+				'position' => 'options-general.php',
 				'icon' => 'dashicons-location',
 			],
 			'sections'=> [
@@ -127,8 +124,27 @@ class General extends Settings_Page {
 	 */
 	public function __construct() {
 		parent::__construct();
+		add_action( 'admin_notices', [$this, 'admin_notices'] );
 		add_filter( 'settings_page/select_options/focus_country', [$this, 'country_select_options'] );
 		add_action( 'settings_page/updated', 'flush_rewrite_rules' );
+	}
+	
+	/**
+	 * Displays admin alerts
+	 * 
+	 * @return void
+	 */
+	public function admin_notices() {
+		global $post_type, $tax_name, $page_hook;
+		if( !$this->google_api_key && ( $post_type == 'location' || $tax_name == 'location_category' || $page_hook == $this->page['hook'] ) ) {
+			$class = 'notice notice-warning is-dismissible';
+			$message = sprintf(
+				__( 'A Google Maps API key is required for the locations search functionality to work. <a href="%1$s" target="_blank">Create a Google Maps Javascript API key</a> and add it to the <a href="%2$s">settings page</a>.', 'locations-search' ),
+				esc_url( 'https://developers.google.com/maps/documentation/javascript/get-api-key#get-an-api-key' ),
+				$this->page['url']
+			);
+			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), wp_kses_post( $message ) );
+		}
 	}
 	
 	/**

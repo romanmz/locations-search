@@ -101,6 +101,11 @@ class Search_Map {
 	 */
 	public function locations_map( $atts=[], $content='' ) {
 		
+		// Check Google API
+		if( !$this->settings->google_api_key ) {
+			return sprintf( '<p>%s</p>', esc_html__( 'A Google Maps API key is required for the locations search functionality to work.', 'locations-search' ) );
+		}
+		
 		// Increase counter
 		static $counter = 0;
 		$counter++;
@@ -131,6 +136,11 @@ class Search_Map {
 	 * @return string
 	 */
 	public function locations_map_search( $atts=[], $content='' ) {
+		
+		// Check Google API
+		if( !$this->settings->google_api_key ) {
+			return sprintf( '<p>%s</p>', esc_html__( 'A Google Maps API key is required for the locations search functionality to work.', 'locations-search' ) );
+		}
 		
 		// Increase counter
 		static $counter = 0;
@@ -166,6 +176,11 @@ class Search_Map {
 	 * @return string
 	 */
 	public function locations_search_form( $atts=[], $content='' ) {
+		
+		// Check Google API
+		if( !$this->settings->google_api_key ) {
+			return sprintf( '<p>%s</p>', esc_html__( 'A Google Maps API key is required for the locations search functionality to work.', 'locations-search' ) );
+		}
 		
 		// Increase counter
 		static $counter = 0;
