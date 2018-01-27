@@ -17,32 +17,30 @@ use Locations_Search as NS;
 class Initializer {
 	
 	/**
+	 * @var array Keeps a list of dependencies
+	 */
+	private $deps = [];
+	
+	/**
 	 * Runs the initializer functions and hooks
 	 * 
 	 * @return void
 	 */
-	static public function run() {
-		
-		// Initialize only once
-		static $initalized = false;
-		if( $initalized ) {
-			return;
-		}
-		$initalized = true;
+	public function __construct() {
 		
 		// Add activation hooks
-		register_activation_hook( NS\PLUGIN_FILE, [__CLASS__, 'on_activation'] );
-		register_deactivation_hook( NS\PLUGIN_FILE, [__CLASS__, 'on_deactivation'] );
+		register_activation_hook( NS\PLUGIN_FILE, [$this, 'on_activation'] );
+		register_deactivation_hook( NS\PLUGIN_FILE, [$this, 'on_deactivation'] );
 		
 		// Add the rest of the hooks
-		if( self::has_required_php_version() ) {
-			add_action( 'plugins_loaded', [__CLASS__, 'load_text_domain'] );
-			NS\Core\Taxonomies::init();
-			NS\Core\Post_Types::init();
-			NS\Settings\General::init();
-			NS\Meta_Boxes\Location_Address::init();
-			NS\Meta_Boxes\Location_Details::init();
-			NS\Shortcodes\Search_Map::init();
+		if( $this->has_required_php_version() ) {
+			add_action( 'plugins_loaded', [$this, 'load_text_domain'] );
+			$this->deps['settings'] = new NS\Settings\General();
+			$this->deps['taxonomies'] = new NS\Core\Taxonomies( $this->deps['settings'] );
+			$this->deps['post_types'] = new NS\Core\Post_Types( $this->deps['settings'] );
+			$this->deps['metabox_address'] = new NS\Meta_Boxes\Location_Address( $this->deps['settings'] );
+			$this->deps['metabox_details'] = new NS\Meta_Boxes\Location_Details( $this->deps['settings'] );
+			$this->deps['shortcode_map'] = new NS\Shortcodes\Search_Map( $this->deps['settings'] );
 		}
 	}
 	
@@ -51,7 +49,7 @@ class Initializer {
 	 * 
 	 * @return bool
 	 */
-	static public function has_required_php_version() {
+	public function has_required_php_version() {
 		return version_compare( PHP_VERSION, NS\REQUIRED_PHP_VERSION, '>=' );
 	}
 	
@@ -60,15 +58,15 @@ class Initializer {
 	 * 
 	 * @return void
 	 */
-	static public function on_activation() {
+	public function on_activation() {
 		// Deactivate and throw error if current PHP version is unsupported
-		if( !self::has_required_php_version() ) {
+		if( !$this->has_required_php_version() ) {
 			deactivate_plugins( plugin_basename( NS\PLUGIN_FILE ) );
 			$error_message = esc_html__( 'This plugin requires a minimum PHP Version of %s.', 'locations-search' );
 			wp_die( sprintf( $error_message, NS\REQUIRED_PHP_VERSION ) );
 		}
-		NS\Core\Taxonomies::register_all();
-		NS\Core\Post_Types::register_all();
+		$this->deps['taxonomies']->register_all();
+		$this->deps['post_types']->register_all();
 		flush_rewrite_rules();
 	}
 	
@@ -77,9 +75,9 @@ class Initializer {
 	 * 
 	 * @return void
 	 */
-	static public function on_deactivation() {
-		NS\Core\Taxonomies::unregister_all();
-		NS\Core\Post_Types::unregister_all();
+	public function on_deactivation() {
+		$this->deps['taxonomies']->unregister_all();
+		$this->deps['post_types']->unregister_all();
 		flush_rewrite_rules();
 	}
 	
@@ -88,7 +86,7 @@ class Initializer {
 	 * 
 	 * @return void
 	 */
-	static public function load_text_domain() {
+	public function load_text_domain() {
 		$rel_path = dirname( plugin_basename( NS\PLUGIN_FILE ) ).'/languages/';
 		load_plugin_textdomain( NS\PLUGIN_TEXT_DOMAIN, false, $rel_path );
 	}

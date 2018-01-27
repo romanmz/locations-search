@@ -13,11 +13,11 @@ if( !defined( 'ABSPATH' ) ) exit;
 ?>
 <div class="locsearch_metabox">
 	<div class="locsearch_metabox__row">
-		<?php self::render_field( 'phone' ) ?>
-		<?php self::render_field( 'email' ) ?>
-		<?php self::render_field( 'website' ) ?>
+		<?php $this->render_field( 'phone' ) ?>
+		<?php $this->render_field( 'email' ) ?>
+		<?php $this->render_field( 'website' ) ?>
 	</div>
 	<div>
-		<?php self::render_field( 'opening_hours' ) ?>
+		<?php $this->render_field( 'opening_hours' ) ?>
 	</div>
 </div>

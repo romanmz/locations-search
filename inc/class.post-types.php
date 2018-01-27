@@ -7,7 +7,6 @@
 
 namespace Locations_Search\Core;
 use Locations_Search as NS;
-use Locations_Search\Settings\General as Settings;
 
 /**
  * Class for Managing Custom Post Types
@@ -18,14 +17,21 @@ use Locations_Search\Settings\General as Settings;
 class Post_Types {
 	
 	/**
-	 * Init function
+	 * @var Locations_Search\Settings\General Holds a reference to the general settings page
+	 */
+	protected $settings;
+	
+	/**
+	 * Constructor method
 	 * 
 	 * Registers the necessary hooks and functions
 	 * 
+	 * @param Locations_Search\Settings\General $settings
 	 * @return void
 	 */
-	static public function init() {
-		add_action( 'init', [__CLASS__, 'register_all'] );
+	public function __construct( $settings ) {
+		$this->settings = $settings;
+		add_action( 'init', [$this, 'register_all'] );
 	}
 	
 	/**
@@ -35,8 +41,8 @@ class Post_Types {
 	 * 
 	 * @return void
 	 */
-	static public function register_all() {
-		self::register_location();
+	public function register_all() {
+		$this->register_location();
 	}
 	
 	/**
@@ -46,7 +52,7 @@ class Post_Types {
 	 * 
 	 * @return void
 	 */
-	static public function unregister_all() {
+	public function unregister_all() {
 		unregister_post_type( 'location' );
 	}
 	
@@ -55,7 +61,7 @@ class Post_Types {
 	 * 
 	 * @return void
 	 */
-	static public function register_location() {
+	public function register_location() {
 		
 		// Define labels
 		$labels = [
@@ -88,7 +94,7 @@ class Post_Types {
 		];
 		
 		// Register post type
-		$permalinks_slug = Settings::get( 'permalinks_base' );
+		$permalinks_slug = $this->settings->permalinks_base;
 		$args = [
 			'labels'                => $labels,
 			'public'                => true,

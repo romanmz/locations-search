@@ -7,7 +7,6 @@
 
 namespace Locations_Search\Shortcodes;
 use Locations_Search as NS;
-use Locations_Search\Settings\General as Settings;
 
 /**
  * Database queries for finding locations
@@ -18,17 +17,39 @@ use Locations_Search\Settings\General as Settings;
 class Search_Map_Model {
 	
 	/**
+	 * @var Locations_Search\Settings\General Holds a reference to the general settings page
+	 */
+	protected $settings;
+	
+	/**
+	 * @var Locations_Search\Shortcodes\Search_Map_Helpers Holds a reference to the shortcode helpers
+	 */
+	protected $helpers;
+	
+	/**
+	 * Constructor function
+	 * 
+	 * @param Locations_Search\Settings\General $settings
+	 * @param Locations_Search\Settings\Search_Map_Helpers $helpers
+	 * @return void
+	 */
+	public function __construct( $settings, $helpers ) {
+		$this->settings = $settings;
+		$this->helpers = $helpers;
+	}
+	
+	/**
 	 * Responds to AJAX with list of locations ordered and filtered by distance
 	 * 
 	 * @return void
 	 */
-	static public function ajax_closest_locations() {
+	public function ajax_closest_locations() {
 		$locations = [];
 		$lat = isset( $_POST['lat'] ) ? floatval( $_POST['lat'] ) : false;
 		$lng = isset( $_POST['lng'] ) ? floatval( $_POST['lng'] ) : false;
 		if( $lat !== false && $lng !== false ) {
-			$search_radius = isset( $_POST['search_radius'] ) ? floatval( $_POST['search_radius'] ) : Settings::get( 'search_radius' );
-			$locations = static::get_closest_locations( $lat, $lng, $search_radius );
+			$search_radius = isset( $_POST['search_radius'] ) ? floatval( $_POST['search_radius'] ) : $this->settings->search_radius;
+			$locations = $this->get_closest_locations( $lat, $lng, $search_radius );
 		}
 		wp_send_json( $locations );
 	}
@@ -42,13 +63,13 @@ class Search_Map_Model {
 	 * @param string $distance_units
 	 * @return array
 	 */
-	static public function get_closest_locations( $lat, $lng, $search_radius=0, $distance_units='km' ) {
+	public function get_closest_locations( $lat, $lng, $search_radius=0, $distance_units='km' ) {
 		
 		// Init vars
 		global $wpdb;
 		$lat = floatval( $lat );
 		$lng = floatval( $lng );
-		$search_radius = $search_radius ? floatval( $search_radius ) : Settings::get( 'search_radius' );
+		$search_radius = $search_radius ? floatval( $search_radius ) : $this->settings->search_radius;
 		$distance_units = ( $distance_units == 'miles' ) ? 'miles' : 'km';
 		$distance_factor = ( $distance_units == 'miles' ) ? 3959 : 6371;
 		
@@ -86,7 +107,7 @@ class Search_Map_Model {
 		
 		// Get posts and return location data
 		$post_ids = $wpdb->get_results( $query, ARRAY_A );
-		$locations = array_map( [__CLASS__, 'prepare_location_data'], $post_ids );
+		$locations = array_map( [$this, 'prepare_location_data'], $post_ids );
 		return $locations;
 	}
 	
@@ -96,7 +117,7 @@ class Search_Map_Model {
 	 * @param array $query_args
 	 * @return array
 	 */
-	static public function get_locations( $query_args=[] ) {
+	public function get_locations( $query_args=[] ) {
 		
 		// Prepare query
 		$default_args = [
@@ -110,7 +131,7 @@ class Search_Map_Model {
 		
 		// Get posts and return location data
 		$post_ids = get_posts( $query_args );
-		$locations = array_map( [__CLASS__, 'prepare_location_data'], $post_ids );
+		$locations = array_map( [$this, 'prepare_location_data'], $post_ids );
 		return $locations;
 	}
 	
@@ -120,7 +141,7 @@ class Search_Map_Model {
 	 * @param int|array $data
 	 * @return array
 	 */
-	static public function prepare_location_data( $data ) {
+	public function prepare_location_data( $data ) {
 		
 		// Prepare basic information
 		if( !is_array( $data ) ) {
@@ -142,11 +163,11 @@ class Search_Map_Model {
 		
 		// Add marker images
 		$data['images'] = [];
-		if( Settings::get( 'map_marker' ) ) {
-			$data['images']['marker'] = Search_Map_Helpers::get_marker_attributes( Settings::get( 'map_marker' ) );
+		if( $this->settings->map_marker ) {
+			$data['images']['marker'] = $this->helpers->get_marker_attributes( $this->settings->map_marker );
 		}
-		if( Settings::get( 'map_marker_active' ) ) {
-			$data['images']['marker_active'] = Search_Map_Helpers::get_marker_attributes( Settings::get( 'map_marker_active' ) );
+		if( $this->settings->map_marker_active ) {
+			$data['images']['marker_active'] = $this->helpers->get_marker_attributes( $this->settings->map_marker_active );
 		}
 		
 		// Add info window
@@ -172,9 +193,9 @@ class Search_Map_Model {
 			</li>',
 			esc_html( $data['title'] ),
 			isset( $data['distance'] ) ? 'Distance: '.round( $data['distance'], 1 ).' '.$data['distance_units'] : '',
-			static::get_formatted_address( $data['id'] ),
-			static::get_formatted_details( $data['id'] ),
-			static::get_formatted_hours( $data['id'] )
+			$this->get_formatted_address( $data['id'] ),
+			$this->get_formatted_details( $data['id'] ),
+			$this->get_formatted_hours( $data['id'] )
 		);
 		$data['list_item'] = wp_kses_post( $list_item );
 		
@@ -188,7 +209,7 @@ class Search_Map_Model {
 	 * @param int $post_id
 	 * @return string
 	 */
-	static public function get_formatted_address( $post_id ) {
+	public function get_formatted_address( $post_id ) {
 		$meta_keys = ['address', 'address2', 'city', 'state', 'postcode', 'country'];
 		foreach( $meta_keys as $meta_key ) {
 			$$meta_key = trim( esc_html( get_post_meta( $post_id, $meta_key, true ) ) );
@@ -206,7 +227,7 @@ class Search_Map_Model {
 	 * @param int $post_id
 	 * @return string
 	 */
-	static public function get_formatted_details( $post_id ) {
+	public function get_formatted_details( $post_id ) {
 		$details = [];
 		// Phone
 		$phone = esc_html( get_post_meta( $post_id, 'phone', true ) );
@@ -235,7 +256,7 @@ class Search_Map_Model {
 	 * @param int $post_id
 	 * @return string
 	 */
-	static public function get_formatted_hours( $post_id ) {
+	public function get_formatted_hours( $post_id ) {
 		
 		// Load data
 		$opening_hours = get_post_meta( $post_id, 'opening_hours', true );

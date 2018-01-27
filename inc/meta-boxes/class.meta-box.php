@@ -44,19 +44,6 @@ abstract class Meta_Box {
 	public $fields = [];
 	
 	/**
-	 * Init function
-	 * 
-	 * @return Meta_Box
-	 */
-	static public function init() {
-		static $instance = null;
-		if( is_null( $instance ) ) {
-			$instance = new static;
-		}
-		return $instance;
-	}
-	
-	/**
 	 * Instance constructor
 	 * 
 	 * Registers the necessary hooks and functions

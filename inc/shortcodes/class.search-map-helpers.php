@@ -23,10 +23,10 @@ class Search_Map_Helpers {
 	 * @param int $max_size
 	 * @return false|array
 	 */
-	static public function get_marker_attributes( $attachment_id, $max_size=40 ) {
+	public function get_marker_attributes( $attachment_id, $max_size=40 ) {
 		
 		// Get image attributes
-		$image_atts = self::get_image_size_attributes( $attachment_id, $max_size );
+		$image_atts = $this->get_image_size_attributes( $attachment_id, $max_size );
 		if( !$image_atts ) {
 			return false;
 		}
@@ -51,8 +51,8 @@ class Search_Map_Helpers {
 	 * @param int $max_size
 	 * @return false|array
 	 */
-	static public function get_cluster_attributes( $attachment_id, $max_size=40 ) {
-		$image_atts = self::get_image_size_attributes( $attachment_id, $max_size );
+	public function get_cluster_attributes( $attachment_id, $max_size=40 ) {
+		$image_atts = $this->get_image_size_attributes( $attachment_id, $max_size );
 		$cluster_atts = [
 			// gridSize
 			// zoomOnClick
@@ -85,7 +85,7 @@ class Search_Map_Helpers {
 	 * @param int $max_size
 	 * @return false|array
 	 */
-	static public function get_image_size_attributes( $attachment_id, $max_size=40 ) {
+	public function get_image_size_attributes( $attachment_id, $max_size=40 ) {
 		
 		// Check ID
 		$attachment_id = absint( $attachment_id );

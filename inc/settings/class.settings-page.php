@@ -54,34 +54,19 @@ abstract class Settings_Page {
 	public $fields = [];
 	
 	/**
-	 * Init function
-	 * 
-	 * @return Settings_Page
-	 */
-	static public function init() {
-		static $instance = null;
-		if( is_null( $instance ) ) {
-			$instance = new static;
-		}
-		return $instance;
-	}
-	
-	/**
-	 * Static property getter
+	 * Property getter
 	 * 
 	 * @param string $property
 	 * @return mixed
 	 */
-	static public function get( $property ) {
-		$instance = static::init();
-		if( !empty( $instance->settings[ $property ] ) ) {
-			return $instance->settings[ $property ];
+	public function __get( $property ) {
+		if( !empty( $this->settings[ $property ] ) ) {
+			return $this->settings[ $property ];
 		}
-		$defaults = $instance->get_default_values();
+		$defaults = $this->get_default_values();
 		if( !empty( $defaults[ $property ] ) ) {
 			return $defaults[ $property ];
 		}
-		return null;
 	}
 	
 	/**

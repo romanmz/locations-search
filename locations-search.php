@@ -36,4 +36,4 @@ define( 'Locations_Search\INCLUDES_DIR', PLUGIN_DIR.'inc/' );
 require_once( PLUGIN_DIR.'inc/class.autoloader.php' );
 
 // Initialize
-Core\Initializer::run();
+new Core\Initializer();

@@ -7,7 +7,6 @@
 
 namespace Locations_Search\Shortcodes;
 use Locations_Search as NS;
-use Locations_Search\Settings\General as Settings;
 
 /**
  * Creates an interactive map to search and filter locations
@@ -18,31 +17,36 @@ use Locations_Search\Settings\General as Settings;
 class Search_Map {
 	
 	/**
-	 * Init function
-	 * 
-	 * Registers the necessary hooks and functions
-	 * 
-	 * @return void
+	 * @var Locations_Search\Settings\General Holds a reference to the general settings page
 	 */
-	static public function init() {
-		static $instance = null;
-		if( is_null( $instance ) ) {
-			$instance = new self;
-		}
-	}
+	protected $settings;
+	
+	/**
+	 * @var Locations_Search\Shortcodes\Search_Map_Model Holds a reference to the shortcode model class
+	 */
+	protected $model;
+	
+	/**
+	 * @var Locations_Search\Shortcodes\Search_Map_Helpers Holds a reference to the shortcode helpers
+	 */
+	protected $helpers;
 	
 	/**
 	 * Constructor function
 	 * 
+	 * @param Locations_Search\Settings\General $settings
 	 * @return void
 	 */
-	private function __construct() {
+	public function __construct( $settings ) {
+		$this->settings = $settings;
+		$this->helpers = new Search_Map_Helpers();
+		$this->model = new Search_Map_Model( $settings, $this->helpers );
 		add_action( 'wp_enqueue_scripts', [$this, 'load_assets'] );
 		add_shortcode( 'locations_map', [$this, 'locations_map'] );
 		add_shortcode( 'locations_map_search', [$this, 'locations_map_search'] );
 		add_shortcode( 'locations_search_form', [$this, 'locations_search_form'] );
-		add_action( 'wp_ajax_'.'locations_map_search', [Search_Map_Model::class, 'ajax_closest_locations'] );
-		add_action( 'wp_ajax_nopriv_'.'locations_map_search', [Search_Map_Model::class, 'ajax_closest_locations'] );
+		add_action( 'wp_ajax_'.'locations_map_search', [$this->model, 'ajax_closest_locations'] );
+		add_action( 'wp_ajax_nopriv_'.'locations_map_search', [$this->model, 'ajax_closest_locations'] );
 	}
 	
 	/**
@@ -52,21 +56,21 @@ class Search_Map {
 	 */
 	public function load_assets() {
 		wp_enqueue_style( NS\PLUGIN_NAME.'_shortcodes', NS\PLUGIN_URL.'assets/css/shortcodes.css', [], NS\PLUGIN_VERSION );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.Settings::get( 'google_api_key' ) );
+		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.$this->settings->google_api_key );
 		wp_enqueue_script( 'markerclusterer', NS\PLUGIN_URL.'assets/vendor/marker-clusterer/markerclusterer.js', [], NS\PLUGIN_VERSION );
 		wp_enqueue_script( NS\PLUGIN_NAME.'_shortcodes', NS\PLUGIN_URL.'assets/js/shortcodes.js', [NS\PLUGIN_NAME.'_google-maps-api', 'markerclusterer', 'jquery'], NS\PLUGIN_VERSION );
 		$js_data = [
 			'ajax_url'            => admin_url( 'admin-ajax.php' ),
 			'map_attributes'      => [
-				'styles'          => json_decode( Settings::get( 'map_styles' ) ),
+				'styles'          => json_decode( $this->settings->map_styles ),
 				'initial_lat'     => floatVal( -33.865 ),
 				'initial_lng'     => floatVal( 151.2094 ),
 				'max_zoom'        => absint( 15 ),
-				'clusters_image'  => Search_Map_Helpers::get_cluster_attributes( Settings::get( 'map_cluster' ) ),
-				'focus_country'   => esc_html( Settings::get( 'focus_country' ) ),
-				'focus_strict'    => boolval( Settings::get( 'focus_strict' ) ),
-				'search_radius'   => absint( Settings::get( 'search_radius' ) ),
-				'max_radius'      => absint( Settings::get( 'max_radius' ) ),
+				'clusters_image'  => $this->helpers->get_cluster_attributes( $this->settings->map_cluster ),
+				'focus_country'   => esc_html( $this->settings->focus_country ),
+				'focus_strict'    => boolval( $this->settings->focus_strict ),
+				'search_radius'   => absint( $this->settings->search_radius ),
+				'max_radius'      => absint( $this->settings->max_radius ),
 			],
 			'alerts'              => [
 				'api_unavailable' => __( 'The Google Maps API is unavailable at the moment, try again later', 'locations-search' ),
@@ -110,7 +114,7 @@ class Search_Map {
 		
 		// Get locations and generate markup
 		$query_args = [ 'post__in' => $atts['include'] ];
-		$locations = Search_Map_Model::get_locations( $query_args );
+		$locations = $this->model->get_locations( $query_args );
 		$html = sprintf(
 			'<div id="locsearch_map_%s" class="locsearch_map" data-locations="%s"></div>',
 			esc_attr( $counter ),

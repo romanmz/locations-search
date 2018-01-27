@@ -7,7 +7,6 @@
 
 namespace Locations_Search\Meta_Boxes;
 use Locations_Search as NS;
-use Locations_Search\Settings\General as Settings;
 
 /**
  * Class for Managing the Location Address Meta_Box
@@ -55,7 +54,7 @@ class Location_Address extends Meta_Box {
 				'country' => [
 					'label' => 'Country',
 					'file' => 'field-select.php',
-					'default' => Settings::get( 'focus_country' ),
+					'default' => $this->settings->focus_country,
 				],
 				'lat' => [
 					'label' => 'Latitude',
@@ -70,11 +69,18 @@ class Location_Address extends Meta_Box {
 	}
 	
 	/**
+	 * @var Locations_Search\Settings\General Holds a reference to the general settings page
+	 */
+	protected $settings;
+	
+	/**
 	 * Instance constructor
 	 * 
+	 * @param Locations_Search\Settings\General $settings
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct( $settings ) {
+		$this->settings = $settings;
 		parent::__constructor();
 		add_filter( 'meta_box/select_options/country', [$this, 'country_select_options'] );
 	}
@@ -111,7 +117,7 @@ class Location_Address extends Meta_Box {
 		
 		// Load assets
 		wp_enqueue_style( NS\PLUGIN_NAME.'_edit-screen', NS\PLUGIN_URL.'assets/css/edit-screen.css', [], NS\PLUGIN_VERSION );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.Settings::get( 'google_api_key' ) );
+		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.$this->settings->google_api_key );
 		wp_enqueue_script( NS\PLUGIN_NAME.'_edit-screen', NS\PLUGIN_URL.'assets/js/edit-screen.js', [NS\PLUGIN_NAME.'_google-maps-api', 'jquery'], NS\PLUGIN_VERSION );
 	}
 	

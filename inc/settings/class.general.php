@@ -125,7 +125,7 @@ class General extends Settings_Page {
 	 * 
 	 * @return void
 	 */
-	protected function __construct() {
+	public function __construct() {
 		parent::__construct();
 		add_filter( 'settings_page/select_options/focus_country', [$this, 'country_select_options'] );
 		add_action( 'settings_page/updated', 'flush_rewrite_rules' );
