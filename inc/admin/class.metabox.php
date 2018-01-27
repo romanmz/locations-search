@@ -13,8 +13,6 @@ use Locations_Search as NS;
  * 
  * @version 1.0.0
  * @since 1.0.0
- * @todo Support i18n
- * @todo Support default values|type checks (e.g. arrays)
  */
 abstract class Metabox {
 	
@@ -27,7 +25,6 @@ abstract class Metabox {
 	
 	/**
 	 * @var string|array The name of the post type(s) that should load this metabox
-	 * @todo Test different types of screens (post_type|'link'|'comment'|admin_page|admin_menu|WP_Screen|array)
 	 */
 	public $post_type = '';
 	

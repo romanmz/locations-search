@@ -13,7 +13,6 @@ use Locations_Search as NS;
  * 
  * @version 1.0.0
  * @since 1.0.0
- * @todo Support i18n
  */
 class Metabox_Location_Details extends Metabox {
 	

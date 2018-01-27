@@ -142,7 +142,10 @@ class Search_Map {
 			'<div id="locsearch_box_%s" class="locsearch_box">
 				%s
 				<div class="locsearch_box__messages"></div>
-				<div class="locsearch_box__map"></div>
+				<div class="locsearch_box__results__container">
+					<ul class="locsearch_box__results"></ul>
+					<div class="locsearch_box__map"></div>
+				</div>
 			</div>',
 			$counter,
 			$this->locations_search_form(),

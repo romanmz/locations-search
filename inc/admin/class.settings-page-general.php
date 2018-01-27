@@ -13,8 +13,6 @@ use Locations_Search as NS;
  * 
  * @version 1.0.0
  * @since 1.0.0
- * @todo Add support for setting other google maps settings: bias_bounds, restrict_state, restrict_postcode, restrict_city, restrict_street, language
- * @todo Apply flush_rewrite_rules() after updating permalinks
  */
 class Settings_Page_General extends Settings_Page {
 	
@@ -90,7 +88,7 @@ class Settings_Page_General extends Settings_Page {
 							'type' => 'number',
 							'sanitize_func' => 'absint',
 							'description' => 'Maximum radius size allowed for the search area',
-							'default' => 50,
+							'default' => 25,
 						],
 						'map_styles' => [
 							'title' => 'Map Styles',

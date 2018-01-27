@@ -1,7 +1,8 @@
 let mix = require('laravel-mix');
-mix.js([
-	'_src/js/shortcodes.js',
-], 'assets/js/shortcodes.js');
+mix.js(['_src/js/shortcodes.js'], 'assets/js/shortcodes.js');
+mix.sass('_src/scss/edit-screen.scss', 'assets/css/');
+mix.sass('_src/scss/edit-settings.scss', 'assets/css/');
+mix.sass('_src/scss/shortcodes.scss', 'assets/css/');
 mix.options({
 	processCssUrls: false
 });

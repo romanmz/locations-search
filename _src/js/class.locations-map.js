@@ -38,11 +38,16 @@ export default class LocationsMap {
 	// Create and add markers from a list of locations (deletes all previous markers)
 	addMarkersFromLocations( locations ) {
 		this.removeAllMarkers();
-		this.markers = locations.map( location => new LocationsMapMarker( this, location ) );
-		if( this.markerClusterer ) {
-			this.markerClusterer.addMarkers( this.markers.map( m => m.marker ) );
-		}
+		this.markers = locations.map( this.addMarkerFromLocation.bind( this ) );
 		this.checkZoomLevel();
+	}
+	addMarkerFromLocation( location ) {
+		let newMarker = new LocationsMapMarker( this, location );
+		if( this.markerClusterer ) {
+			this.markerClusterer.addMarker( newMarker.marker );
+		}
+		location.marker = newMarker;
+		return newMarker;
 	}
 	
 	// Delete all existing markers
@@ -60,9 +65,9 @@ export default class LocationsMap {
 			this.searchRadius.setMap( null );
 		}
 		this.searchRadius = new google.maps.Circle({
-			strokeWeight: 0,
-			fillColor: '#FF0000',
-			fillOpacity: 0.1,
+			strokeWeight: 1,
+			strokeColor: '#FF0000',
+			fillOpacity: 0,
 			map: this.map,
 			center: {lat, lng},
 			radius: radius * 1000,

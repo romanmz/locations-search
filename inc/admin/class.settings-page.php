@@ -13,7 +13,6 @@ use Locations_Search as NS;
  * 
  * @version 1.0.0
  * @since 1.0.0
- * @todo i18n
  */
 abstract class Settings_Page {
 	

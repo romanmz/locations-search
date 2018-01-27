@@ -1,0 +1,131 @@
+
+// Simple Map
+.locsearch_map {
+	min-height: 500px;
+	border: 1px solid #CCC;
+}
+
+// Map Search Box
+.locsearch_box {
+	border: 1px solid #CCC;
+	position: relative;
+	overflow: hidden;
+}
+.locsearch_box--loading:after {
+	content: '';
+	position: absolute;
+	z-index: 10;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba( 255, 255, 255, .75 ) url(../images/loading.svg) center center no-repeat;
+}
+
+// Search Form
+.locsearch_box__form {
+	display: flex;
+	
+	button {
+		flex: 0 1 auto;
+	}
+}
+
+// Search Feedback
+.locsearch_box__messages {
+	&:not( :empty ) {
+		padding: 1em;
+		border-bottom: 1px solid #EEE;
+	}
+	p {
+		margin: 0;
+	}
+	ul {
+		list-style: disc inside;
+		margin: 0;
+	}
+}
+
+// Search Results
+.locsearch_box__results__container {
+	display: flex;
+	max-height: 600px;
+}
+.locsearch_box__results {
+	flex: 0 1 auto;
+	max-width: 50%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	position: relative;
+}
+.locsearch_box__result {
+	padding: 1em;
+	transition: background .5s;
+	cursor: pointer;
+	
+	&:nth-child( n+2 ) {
+		border-top: 1px solid #EEE;
+	}
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+.locsearch_box__result--selected {
+	background: #EEE;
+}
+
+// Search Result Details
+.locsearch_box__result__heading {
+	font-weight: bolder;
+}
+.locsearch_box__result__distance {
+	opacity: .5;
+}
+.locsearch_box__result__address {}
+.locsearch_box__result__details {}
+.locsearch_box__result__hours {
+	dl {
+		display: -ms-grid;
+		-ms-grid-columns: auto 1fr;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		margin: 0;
+	}
+	dt {
+		-ms-grid-column: 1;
+		margin: 0 1em 0 0;
+	}
+	dd {
+		-ms-grid-column: 2;
+		margin: 0;
+	}
+	dt, dd {
+		min-width: 0;
+		&:nth-of-type( 1 ) { -ms-grid-row: 1 }
+		&:nth-of-type( 2 ) { -ms-grid-row: 2 }
+		&:nth-of-type( 3 ) { -ms-grid-row: 3 }
+		&:nth-of-type( 4 ) { -ms-grid-row: 4 }
+		&:nth-of-type( 5 ) { -ms-grid-row: 5 }
+		&:nth-of-type( 6 ) { -ms-grid-row: 6 }
+		&:nth-of-type( 7 ) { -ms-grid-row: 7 }
+	}
+}
+
+// Search Results Map
+.locsearch_box__map {
+	flex: 1;
+	min-height: 600px;
+}
+
+// Info Windows
+.locsearch_infowindow {}
+.locsearch_infowindow__title {
+	font-weight: bold;
+}
+.locsearch_infowindow__distance {
+	font-style: italic;
+}
+.locsearch_infowindow__address {}

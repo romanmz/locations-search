@@ -25,6 +25,7 @@ jQuery(document).ready(function($){
 		let box = $(this);
 		let form = box.find('.locsearch_box__form');
 		let messagesBox = box.find('.locsearch_box__messages');
+		let resultsBox = box.find('.locsearch_box__results');
 		let mapBox = box.find('.locsearch_box__map');
 		let addressField = form.find( 'input[name=address]' );
 		let map = new LocationsMap( mapBox[0] );
@@ -122,6 +123,23 @@ jQuery(document).ready(function($){
 				messagesBox.append( '<p>'+locsearch.text.many_results.replace( '%s', locations.length ) +'</p>' );
 			}
 			map.addMarkersFromLocations( locations );
+			
+			// Update results list
+			resultsBox.empty();
+			locations.forEach( location => {
+				if( !location.list_item ) return;
+				let listItem = $(location.list_item);
+				resultsBox.append( listItem );
+				google.maps.event.addListener( location.marker.marker, 'click', () => {
+					resultsBox.animate({ scrollTop: resultsBox.scrollTop() + listItem.position().top });
+					resultsBox.children( '.locsearch_box__result' ).removeClass( 'locsearch_box__result--selected' );
+					listItem.addClass( 'locsearch_box__result--selected' );
+				});
+				listItem.on( 'click', e => {
+					if( e.target.nodeName.toLowerCase() == 'a' ) return;
+					google.maps.event.trigger( location.marker.marker, 'click' );
+				});
+			});
 		}
 		
 		

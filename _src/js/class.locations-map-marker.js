@@ -8,7 +8,7 @@ export default class LocationsMapMarker {
 		this.marker = new google.maps.Marker({
 			map: map.map,
 			position: new google.maps.LatLng( location.lat, location.lng ),
-			label: location.title,
+			label: location.marker_label,
 		});
 		this.infoWindow = this.addInfoWindow( location.info_window );
 		this.deactivate();
