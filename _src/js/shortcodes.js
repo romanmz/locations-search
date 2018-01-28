@@ -12,6 +12,9 @@ jQuery(document).ready(function($){
 	
 	// Generate locations maps
 	$('.locsearch_map').each(function(){
+		if( $(this).closest('.locsearch_box').length > 0 ) {
+			return;
+		}
 		let map = new LocationsMap( this );
 		map.addMarkersFromLocations( $(this).data('locations') );
 	});
@@ -23,10 +26,10 @@ jQuery(document).ready(function($){
 		// Init objects
 		// ------------------------------
 		let box = $(this);
-		let form = box.find('.locsearch_box__form');
-		let messagesBox = box.find('.locsearch_box__messages');
-		let resultsBox = box.find('.locsearch_box__results');
-		let mapBox = box.find('.locsearch_box__map');
+		let form = box.find('.locsearch_form');
+		let messagesBox = box.find('.locsearch_messages');
+		let resultsBox = box.find('.locsearch_results');
+		let mapBox = box.find('.locsearch_map');
 		let addressField = form.find( 'input[name=address]' );
 		let map = new LocationsMap( mapBox[0] );
 		
@@ -37,12 +40,12 @@ jQuery(document).ready(function($){
 		// Lock/unlock search box
 		function lockSearch() {
 			box.data( 'isLocked', true );
-			box.addClass( 'locsearch_box--loading' );
+			box.addClass( 'loading' );
 			box.find( ':input' ).prop( 'disabled', true );
 		}
 		function unlockSearch() {
 			box.data( 'isLocked', false );
-			box.removeClass( 'locsearch_box--loading' );
+			box.removeClass( 'loading' );
 			box.find( ':input' ).prop( 'disabled', false );
 		}
 		
@@ -132,8 +135,8 @@ jQuery(document).ready(function($){
 				resultsBox.append( listItem );
 				google.maps.event.addListener( location.marker.marker, 'click', () => {
 					resultsBox.animate({ scrollTop: resultsBox.scrollTop() + listItem.position().top });
-					resultsBox.children( '.locsearch_box__result' ).removeClass( 'locsearch_box__result--selected' );
-					listItem.addClass( 'locsearch_box__result--selected' );
+					resultsBox.children( '.locsearch_result' ).removeClass( 'selected' );
+					listItem.addClass( 'selected' );
 				});
 				listItem.on( 'click', e => {
 					if( e.target.nodeName.toLowerCase() == 'a' ) return;

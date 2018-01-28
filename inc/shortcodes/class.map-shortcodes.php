@@ -147,20 +147,22 @@ class Map_Shortcodes {
 		
 		// Parse attributes
 		$default_atts = [
+			'layout' => 'horizontal',
 		];
 		$atts = shortcode_atts( $default_atts, $atts, 'locations_search' );
 		
 		// Output box
 		$html = sprintf(
-			'<div id="locsearch_box_%s" class="locsearch_box">
+			'<div id="locsearch_box_%s" class="locsearch_box locsearch_box--%s">
 				%s
-				<div class="locsearch_box__messages"></div>
-				<div class="locsearch_box__results__container">
-					<ul class="locsearch_box__results"></ul>
-					<div class="locsearch_box__map"></div>
+				<div class="locsearch_messages"></div>
+				<div class="locsearch_results_container">
+					<ul class="locsearch_results"></ul>
+					<div class="locsearch_map"></div>
 				</div>
 			</div>',
 			$counter,
+			$atts['layout'] === 'vertical' ? 'vertical' : 'horizontal',
 			$this->locations_search_form(),
 			$counter
 		);
@@ -198,7 +200,7 @@ class Map_Shortcodes {
 		
 		// Output form
 		$html = sprintf(
-			'<form id="locsearch_box__form_%s" class="locsearch_box__form" action="%s" method="%s"%s>
+			'<form id="locsearch_form_%s" class="locsearch_form" action="%s" method="%s"%s>
 				<input type="text" name="address" value="%s" placeholder="%s">
 				<input type="hidden" name="autosearch" value="1">
 				<button>%s</button>
@@ -263,7 +265,7 @@ class Map_Shortcodes {
 		
 		// Add results list items
 		$list_item = sprintf(
-			'<li class="locsearch_box__result">
+			'<li class="locsearch_result">
 				<div class="locsearch_title">%s</div>
 				%s
 				%s

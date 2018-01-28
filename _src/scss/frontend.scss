@@ -1,11 +1,18 @@
 
-// Location Distance
-.locsearch_distance {
-	opacity: .75;
+// Location Info
+.locsearch_title {
+	font-size: 1.25em;
+	font-weight: bolder;
 }
-
-// Location Address
-.locsearch_address {}
+.locsearch_subtitle {
+	font-weight: bolder;
+}
+.locsearch_distance {
+	opacity: .6;
+}
+.locsearch_address {
+	font-style: inherit;
+}
 
 // Location Details
 .locsearch_details {
@@ -23,6 +30,7 @@
 		margin: 0;
 	}
 	dt, dd {
+		font-weight: inherit;
 		min-width: 0;
 		@for $i from 1 through 3 {
 			&:nth-of-type( #{$i} ) { -ms-grid-row: #{$i} }
@@ -32,7 +40,6 @@
 
 // Location Opening Hours
 .locsearch_hours {
-	div {}
 	dl {
 		display: -ms-grid;
 		-ms-grid-columns: auto 1fr;
@@ -48,6 +55,7 @@
 		margin: 0;
 	}
 	dt, dd {
+		font-weight: inherit;
 		min-width: 0;
 		@for $i from 1 through 7 {
 			&:nth-of-type( #{$i} ) { -ms-grid-row: #{$i} }
@@ -55,10 +63,23 @@
 	}
 }
 
-// Simple Map
+// Locations Map
 .locsearch_map {
-	min-height: 500px;
+	min-height: 600px;
 	border: 1px solid #CCC;
+}
+
+// Search Form
+.locsearch_form {
+	display: flex;
+	border: 1px solid #CCC;
+	
+	input[type=text] {
+		border: none;
+	}
+	button {
+		flex: 0 1 auto;
+	}
 }
 
 // Map Search Box
@@ -66,29 +87,24 @@
 	border: 1px solid #CCC;
 	position: relative;
 	overflow: hidden;
-}
-.locsearch_box--loading:after {
-	content: '';
-	position: absolute;
-	z-index: 10;
-	left: 0;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba( 255, 255, 255, .75 ) url(../images/loading.svg) center center no-repeat;
-}
-
-// Search Form
-.locsearch_box__form {
-	display: flex;
 	
-	button {
-		flex: 0 1 auto;
+	&.loading:after {
+		content: '';
+		position: absolute;
+		z-index: 10;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba( 255, 255, 255, .75 ) url(../images/loading.svg) center center no-repeat;
+	}
+	.locsearch_form {
+		border-style: none none solid;
 	}
 }
 
 // Search Feedback
-.locsearch_box__messages {
+.locsearch_messages {
 	&:not( :empty ) {
 		padding: 1em;
 		border-bottom: 1px solid #EEE;
@@ -103,59 +119,89 @@
 }
 
 // Search Results
-.locsearch_box__results__container {
+.locsearch_results_container {
 	display: flex;
 	max-height: 600px;
+	
+	.locsearch_map {
+		flex: 1;
+		border: none;
+	}
+	
+	// Vertical Layout
+	.locsearch_box--vertical & {
+		flex-direction: column;
+		max-height: none;
+		
+		.locsearch_map {
+			order: 1;
+			min-height: 300px;
+		}
+		.locsearch_results {
+			order: 2;
+			max-width: none;
+			max-height: 500px;
+		}
+		.locsearch_result {
+			display: -ms-grid;
+			-ms-grid-column-sizing: 1fr;
+			display: grid;
+			grid-auto-columns: 1fr;
+			
+			.locsearch_address,
+			.locsearch_details {
+				margin: 0;
+			}
+			.locsearch_hours {
+				-ms-grid-column: 2;
+				-ms-grid-row: 1;
+				-ms-grid-row-span: 4;
+				grid-column: 2;
+				grid-row: 1 / 5;
+			}
+		}
+	}
 }
-.locsearch_box__results {
+.locsearch_results {
 	flex: 0 1 auto;
 	max-width: 50%;
+	&:not( :empty ) {
+		min-width: 300px;
+	}
+	// Reset list
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	// Scroll
+	position: relative;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
-	position: relative;
 }
-.locsearch_box__result {
+.locsearch_result {
 	padding: 1em;
 	transition: background .5s;
 	cursor: pointer;
 	
+	&.selected {
+		background: #EEE;
+	}
 	&:nth-child( n+2 ) {
 		border-top: 1px solid #EEE;
 	}
 	:last-child {
 		margin-bottom: 0;
 	}
-	
-	//
-	.locsearch_title {
-		font-weight: bolder;
-	}
+	.locsearch_title {}
 	.locsearch_distance {}
 	.locsearch_address {}
 	.locsearch_details {}
 	.locsearch_hours {}
 }
-.locsearch_box__result--selected {
-	background: #EEE;
-}
-
-// Search Results Map
-.locsearch_box__map {
-	flex: 1;
-	min-height: 600px;
-}
 
 // Info Windows
 .locsearch_infowindow {
-	.locsearch_title {
-		font-weight: bold;
-	}
-	.locsearch_distance {
-		font-style: italic;
-	}
+	.locsearch_title {}
+	.locsearch_distance {}
 	.locsearch_address {}
 	.locsearch_details {}
 	.locsearch_hours {}

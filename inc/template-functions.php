@@ -179,15 +179,15 @@ if( !function_exists( 'get_location_hours' ) ) {
 		
 		// Return markup
 		$formatted_hours = array_reduce( $lines, function( $html, $line ){
-			return $html .= sprintf( '<dt>%s</dt><dd>%s</dd>', implode( '–', $line['days'] ), $line['hours'] );
+			return $html .= sprintf( '<dt>%s:</dt><dd>%s</dd>', implode( '–', $line['days'] ), $line['hours'] );
 		});
 		if( !empty( $formatted_hours ) ) {
 			$formatted_hours = sprintf( '
 				<div class="locsearch_hours">
-					<div>%s</div>
+					<div class="locsearch_subtitle">%s</div>
 					<dl>%s</dl>
 				</div>',
-				esc_html__( 'Opening Hours:', 'locations-search' ),
+				esc_html__( 'Opening Hours', 'locations-search' ),
 				$formatted_hours
 			);
 		}
