@@ -117,8 +117,8 @@ class Location_Address extends Meta_Box {
 		
 		// Load assets
 		wp_enqueue_style( NS\PLUGIN_NAME.'_edit-screen', NS\PLUGIN_URL.'assets/css/edit-screen.css', [], NS\PLUGIN_VERSION );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.$this->settings->google_api_key );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_edit-screen', NS\PLUGIN_URL.'assets/js/edit-screen.js', [NS\PLUGIN_NAME.'_google-maps-api', 'jquery'], NS\PLUGIN_VERSION );
+		wp_enqueue_script( 'google-maps-api', '//maps.googleapis.com/maps/api/js?key='.$this->settings->google_api_key, null, null, true );
+		wp_enqueue_script( NS\PLUGIN_NAME.'_edit-screen', NS\PLUGIN_URL.'assets/js/edit-screen.js', ['google-maps-api', 'jquery'], NS\PLUGIN_VERSION, true );
 	}
 	
 }

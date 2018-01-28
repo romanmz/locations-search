@@ -26,13 +26,13 @@ function format_location_distance( $distance, $distance_units='km' ) {
 	return $formatted_distance ? sprintf( '<div class="locsearch_distance">%s</div>', $formatted_distance ) : '';
 }
 
-/**
- * Returns a nicely formatted location address
- * 
- * @param int $post_id
- * @return string
- */
 if( !function_exists( 'get_location_address' ) ) {
+	/**
+	 * Returns a nicely formatted location address
+	 * 
+	 * @param int $post_id
+	 * @return string
+	 */
 	function get_location_address( $post_id=0 ) {
 		
 		// Check post ID
@@ -57,25 +57,25 @@ if( !function_exists( 'get_location_address' ) ) {
 	}
 }
 
-/**
- * Outputs a nicely formatted location address
- * 
- * @param int $post_id
- * @return string
- */
 if( !function_exists( 'the_location_address' ) ) {
+	/**
+	 * Outputs a nicely formatted location address
+	 * 
+	 * @param int $post_id
+	 * @return string
+	 */
 	function the_location_address( $post_id=0 ) {
 		echo get_location_address( $post_id );
 	}
 }
 
-/**
- * Returns a nicely formatted list of location details
- * 
- * @param int $post_id
- * @return string
- */
 if( !function_exists( 'get_location_details' ) ) {
+	/**
+	 * Returns a nicely formatted list of location details
+	 * 
+	 * @param int $post_id
+	 * @return string
+	 */
 	function get_location_details( $post_id=0 ) {
 		
 		// Check post ID
@@ -107,25 +107,25 @@ if( !function_exists( 'get_location_details' ) ) {
 	}
 }
 
-/**
- * Outputs a nicely formatted list of location details
- * 
- * @param int $post_id
- * @return string
- */
 if( !function_exists( 'the_location_details' ) ) {
+	/**
+	 * Outputs a nicely formatted list of location details
+	 * 
+	 * @param int $post_id
+	 * @return string
+	 */
 	function the_location_details( $post_id=0 ) {
 		echo get_location_details( $post_id );
 	}
 }
 
-/**
- * Returns a nicely formatted list of opening hours for a location
- * 
- * @param int $post_id
- * @return string
- */
 if( !function_exists( 'get_location_hours' ) ) {
+	/**
+	 * Returns a nicely formatted list of opening hours for a location
+	 * 
+	 * @param int $post_id
+	 * @return string
+	 */
 	function get_location_hours( $post_id=0 ) {
 		
 		// Check post ID
@@ -195,13 +195,13 @@ if( !function_exists( 'get_location_hours' ) ) {
 	}
 }
 
-/**
- * Outputs a nicely formatted list of opening hours for a location
- * 
- * @param int $post_id
- * @return string
- */
 if( !function_exists( 'the_location_hours' ) ) {
+	/**
+	 * Outputs a nicely formatted list of opening hours for a location
+	 * 
+	 * @param int $post_id
+	 * @return string
+	 */
 	function the_location_hours( $post_id=0 ) {
 		echo get_location_hours( $post_id );
 	}

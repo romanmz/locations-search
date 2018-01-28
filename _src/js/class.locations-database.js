@@ -26,7 +26,7 @@ export default class LocationsDatabase {
 			
 			// Prepare query
 			let query = {
-				'action': 'locations_map_search',
+				'action': 'locations_search',
 				lat,
 				lng,
 				search_radius: radius,

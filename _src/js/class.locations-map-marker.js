@@ -29,8 +29,8 @@ export default class LocationsMapMarker {
 	
 	// Activates the marker
 	activate() {
-		if( this.location.images.marker_active ) {
-			this.replaceIcon( this.location.images.marker_active );
+		if( this.location.marker_images && this.location.marker_images.active ) {
+			this.replaceIcon( this.location.marker_images.active );
 		}
 		if( this.infoWindow ) {
 			this.infoWindow.open( this.map.map );
@@ -39,8 +39,8 @@ export default class LocationsMapMarker {
 	
 	// Deactivates the marker
 	deactivate() {
-		if( this.location.images.marker ) {
-			this.replaceIcon( this.location.images.marker );
+		if( this.location.marker_images && this.location.marker_images.default ) {
+			this.replaceIcon( this.location.marker_images.default );
 		}
 		if( this.infoWindow ) {
 			this.infoWindow.close();

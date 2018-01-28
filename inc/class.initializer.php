@@ -36,12 +36,13 @@ class Initializer {
 		if( $this->has_required_php_version() ) {
 			add_action( 'plugins_loaded', [$this, 'load_text_domain'] );
 			add_action( 'wp_enqueue_scripts', [$this, 'load_frontend_assets'] );
-			$this->deps['settings'] = new NS\Settings\General();
-			$this->deps['taxonomies'] = new NS\Core\Taxonomies( $this->deps['settings'] );
-			$this->deps['post_types'] = new NS\Core\Post_Types( $this->deps['settings'] );
-			$this->deps['metabox_address'] = new NS\Meta_Boxes\Location_Address( $this->deps['settings'] );
-			$this->deps['metabox_details'] = new NS\Meta_Boxes\Location_Details( $this->deps['settings'] );
-			$this->deps['shortcode_map'] = new NS\Shortcodes\Search_Map( $this->deps['settings'] );
+			$settings = $this->deps['settings'] = new NS\Settings\General();
+			$this->deps['taxonomies'] = new NS\Core\Taxonomies( $settings );
+			$this->deps['post_types'] = new NS\Core\Post_Types( $settings );
+			$this->deps['metabox_address'] = new NS\Meta_Boxes\Location_Address( $settings );
+			$this->deps['metabox_details'] = new NS\Meta_Boxes\Location_Details( $settings );
+			$locations_db = $this->deps['locations_db'] = new NS\Data\Locations( $settings );
+			$this->deps['map_shortcodes'] = new NS\Shortcodes\Map_Shortcodes( $settings, $locations_db );
 		}
 	}
 	

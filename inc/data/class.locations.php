@@ -2,10 +2,10 @@
 /**
  * @version 1.0.0
  * @since 1.0.0
- * @package Locations_Search\Shortcodes
+ * @package Locations_Search\Data
  */
 
-namespace Locations_Search\Shortcodes;
+namespace Locations_Search\Data;
 use Locations_Search as NS;
 
 /**
@@ -14,7 +14,7 @@ use Locations_Search as NS;
  * @version 1.0.0
  * @since 1.0.0
  */
-class Search_Map_Model {
+class Locations {
 	
 	/**
 	 * @var Locations_Search\Settings\General Holds a reference to the general settings page
@@ -22,36 +22,13 @@ class Search_Map_Model {
 	protected $settings;
 	
 	/**
-	 * @var Locations_Search\Shortcodes\Search_Map_Helpers Holds a reference to the shortcode helpers
-	 */
-	protected $helpers;
-	
-	/**
 	 * Constructor function
 	 * 
 	 * @param Locations_Search\Settings\General $settings
-	 * @param Locations_Search\Settings\Search_Map_Helpers $helpers
 	 * @return void
 	 */
-	public function __construct( $settings, $helpers ) {
+	public function __construct( $settings ) {
 		$this->settings = $settings;
-		$this->helpers = $helpers;
-	}
-	
-	/**
-	 * Responds to AJAX with list of locations ordered and filtered by distance
-	 * 
-	 * @return void
-	 */
-	public function ajax_closest_locations() {
-		$locations = [];
-		$lat = isset( $_POST['lat'] ) ? floatval( $_POST['lat'] ) : false;
-		$lng = isset( $_POST['lng'] ) ? floatval( $_POST['lng'] ) : false;
-		if( $lat !== false && $lng !== false ) {
-			$search_radius = isset( $_POST['search_radius'] ) ? floatval( $_POST['search_radius'] ) : $this->settings->search_radius;
-			$locations = $this->get_closest_locations( $lat, $lng, $search_radius );
-		}
-		wp_send_json( $locations );
 	}
 	
 	/**
@@ -155,49 +132,10 @@ class Search_Map_Model {
 		$data['lat']   = floatval( $data['lat'] );
 		$data['lng']   = floatval( $data['lng'] );
 		$data['title'] = get_the_title( $data['id'] );
-		$data['marker_label'] = '';
 		$data['url']   = get_permalink( $data['id'] );
 		if( isset( $data['distance'] ) ) {
 			$data['distance'] = floatval( $data['distance'] );
 		}
-		
-		// Add marker images
-		$data['images'] = [];
-		if( $this->settings->map_marker ) {
-			$data['images']['marker'] = $this->helpers->get_marker_attributes( $this->settings->map_marker );
-		}
-		if( $this->settings->map_marker_active ) {
-			$data['images']['marker_active'] = $this->helpers->get_marker_attributes( $this->settings->map_marker_active );
-		}
-		
-		// Add info window
-		$info_window = sprintf( '
-			<div class="locsearch_infowindow">
-				<div class="locsearch_title">%s</div>
-				%s
-			</div>
-			',
-			esc_html( $data['title'] ),
-			isset( $data['distance'] ) ? format_location_distance( $data['distance'], $data['distance_units'] ) : ''
-		);
-		$data['info_window'] = $info_window;
-		
-		// Add list items
-		$list_item = sprintf(
-			'<li class="locsearch_box__result">
-				<div class="locsearch_title">%s</div>
-				%s
-				%s
-				%s
-				%s
-			</li>',
-			esc_html( $data['title'] ),
-			isset( $data['distance'] ) ? format_location_distance( $data['distance'], $data['distance_units'] ) : '',
-			get_location_address( $data['id'] ),
-			get_location_details( $data['id'] ),
-			get_location_hours( $data['id'] )
-		);
-		$data['list_item'] = wp_kses_post( $list_item );
 		
 		// Return
 		return $data;
