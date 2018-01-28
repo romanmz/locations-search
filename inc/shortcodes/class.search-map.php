@@ -55,10 +55,19 @@ class Search_Map {
 	 * @return void
 	 */
 	public function load_assets() {
-		wp_enqueue_style( NS\PLUGIN_NAME.'_shortcodes', NS\PLUGIN_URL.'assets/css/shortcodes.css', [], NS\PLUGIN_VERSION );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.$this->settings->google_api_key );
-		wp_enqueue_script( 'markerclusterer', NS\PLUGIN_URL.'assets/vendor/marker-clusterer/markerclusterer.js', [], NS\PLUGIN_VERSION );
-		wp_enqueue_script( NS\PLUGIN_NAME.'_shortcodes', NS\PLUGIN_URL.'assets/js/shortcodes.js', [NS\PLUGIN_NAME.'_google-maps-api', 'markerclusterer', 'jquery'], NS\PLUGIN_VERSION );
+		global $post;
+		if(
+			!is_singular() ||
+			(
+				!has_shortcode( $post->post_content, 'locations_map' )
+				&& !has_shortcode( $post->post_content, 'locations_map_search' )
+			)
+		) {
+			return;
+		}
+		wp_enqueue_script( NS\PLUGIN_NAME.'_google-maps-api', '//maps.googleapis.com/maps/api/js?key='.$this->settings->google_api_key, null, null, true );
+		wp_enqueue_script( 'markerclusterer', NS\PLUGIN_URL.'assets/vendor/marker-clusterer/markerclusterer.js', [], NS\PLUGIN_VERSION, true );
+		wp_enqueue_script( NS\PLUGIN_NAME.'_shortcodes', NS\PLUGIN_URL.'assets/js/shortcodes.js', [NS\PLUGIN_NAME.'_google-maps-api', 'markerclusterer', 'jquery'], NS\PLUGIN_VERSION, true );
 		$js_data = [
 			'ajax_url'            => admin_url( 'admin-ajax.php' ),
 			'map_attributes'      => [

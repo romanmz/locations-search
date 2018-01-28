@@ -1,4 +1,60 @@
 
+// Location Distance
+.locsearch_distance {
+	opacity: .75;
+}
+
+// Location Address
+.locsearch_address {}
+
+// Location Details
+.locsearch_details {
+	display: -ms-grid;
+	-ms-grid-columns: auto 1fr;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	
+	dt {
+		-ms-grid-column: 1;
+		margin: 0 1em 0 0;
+	}
+	dd {
+		-ms-grid-column: 2;
+		margin: 0;
+	}
+	dt, dd {
+		min-width: 0;
+		@for $i from 1 through 3 {
+			&:nth-of-type( #{$i} ) { -ms-grid-row: #{$i} }
+		}
+	}
+}
+
+// Location Opening Hours
+.locsearch_hours {
+	div {}
+	dl {
+		display: -ms-grid;
+		-ms-grid-columns: auto 1fr;
+		display: grid;
+		grid-template-columns: auto 1fr;
+	}
+	dt {
+		-ms-grid-column: 1;
+		margin: 0 1em 0 0;
+	}
+	dd {
+		-ms-grid-column: 2;
+		margin: 0;
+	}
+	dt, dd {
+		min-width: 0;
+		@for $i from 1 through 7 {
+			&:nth-of-type( #{$i} ) { -ms-grid-row: #{$i} }
+		}
+	}
+}
+
 // Simple Map
 .locsearch_map {
 	min-height: 500px;
@@ -72,46 +128,18 @@
 	&:last-child {
 		margin-bottom: 0;
 	}
+	
+	//
+	.locsearch_title {
+		font-weight: bolder;
+	}
+	.locsearch_distance {}
+	.locsearch_address {}
+	.locsearch_details {}
+	.locsearch_hours {}
 }
 .locsearch_box__result--selected {
 	background: #EEE;
-}
-
-// Search Result Details
-.locsearch_box__result__heading {
-	font-weight: bolder;
-}
-.locsearch_box__result__distance {
-	opacity: .5;
-}
-.locsearch_box__result__address {}
-.locsearch_box__result__details {}
-.locsearch_box__result__hours {
-	dl {
-		display: -ms-grid;
-		-ms-grid-columns: auto 1fr;
-		display: grid;
-		grid-template-columns: auto 1fr;
-		margin: 0;
-	}
-	dt {
-		-ms-grid-column: 1;
-		margin: 0 1em 0 0;
-	}
-	dd {
-		-ms-grid-column: 2;
-		margin: 0;
-	}
-	dt, dd {
-		min-width: 0;
-		&:nth-of-type( 1 ) { -ms-grid-row: 1 }
-		&:nth-of-type( 2 ) { -ms-grid-row: 2 }
-		&:nth-of-type( 3 ) { -ms-grid-row: 3 }
-		&:nth-of-type( 4 ) { -ms-grid-row: 4 }
-		&:nth-of-type( 5 ) { -ms-grid-row: 5 }
-		&:nth-of-type( 6 ) { -ms-grid-row: 6 }
-		&:nth-of-type( 7 ) { -ms-grid-row: 7 }
-	}
 }
 
 // Search Results Map
@@ -121,11 +149,14 @@
 }
 
 // Info Windows
-.locsearch_infowindow {}
-.locsearch_infowindow__title {
-	font-weight: bold;
+.locsearch_infowindow {
+	.locsearch_title {
+		font-weight: bold;
+	}
+	.locsearch_distance {
+		font-style: italic;
+	}
+	.locsearch_address {}
+	.locsearch_details {}
+	.locsearch_hours {}
 }
-.locsearch_infowindow__distance {
-	font-style: italic;
-}
-.locsearch_infowindow__address {}

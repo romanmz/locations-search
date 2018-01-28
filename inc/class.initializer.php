@@ -35,6 +35,7 @@ class Initializer {
 		// Add the rest of the hooks
 		if( $this->has_required_php_version() ) {
 			add_action( 'plugins_loaded', [$this, 'load_text_domain'] );
+			add_action( 'wp_enqueue_scripts', [$this, 'load_frontend_assets'] );
 			$this->deps['settings'] = new NS\Settings\General();
 			$this->deps['taxonomies'] = new NS\Core\Taxonomies( $this->deps['settings'] );
 			$this->deps['post_types'] = new NS\Core\Post_Types( $this->deps['settings'] );
@@ -89,6 +90,15 @@ class Initializer {
 	public function load_text_domain() {
 		$rel_path = dirname( plugin_basename( NS\PLUGIN_FILE ) ).'/languages/';
 		load_plugin_textdomain( NS\PLUGIN_TEXT_DOMAIN, false, $rel_path );
+	}
+	
+	/**
+	 * Loads the required assets for the frontend
+	 * 
+	 * @return void
+	 */
+	public function load_frontend_assets() {
+		wp_enqueue_style( NS\PLUGIN_NAME.'_frontend', NS\PLUGIN_URL.'assets/css/frontend.css', [], NS\PLUGIN_VERSION );
 	}
 	
 }

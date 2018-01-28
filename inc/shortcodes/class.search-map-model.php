@@ -173,143 +173,34 @@ class Search_Map_Model {
 		// Add info window
 		$info_window = sprintf( '
 			<div class="locsearch_infowindow">
-				<div class="locsearch_infowindow__title">%s</div>
-				<div class="locsearch_infowindow__distance">%s</div>
+				<div class="locsearch_title">%s</div>
+				%s
 			</div>
 			',
 			esc_html( $data['title'] ),
-			isset( $data['distance'] ) ? 'Distance: '.round( $data['distance'], 1 ).' '.$data['distance_units'] : ''
+			isset( $data['distance'] ) ? format_location_distance( $data['distance'], $data['distance_units'] ) : ''
 		);
 		$data['info_window'] = $info_window;
 		
 		// Add list items
 		$list_item = sprintf(
 			'<li class="locsearch_box__result">
-				<div class="locsearch_box__result__heading">%s</div>
-				<div class="locsearch_box__result__distance">%s</div>
-				<div class="locsearch_box__result__address">%s</div>
-				<div class="locsearch_box__result__details">%s</div>
-				<div class="locsearch_box__result__hours">%s</div>
+				<div class="locsearch_title">%s</div>
+				%s
+				%s
+				%s
+				%s
 			</li>',
 			esc_html( $data['title'] ),
-			isset( $data['distance'] ) ? 'Distance: '.round( $data['distance'], 1 ).' '.$data['distance_units'] : '',
-			$this->get_formatted_address( $data['id'] ),
-			$this->get_formatted_details( $data['id'] ),
-			$this->get_formatted_hours( $data['id'] )
+			isset( $data['distance'] ) ? format_location_distance( $data['distance'], $data['distance_units'] ) : '',
+			get_location_address( $data['id'] ),
+			get_location_details( $data['id'] ),
+			get_location_hours( $data['id'] )
 		);
 		$data['list_item'] = wp_kses_post( $list_item );
 		
 		// Return
 		return $data;
-	}
-	
-	/**
-	 * Returns a nicely formatted address from a location
-	 * 
-	 * @param int $post_id
-	 * @return string
-	 */
-	public function get_formatted_address( $post_id ) {
-		$meta_keys = ['address', 'address2', 'city', 'state', 'postcode', 'country'];
-		foreach( $meta_keys as $meta_key ) {
-			$$meta_key = trim( esc_html( get_post_meta( $post_id, $meta_key, true ) ) );
-		}
-		$address_line_1 = $address;
-		$address_line_2 = $address2;
-		$address_line_3 = implode( ', ', array_filter( [$city, $state, $postcode, $country] ) );
-		$formatted_address = implode( '<br>', array_filter( [$address_line_1, $address_line_2, $address_line_3] ) );
-		return $formatted_address;
-	}
-	
-	/**
-	 * Returns a nicely formatted list of location details
-	 * 
-	 * @param int $post_id
-	 * @return string
-	 */
-	public function get_formatted_details( $post_id ) {
-		$details = [];
-		// Phone
-		$phone = esc_html( get_post_meta( $post_id, 'phone', true ) );
-		if( $phone ) {
-			$details[] = '<div><strong>Phone:</strong> <a href="tel:'.esc_attr( $phone ).'">'.$phone.'</a></div>';
-		}
-		// Email
-		$email = is_email( get_post_meta( $post_id, 'email', true ) );
-		if( $email ) {
-			$details[] = '<div><strong>Email:</strong> <a href="mailto:'.esc_attr( $email ).'">'.esc_html( $email ).'</a></div>';
-		}
-		// Website
-		$website_raw = get_post_meta( $post_id, 'website', true );
-		$website = esc_url( $website_raw );
-		if( $website ) {
-			$details[] = '<div><strong>Website:</strong> <a href="'.esc_attr( $website ).'" target="_blank">'.esc_html( $website_raw ).'</a></div>';
-		}
-		// Output
-		$details = implode( '', $details );
-		return $details;
-	}
-	
-	/**
-	 * Returns a nicely formatted list of opening hours
-	 * 
-	 * @param int $post_id
-	 * @return string
-	 */
-	public function get_formatted_hours( $post_id ) {
-		
-		// Load data
-		$opening_hours = get_post_meta( $post_id, 'opening_hours', true );
-		if( empty( $opening_hours ) || !is_array( $opening_hours ) ) {
-			return '';
-		}
-		
-		// Setup vars
-		$dow_names = [
-			_x( 'Mon', 'short for Monday', 'locations-search' ),
-			_x( 'Tue', 'short for Tuesday', 'locations-search' ),
-			_x( 'Wed', 'short for Wednesday', 'locations-search' ),
-			_x( 'Thu', 'short for Thursday', 'locations-search' ),
-			_x( 'Fri', 'short for Friday', 'locations-search' ),
-			_x( 'Sat', 'short for Saturday', 'locations-search' ),
-			_x( 'Sun', 'short for Sunday', 'locations-search' ),
-		];
-		$lines = [];
-		$prev_row = -1;
-		$prev_hours = '';
-		
-		// Loop days of the week
-		foreach( $dow_names as $i => $day_name ) {
-			
-			// Get today's hours
-			$opens  = !empty( $opening_hours[$i]['opens'] )  ? esc_html( $opening_hours[$i]['opens'] )  : '';
-			$closes = !empty( $opening_hours[$i]['closes'] ) ? esc_html( $opening_hours[$i]['closes'] ) : '';
-			$today_hours = implode( '–', array_filter( [$opens, $closes] ) );
-			
-			// Skip empty rows
-			if( empty( $today_hours ) ) {
-				$prev_hours = '';
-				continue;
-			}
-			// If today's hours are the same as yesterday, keep them in the same row
-			if( $today_hours == $prev_hours ) {
-				$lines[ $prev_row ]['days'][1] = $day_name;
-				continue;
-			}
-			// Otherwise, create a new row
-			$lines[ $i ] = ['days' => [$day_name], 'hours' => $today_hours];
-			$prev_row = $i;
-			$prev_hours = $today_hours;
-		}
-		
-		// Return markup
-		$formatted_hours = array_reduce( $lines, function( $html, $line ){
-			return $html .= sprintf( '<dt>%s</dt><dd> %s</dd>', implode( '–', $line['days'] ), $line['hours'] );
-		});
-		if( !empty( $formatted_hours ) ) {
-			$formatted_hours = sprintf( '<strong>%s</strong><dl>%s</dl>', 'Opening Hours:', $formatted_hours );
-		}
-		return $formatted_hours;
 	}
 	
 }
