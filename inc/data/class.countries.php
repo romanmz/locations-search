@@ -1,5 +1,7 @@
 <?php
 /**
+ * Class for getting static information about countries
+ * 
  * @version 1.0.0
  * @since 1.0.0
  * @package Locations_Search\Data
@@ -9,7 +11,7 @@ namespace Locations_Search\Data;
 use Locations_Search as NS;
 
 /**
- * Class for getting information about countries
+ * Class for getting static information about countries
  * 
  * @version 1.0.0
  * @since 1.0.0

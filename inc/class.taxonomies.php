@@ -1,5 +1,7 @@
 <?php
 /**
+ * Class for Managing Custom Taxonomies
+ * 
  * @version 1.0.0
  * @since 1.0.0
  * @package Locations_Search\Core

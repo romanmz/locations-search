@@ -1,5 +1,7 @@
 <?php
 /**
+ * Class for creating the 3 main map shortcodes
+ * 
  * @version 1.0.0
  * @since 1.0.0
  * @package Locations_Search\Shortcodes
@@ -9,7 +11,7 @@ namespace Locations_Search\Shortcodes;
 use Locations_Search as NS;
 
 /**
- * Creates an interactive map to search and filter locations
+ * Class for creating the 3 main map shortcodes
  * 
  * @version 1.0.0
  * @since 1.0.0

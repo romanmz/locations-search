@@ -1,5 +1,7 @@
 <?php
 /**
+ * Class for Managing the Location Details Meta_Box
+ * 
  * @version 1.0.0
  * @since 1.0.0
  * @package Locations_Search\Meta_Boxes

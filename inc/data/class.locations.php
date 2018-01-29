@@ -1,5 +1,7 @@
 <?php
 /**
+ * Class for managing database queries for finding locations
+ * 
  * @version 1.0.0
  * @since 1.0.0
  * @package Locations_Search\Data

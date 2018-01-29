@@ -128,8 +128,7 @@
 		border: none;
 	}
 	
-	// Vertical Layout
-	.locsearch_box--vertical & {
+	@mixin vertical-layout {
 		flex-direction: column;
 		max-height: none;
 		
@@ -142,24 +141,33 @@
 			max-width: none;
 			max-height: 500px;
 		}
-		.locsearch_result {
-			display: -ms-grid;
-			-ms-grid-column-sizing: 1fr;
-			display: grid;
-			grid-auto-columns: 1fr;
-			
-			.locsearch_address,
-			.locsearch_details {
-				margin: 0;
-			}
-			.locsearch_hours {
-				-ms-grid-column: 2;
-				-ms-grid-row: 1;
-				-ms-grid-row-span: 4;
-				grid-column: 2;
-				grid-row: 1 / 5;
+	}
+	// Vertical Layout
+	.locsearch_box--vertical & {
+		@include vertical-layout;
+		@media (min-width: 961px) {
+			.locsearch_result {
+				display: -ms-grid;
+				-ms-grid-column-sizing: 1fr;
+				display: grid;
+				grid-auto-columns: 1fr;
+				
+				.locsearch_address,
+				.locsearch_details {
+					margin: 0;
+				}
+				.locsearch_hours {
+					-ms-grid-column: 2;
+					-ms-grid-row: 1;
+					-ms-grid-row-span: 4;
+					grid-column: 2;
+					grid-row: 1 / 5;
+				}
 			}
 		}
+	}
+	@media (max-width: 960px) {
+		@include vertical-layout;
 	}
 }
 .locsearch_results {
