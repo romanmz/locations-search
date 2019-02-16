@@ -3,6 +3,9 @@ node_modules/
 mix-manifest.json
 package-lock.json
 
+# PHPDoc
+_docs/
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
