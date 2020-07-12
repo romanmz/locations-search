@@ -14,5 +14,5 @@ mix.browserSync({
 		'assets/css/*.css'
 	]
 });
-mix.disableNotifications();
+mix.disableSuccessNotifications();
 mix.sourceMaps();
